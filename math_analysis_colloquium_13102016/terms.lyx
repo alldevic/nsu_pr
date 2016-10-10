@@ -93,6 +93,34 @@ x, & x\geqslant0
 \end_layout
 
 \begin_layout Enumerate
+Инъекция: 
+\begin_inset Formula $f:X\rightarrow Y$
+\end_inset
+
+ называется инъективным (однозначным), если 
+\begin_inset Formula $(\forall x_{1},x_{2}\in X)(x_{1}\neq x_{2}\Rightarrow f(x_{1})\neq f(x_{2})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Сюръекция: 
+\begin_inset Formula $f:X\rightarrow Y$
+\end_inset
+
+ называется сюръективным (накрывающим), если 
+\begin_inset Formula $\forall y\in Y\ \exists x\in X\ |\ f(x)=y$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Биекция: отображение называют биективным, если он инъективно и сюръективно.
+\end_layout
+
+\begin_layout Enumerate
 Счетное множество --- это множество, равномощное 
 \family roman
 \series medium
@@ -147,6 +175,14 @@ x, & x\geqslant0
 \end_layout
 
 \begin_layout Enumerate
+Принцип Архимеда: 
+\begin_inset Formula $\forall x\in\text{ℝ}\ \exists n\in\ensuremath{ℕ}\ |\ n>x$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
 Последовательность: Числовой последовательностью называется любое отображение
  
 \begin_inset Formula $f:\text{ℕ}\rightarrow\text{ℝ}$
@@ -184,7 +220,7 @@ x, & x\geqslant0
 \end_layout
 
 \begin_layout Enumerate
-Неубывающая последовательность (монотонно возрастающая): Надо добавить
+Неубывающая последовательность (монотонно возрастающая): 
 \begin_inset Formula $\forall n\in\text{ℕ}\ x_{n}\leqslant x_{n+1}$
 \end_inset
 

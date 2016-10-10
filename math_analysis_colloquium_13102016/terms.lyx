@@ -235,12 +235,12 @@ x, & x\geqslant0
 Существует нижняя граница (посл.
  огр.
  снизу): 
-\begin_inset Formula $\exists\varepsilon\in\left\{ a_{n}\right\} \ |\ \forall n\in\text{ℕ}\ a_{n}\geqslant\varepsilon$
+\begin_inset Formula $\exists\varepsilon\in\text{ℝ}\ |\ \forall n\in\text{ℕ}\ a_{n}\geqslant\varepsilon$
 \end_inset
 
 .
  Отр.: 
-\begin_inset Formula $\forall\varepsilon\in\left\{ a_{n}\right\} \ |\ \exists n\in\text{ℕ}\ a_{n}<\varepsilon$
+\begin_inset Formula $\forall\varepsilon\in\text{ℝ}\ |\ \exists n\in\text{ℕ}\ a_{n}<\varepsilon$
 \end_inset
 
 .
@@ -265,12 +265,12 @@ x, & x\geqslant0
 Существует верхняя граница (посл.
  огр.
  сверху): 
-\begin_inset Formula $\exists\varepsilon\in\left\{ a_{n}\right\} \ |\ \forall n\in\text{ℕ}\ a_{n}\leqslant\varepsilon$
+\begin_inset Formula $\exists\varepsilon\in\text{ℝ}\ |\ \forall n\in\text{ℕ}\ a_{n}\leqslant\varepsilon$
 \end_inset
 
 .
  Отр.: 
-\begin_inset Formula $\forall\varepsilon\in\left\{ a_{n}\right\} \ |\ \exists n\in\text{ℕ}\ a_{n}>\varepsilon$
+\begin_inset Formula $\forall\varepsilon\in\text{ℝ}\ |\ \exists n\in\text{ℕ}\ a_{n}>\varepsilon$
 \end_inset
 
 .

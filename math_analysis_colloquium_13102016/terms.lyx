@@ -70,7 +70,7 @@ figs-within-sections
 \begin_body
 
 \begin_layout Standard
-Белый Николай, 16210, 09.10.2016
+Белый Николай, 16210, 11.10.2016
 \end_layout
 
 \begin_layout Section
@@ -83,7 +83,7 @@ figs-within-sections
 \[
 |x|=\begin{cases}
 -x, & x<0\\
-x, & x\geqslant0
+\ x, & x\geqslant0
 \end{cases}
 \]
 
@@ -167,11 +167,12 @@ x, & x\geqslant0
 \end_layout
 
 \begin_layout Enumerate
-Образ отображения --- это область значений функции.
+Область определения функции --- множество, на котором задается функция.
 \end_layout
 
 \begin_layout Enumerate
-Прообраз отображения --- это область определения функции.
+Область значений функции --- множество, состоящее из всех значений, которые
+ принимает функция.
 \end_layout
 
 \begin_layout Enumerate
@@ -235,12 +236,18 @@ x, & x\geqslant0
 Существует нижняя граница (посл.
  огр.
  снизу): 
-\begin_inset Formula $\exists\varepsilon\in\left\{ a_{n}\right\} \ |\ \forall n\in\text{ℕ}\ a_{n}\geqslant\varepsilon$
+\begin_inset Formula $\exists\varepsilon\in\text{ℝ}\ |\ \forall n\in\text{ℕ}\ a_{n}\geqslant\varepsilon$
 \end_inset
 
 .
- Отр.: 
-\begin_inset Formula $\forall\varepsilon\in\left\{ a_{n}\right\} \ |\ \exists n\in\text{ℕ}\ a_{n}<\varepsilon$
+ 
+\end_layout
+
+\begin_layout Enumerate
+Нижней границы не существует (посл.
+ не огр.
+ снизу): 
+\begin_inset Formula $\forall\varepsilon\in\text{ℝ}\ |\ \exists n\in\text{ℕ}\ a_{n}<\varepsilon$
 \end_inset
 
 .
@@ -265,12 +272,19 @@ x, & x\geqslant0
 Существует верхняя граница (посл.
  огр.
  сверху): 
-\begin_inset Formula $\exists\varepsilon\in\left\{ a_{n}\right\} \ |\ \forall n\in\text{ℕ}\ a_{n}\leqslant\varepsilon$
+\begin_inset Formula $\exists\varepsilon\in\text{ℝ}\ |\ \forall n\in\text{ℕ}\ a_{n}\leqslant\varepsilon$
 \end_inset
 
 .
- Отр.: 
-\begin_inset Formula $\forall\varepsilon\in\left\{ a_{n}\right\} \ |\ \exists n\in\text{ℕ}\ a_{n}>\varepsilon$
+ 
+\end_layout
+
+\begin_layout Enumerate
+Верхней границы не сущ.
+ (посл.
+ не огр.
+ сверху): 
+\begin_inset Formula $\forall\varepsilon\in\text{ℝ}\ |\ \exists n\in\text{ℕ}\ a_{n}>\varepsilon$
 \end_inset
 
 .
@@ -385,6 +399,66 @@ x, & x\geqslant0
 \end_layout
 
 \begin_layout Enumerate
+Стремится к 
+\begin_inset Formula $+\infty$
+\end_inset
+
+: 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $\lim_{n\rightarrow\infty}a_{n}=+\infty\ \Leftrightarrow\ \forall\varepsilon>0\ \exists n_{0}\in\text{ℕ}\ |\ \forall n>n_{0}\ a_{n}>\varepsilon$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Не стремится к 
+\begin_inset Formula $+\infty$
+\end_inset
+
+: 
+\begin_inset Formula $\lim_{n\rightarrow\infty}a_{n}\neq+\infty\ \Leftrightarrow\ \exists\varepsilon>0\ |\ \forall n_{0}\in\text{ℕ}\ \exists n>n_{0}\ |\ a_{n}\leqslant\varepsilon$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Стремится к 
+\begin_inset Formula $-\infty$
+\end_inset
+
+: 
+\begin_inset Formula $\lim_{n\rightarrow\infty}a_{n}=-\infty\ \Leftrightarrow\ \forall\varepsilon>0\ \exists n_{0}\in\text{ℕ}\ |\ \forall n>n_{0}\ a_{n}<\varepsilon$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Не стремится к 
+\begin_inset Formula $-\infty$
+\end_inset
+
+: 
+\begin_inset Formula $\lim_{n\rightarrow\infty}a_{n}\neq-\infty\ \Leftrightarrow\ \exists\varepsilon>0\ |\ \forall n_{0}\in\text{ℕ}\ \exists n>n_{0}\ |\ a_{n}\geqslant\varepsilon$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
 Теорема о зажатой последовательности: Если 
 \begin_inset Formula $\forall n\ b_{n}\leqslant a_{n}\leqslant c_{n}$
 \end_inset
@@ -401,12 +475,14 @@ x, & x\geqslant0
 \end_layout
 
 \begin_layout Enumerate
-Теорема Вейерштрасса: Любая монотонно возрастающая (убывающая) и ограниченная
- сверху (снизу) последовательность имеет предел.
+Теорема Вейерштрасса: Любая монотонно возр.
+ (убывающая) и огр.
+ сверху (снизу) посл.
+ имеет предел.
 \end_layout
 
 \begin_layout Enumerate
-Последоввательность фундаментальна, если
+Последовательность фундаментальна, если
 \family roman
 \series medium
 \shape up
@@ -419,7 +495,7 @@ x, & x\geqslant0
 \noun off
 \color none
  
-\begin_inset Formula $\forall\varepsilon>0\ \exists n_{0}\in\text{ℕ}\ |\ \forall m,n>n_{0}\ |a_{m}-a_{n}|<\varepsilon$
+\begin_inset Formula $\forall\varepsilon>0\ \exists n_{0}\in\text{ℕ}\ |\ \forall m,n>n_{0}\ \Rightarrow\ |a_{m}-a_{n}|<\varepsilon$
 \end_inset
 
 .
@@ -427,7 +503,7 @@ x, & x\geqslant0
 
 \begin_layout Enumerate
 Последовательность не фундаментальна, если 
-\begin_inset Formula $\exists\varepsilon>0\ \forall n_{0}\in\text{ℕ}\ |\ \exists m,n>n_{0}\ |a_{m}-a_{n}|\geqslant\varepsilon$
+\begin_inset Formula $\exists\varepsilon>0\ \forall n_{0}\in\text{ℕ}\ |\ \exists m,n>n_{0}\ (|a_{m}-a_{n}|\geqslant\varepsilon)$
 \end_inset
 
 .
@@ -494,7 +570,7 @@ x, & x\geqslant0
 Нижний предел последовательности есть наименьший частичный предел:
 \begin_inset Formula 
 \[
-\underline{\lim}_{n\rightarrow\infty}a_{n}=\inf_{n\rightarrow\infty}\left\{ \lim_{k\rightarrow\infty}a_{n_{k}}\right\} 
+\underline{\lim}_{n\rightarrow\infty}a_{n}=\lim_{n\rightarrow\infty}\inf_{k>n}a_{k}
 \]
 
 \end_inset
@@ -506,7 +582,7 @@ x, & x\geqslant0
 Верхний предел последовательности есть наибольший частичный предел:
 \begin_inset Formula 
 \[
-\overline{\lim}_{n\rightarrow\infty}a_{n}=\sup_{n\rightarrow\infty}\left\{ \lim_{k\rightarrow\infty}a_{n_{k}}\right\} 
+\overline{\lim}_{n\rightarrow\infty}a_{n}=\lim_{n\rightarrow\infty}\sup_{k>n}a_{k}
 \]
 
 \end_inset
@@ -524,7 +600,8 @@ x, & x\geqslant0
 
 \begin_layout Enumerate
 Теорема Больцано-Вейерштрасса: Из ограниченной посл.
- можно выделить сходящуюся подпосл.
+ вещь.
+ чисел можно выделить сходящуюся подпосл.
 \end_layout
 
 \begin_layout Enumerate

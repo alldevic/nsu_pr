@@ -23,11 +23,16 @@
  * <li>ERR_CLOSE - can't correct close file
  * <li>ERR_ALLOC - cab't allocation memory
  */
-enum ERRORS {NO_ERR, ERR_OPEN, ERR_CREATE,
-    ERR_SCAN, ERR_PRINT, ERR_CLOSE, ERR_ALLOC};
+enum ERRORS
+{
+    NO_ERR, ERR_OPEN, ERR_CREATE,
+    ERR_SCAN, ERR_PRINT, ERR_CLOSE, ERR_ALLOC
+};
 
 int get_input(int *n, int **array);
-void quick_sort(int n, int *a);
+
+void quick_sort(int n, int *array);
+
 int set_output(int n, int *array);
 
 #endif /*LAB4_SOLUTION_H*/

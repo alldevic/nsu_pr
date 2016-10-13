@@ -17,7 +17,7 @@ int main(void)
     int n = 0, *array;
     int err = get_input(&n, &array);
     quick_sort(n, array);
-    err = !err ? set_output(n, array) : err;
+    err = !err ? set_output(&n, array) : err;
     free(array);
     return err;
 }
@@ -86,13 +86,13 @@ void quick_sort(int n, int *array)
  * @param array - sorted array
  * @return err - error code
  */
-int set_output(int n, int *array)
+int set_output(int *n, int *array)
 {
     int err = NO_ERR, i = 0;
     FILE *f_out;
     err = ((f_out = fopen(OUTPUT, "w")) == NULL) ? ERR_CREATE : err;
 
-    for (i = 0; !err && (i < n); i++)
+    for (i = 0; !err && (i < *n); i++)
         err = (fprintf(f_out, (!i) ? "%d" : " %d", array[i]) < 0) ? ERR_PRINT : err;
 
     return ((fclose(f_out) == EOF) && !err) ? ERR_CLOSE : err;

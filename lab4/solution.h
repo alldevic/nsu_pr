@@ -33,6 +33,6 @@ int get_input(int *n, int **array);
 
 void quick_sort(int n, int *array);
 
-int set_output(int n, int *array);
+int set_output(int *n, int *array);
 
 #endif /*LAB4_SOLUTION_H*/

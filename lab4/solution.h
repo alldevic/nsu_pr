@@ -1,5 +1,6 @@
 #ifndef LAB4_SOLUTION_H
 #define LAB4_SOLUTION_H
+
 /**
  * #def File with source values
  * Default for problem: <b>"in.txt"</b>
@@ -28,4 +29,5 @@ enum ERRORS {NO_ERR, ERR_OPEN, ERR_CREATE,
 int get_input(int *n, int **array);
 void quick_sort(int n, int *a);
 int set_output(int n, int *array);
+
 #endif /*LAB4_SOLUTION_H*/

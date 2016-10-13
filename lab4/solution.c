@@ -7,7 +7,10 @@
 #include <malloc.h>
 #include "solution.h"
 
-
+/**
+ * @function Entry point to program. Reading array from INPUT, sorting and write to OUTPUT.
+ * @return err - error code
+ */
 int main(void) {
     int n = 0, *array;
     int err = get_input(&n, &array);
@@ -16,7 +19,6 @@ int main(void) {
     free(array);
     return err;
 }
-
 
 /**
  * @function Get <b>n</b> and <b>array</b> from INPUT
@@ -63,6 +65,12 @@ void quick_sort(int n, int *a) {
     quick_sort(n - i, a + i);
 }
 
+/**
+ * @function Write sorted array <b>array</b> to OUTPUT
+ * @param n - size of array
+ * @param array - sorted array
+ * @return err - error code
+ */
 int set_output(int n, int *array) {
     int err = NO_ERR, i = 0;
     FILE *f_out;

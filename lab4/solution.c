@@ -59,22 +59,22 @@ int get_input(int *n, int **array)
  */
 void quick_sort(int n, int *array)
 {
-    int i, j, p = array[n / 2];
-    if (n > 1)
+    int i, j, p, t;
+    if (n < 2)
         return;
-
+    p = array[n / 2];
     for (i = 0, j = n - 1;; i++, j--)
     {
         while (array[i] < p)
             i++;
-        while (array[j] > p)
+        while (p < array[j])
             j--;
         if (i >= j)
             break;
 
-        array[i] = array[i] + array[j];
-        array[j] = array[i] - array[j];
-        array[i] = array[i] - array[j];
+        t = array[i];
+        array[i] = array[j];
+        array[j] = t;
     }
     quick_sort(i, array);
     quick_sort(n - i, array + i);

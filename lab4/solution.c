@@ -56,7 +56,7 @@ int get_input(int *n, int **array)
  */
 void quick_sort(int n, int *array)
 {
-    int i, j, p, t;
+    int i, j, p;
     if (n < 2)
         return;
     p = array[n / 2];
@@ -68,9 +68,9 @@ void quick_sort(int n, int *array)
         if (--i >= ++j)
             break;
 
-        t = array[i];
-        array[i] = array[j];
-        array[j] = t;
+        array[i] = array[i] + array[j];
+        array[j] = array[i] - array[j];
+        array[i] = array[i] - array[j];
 
     }
     quick_sort(i, array);

@@ -9,7 +9,8 @@
 
 
 /**
- * @function Entry point  to program. On first step the variables get values from INPUT,
+ * @function Entry point  to program. On first step the variables get values from
+ INPUT,
  * calculate of the occurance of symbols for pattern, open OUTPUT for write. Next step, in
  * while loop all needs symbols writing to OUTPUT.
  * @return err - error code

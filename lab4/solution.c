@@ -9,7 +9,7 @@
 
 /**
  * @function Entry point to program. Reading array from INPUT, sorting and write
- * to OUTPUT.
+ * to OUTPUT
  * @return err - error code
  */
 int main(void)
@@ -31,22 +31,19 @@ int main(void)
 int get_input(int *n, int **array)
 {
     FILE *f_in;
-    int err = NO_ERR, i = 0;
+    int err = (f_in = fopen(INPUT, "r")) == NULL ? ERR_OPEN : NO_ERR, i = 0;
 
-    if ((f_in = fopen(INPUT, "r")) != NULL)
+    if (err != ERR_OPEN)
     {
         err = (fscanf(f_in, "%d", n) < 0) ? ERR_SCAN : err;
-
-        if ((*array = calloc((size_t) *n, sizeof(int))) == NULL)
-            err = ERR_ALLOC;
+        err = ((*array = calloc((size_t) *n, sizeof(int))) == NULL) ? ERR_ALLOC : err;
 
         for (i = 0; !err && (i < *n); i++)
             err = (fscanf(f_in, "%d", *array + i) < 0) ? ERR_SCAN : err;
 
         err = (!err && (fclose(f_in) == EOF)) ? ERR_CLOSE : err;
     }
-    else
-        err = ERR_OPEN;
+
     return err;
 }
 
@@ -63,18 +60,18 @@ void quick_sort(int n, int *array)
     if (n < 2)
         return;
     p = array[n / 2];
-    for (i = 0, j = n - 1;; i++, j--)
+    for (i = 0, j = n - 1; ; i++, j--)
     {
-        while (array[i] < p)
-            i++;
-        while (p < array[j])
-            j--;
-        if (i >= j)
+        while (array[i++] < p);
+        while (p < array[j--]);
+
+        if (--i >= ++j)
             break;
 
         t = array[i];
         array[i] = array[j];
         array[j] = t;
+
     }
     quick_sort(i, array);
     quick_sort(n - i, array + i);
@@ -88,9 +85,8 @@ void quick_sort(int n, int *array)
  */
 int set_output(int *n, int *array)
 {
-    int err = NO_ERR, i = 0;
     FILE *f_out;
-    err = ((f_out = fopen(OUTPUT, "w")) == NULL) ? ERR_CREATE : err;
+    int err = ((f_out = fopen(OUTPUT, "w")) == NULL) ? ERR_CREATE : NO_ERR, i = 0;
 
     for (i = 0; !err && (i < *n); i++)
         err = (fprintf(f_out, (!i) ? "%d" : " %d", array[i]) < 0) ? ERR_PRINT : err;

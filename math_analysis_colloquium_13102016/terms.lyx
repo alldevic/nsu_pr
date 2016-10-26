@@ -258,7 +258,7 @@ figs-within-sections
 \begin_inset Formula 
 \[
 \inf\ \{a_{n}\}=A\Leftrightarrow\begin{cases}
-1) & \exists A\ |\ \forall n\in\text{ℕ}\ a_{n}\geqslant A\\
+1) & A\ |\ \forall n\in\text{ℕ}\ a_{n}\geqslant A\\
 2) & \forall A'>A\ \exists a_{n}\in\text{ℕ}\ |\ a_{n}<A'
 \end{cases}
 \]
@@ -295,7 +295,7 @@ figs-within-sections
 \begin_inset Formula 
 \[
 \sup\ \{a_{n}\}=A\Leftrightarrow\begin{cases}
-1) & \exists A\ |\ \forall n\in\text{ℕ}\ a_{n}\leqslant A\\
+1) & A\ |\ \forall n\in\text{ℕ}\ a_{n}\leqslant A\\
 2) & \forall A'\text{<}A\ \exists a_{n}\ |\ a_{n}>A'
 \end{cases}
 \]

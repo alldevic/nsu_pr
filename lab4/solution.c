@@ -93,8 +93,3 @@ int set_output(int *n, int *array)
 
     return ((fclose(f_out) == EOF) && !err) ? ERR_CLOSE : err;
 }
-
-void func(int n, ...)
-{
-    return;
-}

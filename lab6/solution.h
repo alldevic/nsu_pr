@@ -34,5 +34,5 @@ enum ERRORS {NO_ERR, ERR_OPEN, ERR_CREATE,
 
 int str_len(char *str);
 int get_input(char *pattern, char *text, char **s);
-int get_hash(char *template);
+int get_hash(char *str, int start, int size);
 #endif /*LAB3_SOLUTION_H*/

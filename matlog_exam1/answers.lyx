@@ -618,7 +618,7 @@
 \begin_inset Formula $(A,B,C,\dots)$
 \end_inset
 
-, будем называть переменные принимающие свои значения из множества 
+ будем называть переменные принимающие свои значения из множества 
 \begin_inset Formula $\{$
 \end_inset
 
@@ -1175,10 +1175,603 @@
 
 \end_deeper
 \begin_layout Enumerate
+
+\series bold
 Логика высказываний: таблицы истинности, понятия формулы, эквивалентности
  формул
 \end_layout
 
+\begin_deeper
+\begin_layout Standard
+Также, как и в арифметике, в логике высказываний есть переменные и операции,
+ но в логике высказываний мы имеем дело с мерой истинности.
+ Значениями переменных являются значения истинности 
+\begin_inset Quotes fld
+\end_inset
+
+истина
+\begin_inset Quotes frd
+\end_inset
+
+ и 
+\begin_inset Quotes fld
+\end_inset
+
+ложь
+\begin_inset Quotes frd
+\end_inset
+
+.
+ Каждая переменная обозначает некоторое неизместное высказывание, предложение
+ про которое может быть известно только является ли оно истинным, либо ложным.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Пропозициональными переменными 
+\series default
+
+\begin_inset Formula $(A,B,C,\dots)$
+\end_inset
+
+ будем называть переменные принимающие свои значения из множества 
+\begin_inset Formula $\{$
+\end_inset
+
+
+\begin_inset Quotes fld
+\end_inset
+
+истина
+\begin_inset Quotes frd
+\end_inset
+
+, 
+\begin_inset Quotes fld
+\end_inset
+
+ложь
+\begin_inset Quotes frd
+\end_inset
+
+
+\begin_inset Formula $\}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Логические связки — операции над пропозициональным переменными:
+\end_layout
+
+\begin_layout Standard
+1.
+ 
+\series bold
+Дизъюнкция
+\series default
+ 
+\begin_inset Formula $\vee$
+\end_inset
+
+ (или) 2.
+ 
+\series bold
+Конъюнкция
+\series default
+ 
+\begin_inset Formula $\wedge,\&$
+\end_inset
+
+ (и) 3.
+ 
+\series bold
+Импликация
+\series default
+ 
+\begin_inset Formula $\rightarrow$
+\end_inset
+
+(если ..., то ...)
+\end_layout
+
+\begin_layout Standard
+4.
+ 
+\series bold
+Отрицание
+\series default
+ 
+\begin_inset Formula $\lnot$
+\end_inset
+
+ (не) 5.
+ 
+\series bold
+Эквиваленция
+\series default
+ 
+\begin_inset Formula $\leftrightarrow$
+\end_inset
+
+ (равносильно)
+\end_layout
+
+\begin_layout Standard
+Значения логических связок приведены в таблицах, называемых 
+\series bold
+таблицами истинности
+\series default
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="5" columns="7">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $A$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $B$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $A\vee B$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $A\wedge B$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $A\rightarrow B$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $\lnot A$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $A\leftrightarrow B$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+и
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+и
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+и
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+и
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+и
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+л
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+и
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+и
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+л
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+и
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+л
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+л
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+л
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+л
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+л
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+и
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+и
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+л
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+и
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+и
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+л
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+л
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+л
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+л
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+л
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+и
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+и
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+и
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Формула логики высказываний:
+\end_layout
+
+\begin_layout Standard
+1.
+ Атомные формулы: все пропозициональные переменные 
+\begin_inset Formula $(A,B,C,\dots)$
+\end_inset
+
+ являются формулами
+\end_layout
+
+\begin_layout Standard
+2.
+ Построение новых: если 
+\begin_inset Formula $\phi\text{ и }\psi$
+\end_inset
+
+ — формулы, то 
+\begin_inset Formula $(\phi\vee\psi)$
+\end_inset
+
+,
+\begin_inset Formula $(\phi\wedge\psi),$
+\end_inset
+
+
+\begin_inset Formula $(\phi\rightarrow\psi)$
+\end_inset
+
+,
+\begin_inset Formula $(\lnot\phi)$
+\end_inset
+
+ — формулы.
+\end_layout
+
+\begin_layout Standard
+3.
+ Других формул нет.
+\end_layout
+
+\begin_layout Standard
+Двуместное отношение 
+\begin_inset Formula $\sim$
+\end_inset
+
+называется 
+\series bold
+отношением эквивалентности 
+\series default
+(на множестве 
+\begin_inset Formula $A$
+\end_inset
+
+), если 
+\begin_inset Formula $\forall a,b,c\in A$
+\end_inset
+
+ выполняется: 1.
+ 
+\begin_inset Formula $a\sim a$
+\end_inset
+
+ 2.
+ 
+\begin_inset Formula $a\sim b\Rightarrow b\sim a$
+\end_inset
+
+ 3.
+\begin_inset Formula $(a\sim b\text{ и }b\sim c)\Rightarrow a\sim c$
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+Формулы 
+\begin_inset Formula $\phi\text{ и }\psi$
+\end_inset
+
+ называются 
+\series bold
+эквивалентными 
+\series default
+
+\begin_inset Formula $(\phi\sim\psi)$
+\end_inset
+
+, если они принимают одинаковые значения истинности при одинаковых значениях
+ входящих в них пропозициональных переменных.
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\end_deeper
 \begin_layout Enumerate
 Выражение теоретико-множественных операций через логические связки 
 \end_layout

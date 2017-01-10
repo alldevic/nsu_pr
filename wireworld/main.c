@@ -1,9 +1,33 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include <termios.h>
 
 #define SYMBOL 40
 #define WIDTH 14
 #define HEIGHT 5
+
+static struct termios stored_settings;
+
+void set_keypress(void) {
+    struct termios new_settings;
+
+    tcgetattr(0, &stored_settings);
+
+    new_settings = stored_settings;
+
+    /* Disable canonical mode, and set buffer size to 1 byte */
+    new_settings.c_lflag &= (~ICANON);
+    new_settings.c_cc[VTIME] = 0;
+    new_settings.c_cc[VMIN] = 1;
+
+    tcsetattr(0, TCSANOW, &new_settings);
+    return;
+}
+
+void reset_keypress(void) {
+    tcsetattr(0, TCSANOW, &stored_settings);
+    return;
+}
+
 
 typedef enum CellStates {
     EMPTY = 0, HEAD, TAIL, WIRE
@@ -46,14 +70,15 @@ State nextWorld(State *old, State *new) {
                 new[i] = (hc == 1 || hc == 2) ? HEAD : WIRE;
                 break;
             }
-            default:
-                new[i] = old[i];
         }
     }
     new[i] = old[i];
 }
 
+
 int main(void) {
+    set_keypress();
+
     State field[HEIGHT][WIDTH] = {
             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
             {0, 0, 0, 0, 0, 0, 3, 3, 0, 0, 0, 0, 0, 0},
@@ -67,9 +92,8 @@ int main(void) {
             printCell(field[i][j]);
         printf("\n");
     }
-    int ch = getchar();
-    while (ch != 'q') {
-        system("clear");
+
+    while (getchar()) {
         nextWorld((State *) field, (State *) tmpfield);
         for (int i = 0; i < HEIGHT; i++)
             for (int j = 0; j < WIDTH; j++)
@@ -80,7 +104,7 @@ int main(void) {
                 printCell(field[i][j]);
             printf("\n");
         }
-        ch = getchar();
     }
+    reset_keypress();
     return 0;
 }

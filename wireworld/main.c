@@ -16,7 +16,25 @@ char *rle_decode(char *str) {
 }
 
 char *rle_encode(char *str) {
-    return str;
+    int cnt;
+    char smb, *encode = calloc(strlen(str),sizeof(char)), *newstr = calloc(strlen(str),sizeof(char));
+    smb = str[0];
+    cnt = 0;
+
+    for (int i = 0; i <= strlen(str); i++) {
+        if (str[i]==smb) {
+            cnt++;
+        }
+        else {
+            sprintf(newstr, "%d", cnt);
+            strcat(encode, newstr);
+            sprintf(newstr, "%c", smb);
+            strcat(encode, newstr);
+            smb = str[i];
+            cnt = 1;
+        }
+    }
+    return encode;
 }
 
 void printCell(State st) {
@@ -113,7 +131,7 @@ int main(int argc, char **argv) {
     if (!file)
         return -4;
     fprintf(file, "%d %d\n", height, width);
-    fprintf(file, rle_encode(str));
+    fprintf(file, "%s", rle_encode(str));
     fclose(file);
     return 0;
 }

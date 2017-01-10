@@ -6,37 +6,33 @@
 #define OFFLINE 0
 #define SYMBOL 40
 
-
 typedef enum CellStates {
     EMPTY = 'q', HEAD = 'g', TAIL = 'o', WIRE = 'e'
 } State;
 
 char *rle_decode(char *str) {
-    char *newstr = calloc(2*strlen(str), sizeof(char)), c;
+    char *newstr = calloc(2 * strlen(str), sizeof(char)), c, itmp[3];
     int i, j;
 
-    while( sscanf(str,"%d%c", &i, &c) == 2 ) {
-        str +=2;
-        for(j=0; j < i; j++)
-            sprintf(newstr, "%s%c", newstr,c);
+    while (sscanf(str, "%d%c", &i, &c) == 2) {
+        sprintf(itmp, "%d", i);
+        str += strlen(itmp)+1;
+        for (j = 0; j < i; j++)
+            sprintf(newstr, "%s%c", newstr, c);
     }
     return newstr;
 }
 
 char *rle_encode(char *str) {
-    int cnt;
-    char smb, *encode = calloc(strlen(str),sizeof(char)), *newstr = calloc(strlen(str),sizeof(char));
+    int cnt = 0;
+    char smb, *encode = calloc(strlen(str), sizeof(char)), *newstr = calloc(strlen(str), sizeof(char));
     smb = str[0];
-    cnt = 0;
 
     for (int i = 0; i <= strlen(str); i++) {
-        if (str[i]==smb) {
+        if (str[i] == smb)
             cnt++;
-        }
         else {
-            sprintf(newstr, "%d", cnt);
-            strcat(encode, newstr);
-            sprintf(newstr, "%c", smb);
+            sprintf(newstr, "%d%c", cnt, smb);
             strcat(encode, newstr);
             smb = str[i];
             cnt = 1;

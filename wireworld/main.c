@@ -1,18 +1,24 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <memory.h>
 
 #define COLOR 1
+#define OFFLINE 0
 #define SYMBOL 40
 
 
 typedef enum CellStates {
-    EMPTY = ' ', HEAD = 'g', TAIL = 'o', WIRE = 'O'
+    EMPTY = 'q', HEAD = 'g', TAIL = 'o', WIRE = 'e'
 } State;
 
-char *rle_decode(char *str)
-{
+char *rle_decode(char *str) {
     return str;
 }
+
+char *rle_encode(char *str) {
+    return str;
+}
+
 void printCell(State st) {
     switch (st) {
         case EMPTY:
@@ -50,47 +56,64 @@ State nextWorld(char *old, char *new, int height, int width) {
                 new[i] = (hc == 1 || hc == 2) ? HEAD : WIRE;
                 break;
             }
-            default:break;
+            default:
+                break;
         }
     }
     new[i] = old[i];
 }
 
 int main(int argc, char **argv) {
-    FILE *input = fopen(argv[1],"r");
-    if (!input) return -1;
+    FILE *file = fopen(argv[1], "r");
+
+    if (!file) return -1;
     int height, width;
-    if(fscanf(input, "%d", &height) < 0)
+    if (fscanf(file, "%d", &height) < 0)
         return -2;
-    if(fscanf(input, "%d", &width) < 0)
+    if (fscanf(file, "%d", &width) < 0)
         return -2;
-    
-    char *str = malloc(height*width*sizeof(char));
-    char *tmpstr = malloc(height*width*sizeof(char));
+    char *str = malloc(height * width * sizeof(char));
+    char *tmpstr = malloc(height * width * sizeof(char));
     if (!str || !tmpstr)
         return -3;
-    
-    if(fscanf(input, "%s", str) < 0)
-        return -4;
+    while (fscanf(file, "%s", tmpstr) > 0)
+        strcat(str, tmpstr);
+    fclose(file);
+
+    int count = atoi(argv[3]);
 
     str = rle_decode(str);
-
-
-    for (int i = 0; i < height; i++) {
-        for (int j = 0; j < width; j++)
-            COLOR ? printCell((State) str[i * height + j]) : printf("%c", str[i * height + j]);
+    if (!OFFLINE) {
+        for (int i = 0; i < height * width; i++) {
+            if ((i % width == 0) && (i != 0))
+                printf("\n");
+            COLOR ? printCell((State) str[i]) : printf("%c", str[i]);
+        }
         printf("\n");
     }
 
-    while (getchar()) {
-        nextWorld(str, tmpstr, height, width);
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                str[i*height+j] = tmpstr[i*height+j];
-                COLOR ? printCell((State) str[i * height + j]) : printf("%c", str[i * height + j]);
-            }
+    while (count > 0) {
+        if (!OFFLINE)
             printf("\n");
+        nextWorld(str, tmpstr, height, width);
+
+        for (int i = 0; i < height * width; i++) {
+            str[i] = tmpstr[i];
+            if ((i % width == 0) && (i != 0) && !OFFLINE)
+                printf("\n");
+            (!OFFLINE) ? (COLOR ? printCell((State) str[i]) : printf("%c", str[i])) : NULL;
         }
+        if (!OFFLINE)
+            printf("\n");
+
+        count--;
     }
+
+    file = fopen(argv[2], "w");
+    if (!file)
+        return -4;
+    fprintf(file, "%d %d\n", height, width);
+    fprintf(file, rle_encode(str));
+    fclose(file);
     return 0;
 }

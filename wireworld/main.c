@@ -1,7 +1,5 @@
 #include <stdio.h>
-
-#define WIDTH 10
-#define HEIGHT 3
+#include <stdlib.h>
 
 #define COLOR 1
 #define SYMBOL 40
@@ -11,7 +9,10 @@ typedef enum CellStates {
     EMPTY = ' ', HEAD = 'g', TAIL = 'o', WIRE = 'O'
 } State;
 
-
+char *rle_decode(char *str)
+{
+    return str;
+}
 void printCell(State st) {
     switch (st) {
         case EMPTY:
@@ -29,9 +30,9 @@ void printCell(State st) {
     };
 }
 
-State nextWorld(State *old, State *new) {
+State nextWorld(char *old, char *new, int height, int width) {
     int i;
-    for (i = 0; i < WIDTH * HEIGHT; i++) {
+    for (i = 0; i < width * height; i++) {
         switch (old[i]) {
             case EMPTY:
                 new[i] = EMPTY;
@@ -43,35 +44,50 @@ State nextWorld(State *old, State *new) {
                 new[i] = TAIL;
                 break;
             case WIRE: {
-                int hc = (old[i - WIDTH - 1] == HEAD) + (old[i - WIDTH] == HEAD) + (old[i - WIDTH + 1] == HEAD) +
+                int hc = (old[i - width - 1] == HEAD) + (old[i - width] == HEAD) + (old[i - width + 1] == HEAD) +
                          (old[i - 1] == HEAD) + (old[i + 1] == HEAD) +
-                         (old[i + WIDTH - 1] == HEAD) + (old[i + WIDTH] == HEAD) + (old[i + WIDTH + 1] == HEAD);
+                         (old[i + width - 1] == HEAD) + (old[i + width] == HEAD) + (old[i + width + 1] == HEAD);
                 new[i] = (hc == 1 || hc == 2) ? HEAD : WIRE;
                 break;
             }
+            default:break;
         }
     }
     new[i] = old[i];
 }
 
-int main(void) {
-    State field[HEIGHT][WIDTH] = {
-            {EMPTY, EMPTY, EMPTY, EMPTY, WIRE, WIRE, EMPTY, EMPTY, EMPTY, EMPTY},
-            {TAIL, HEAD, WIRE, WIRE, WIRE, EMPTY, WIRE, WIRE, WIRE, WIRE},
-            {EMPTY, EMPTY, EMPTY, EMPTY, WIRE, WIRE, EMPTY, EMPTY, EMPTY, EMPTY},
-    }, tmpfield[HEIGHT][WIDTH];
-    for (int i = 0; i < HEIGHT; i++) {
-        for (int j = 0; j < WIDTH; j++)
-            COLOR ? printCell(field[i][j]):printf("%c", field[i][j]);
+int main(int argc, char **argv) {
+    FILE *input = fopen(argv[1],"r");
+    if (!input) return -1;
+    int height, width;
+    if(fscanf(input, "%d", &height) < 0)
+        return -2;
+    if(fscanf(input, "%d", &width) < 0)
+        return -2;
+    
+    char *str = malloc(height*width*sizeof(char));
+    char *tmpstr = malloc(height*width*sizeof(char));
+    if (!str || !tmpstr)
+        return -3;
+    
+    if(fscanf(input, "%s", str) < 0)
+        return -4;
+
+    str = rle_decode(str);
+
+
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++)
+            COLOR ? printCell((State) str[i * height + j]) : printf("%c", str[i * height + j]);
         printf("\n");
     }
 
     while (getchar()) {
-        nextWorld((State *) field, (State *) tmpfield);
-        for (int i = 0; i < HEIGHT; i++) {
-            for (int j = 0; j < WIDTH; j++) {
-                field[i][j] = tmpfield[i][j];
-                COLOR ? printCell(field[i][j]):printf("%c", field[i][j]);
+        nextWorld(str, tmpstr, height, width);
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                str[i*height+j] = tmpstr[i*height+j];
+                COLOR ? printCell((State) str[i * height + j]) : printf("%c", str[i * height + j]);
             }
             printf("\n");
         }

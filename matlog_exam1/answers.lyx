@@ -498,7 +498,7 @@
 
 .
  По определению равенства множеств 
-\begin_inset Formula $\exists x|x\in\emptyset_{1}\text{ и }x\text{\notin}\emptyset_{2}$
+\begin_inset Formula $\exists x|x\in\emptyset_{1}\text{ и }x\text{∉}\emptyset_{2}$
 \end_inset
 
 , либо 
@@ -696,6 +696,84 @@
 \begin_layout Enumerate
 Канторовская нумерация.
  
+\end_layout
+
+\begin_layout Enumerate
+Секвенциональное исчисление высказываний
+\end_layout
+
+\begin_layout Enumerate
+Семантика исчисления секвенций.
+ Теорема о корректности.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Теорема о замене в исчислении высказываний
+\end_layout
+
+\begin_layout Enumerate
+Теорема о полноте секвенционального исчисления высказываний
+\end_layout
+
+\begin_layout Enumerate
+Исчисление высказываний гильбертовского типа.
+\end_layout
+
+\begin_layout Enumerate
+Гомоморфизмы, изоморфизмы.
+\end_layout
+
+\begin_layout Enumerate
+Подмодель.
+\end_layout
+
+\begin_layout Enumerate
+Теорема о существовании наименьшей подмодели
+\end_layout
+
+\begin_layout Enumerate
+Теорема о модели, порожденной множеством замкнутых термов
+\end_layout
+
+\begin_layout Enumerate
+Сохранение истинности формул на подмоделях
+\end_layout
+
+\begin_layout Enumerate
+Отношение конгруэнции.
+ Теорема о факторизации
+\end_layout
+
+\begin_layout Enumerate
+Теорема о сильных эпиморфизмах
+\end_layout
+
+\begin_layout Enumerate
+Основная теорема о гомоморфизмах
+\end_layout
+
+\begin_layout Enumerate
+Секвенциональное исчисление предикатов
+\end_layout
+
+\begin_layout Enumerate
+Семантика исчисления секвенций.
+ Теорема о корректности
+\end_layout
+
+\begin_layout Enumerate
+Теорема о замене в исчислении предикатов.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Приведение формулы к предваренной нормальной форме 
+\end_layout
+
+\begin_layout Enumerate
+Противоречивые, непротеречивые множества формул.
+ Теории, полные теории
 \end_layout
 
 \end_body

@@ -12,13 +12,13 @@ typedef enum CellStates {
 } State;
 
 char *rle_decode(char *str) {
-    char *newstr = calloc(2*strlen(str), sizeof(char)), tmp[1] = "";
-    int i, c, j;
+    char *newstr = calloc(2*strlen(str), sizeof(char)), c;
+    int i, j;
 
     while( sscanf(str,"%d%c", &i, &c) == 2 ) {
         str +=2;
-        sprintf(tmp, "%c", c);
-        for(j=0; j < i; j++) strcat(newstr, tmp);
+        for(j=0; j < i; j++)
+            sprintf(newstr, "%s%c", newstr,c);
     }
     return newstr;
 }
@@ -42,7 +42,6 @@ char *rle_encode(char *str) {
             cnt = 1;
         }
     }
-    free(newstr);
     return encode;
 }
 

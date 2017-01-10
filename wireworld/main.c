@@ -12,7 +12,15 @@ typedef enum CellStates {
 } State;
 
 char *rle_decode(char *str) {
-    return str;
+    char *newstr = calloc(2*strlen(str), sizeof(char)), c;
+    int i, j;
+
+    while( sscanf(str,"%d%c", &i, &c) == 2 ) {
+        str +=2;
+        for(j=0; j < i; j++)
+            sprintf(newstr, "%s%c", newstr,c);
+    }
+    return newstr;
 }
 
 char *rle_encode(char *str) {
@@ -54,7 +62,7 @@ void printCell(State st) {
     };
 }
 
-State nextWorld(char *old, char *new, int height, int width) {
+void nextWorld(char *old, char *new, int height, int width) {
     int i;
     for (i = 0; i < width * height; i++) {
         switch (old[i]) {

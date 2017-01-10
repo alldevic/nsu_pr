@@ -1,33 +1,36 @@
-#LyX 2.1 created this file. For more info see http://www.lyx.org/
-\lyxformat 474
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
 \begin_document
 \begin_header
+\save_transient_properties true
+\origin unavailable
 \textclass article
 \use_default_options true
 \maintain_unincluded_children false
-\language english
+\language russian
 \language_package default
 \inputencoding auto
 \fontencoding global
-\font_roman default
-\font_sans default
-\font_typewriter default
-\font_math auto
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
 \font_default_family default
 \use_non_tex_fonts false
 \font_sc false
 \font_osf false
-\font_sf_scale 100
-\font_tt_scale 100
-\graphics default
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\graphics pdftex
 \default_output_format default
 \output_sync 0
 \bibtex_command default
 \index_command default
 \paperfontsize default
+\spacing single
 \use_hyperref false
 \papersize default
-\use_geometry false
+\use_geometry true
 \use_package amsmath 1
 \use_package amssymb 1
 \use_package cancel 1
@@ -51,11 +54,18 @@
 \shortcut idx
 \color #008000
 \end_index
+\leftmargin 1cm
+\topmargin 1cm
+\rightmargin 1cm
+\bottommargin 1cm
+\headheight 1cm
+\headsep 1cm
+\footskip 1cm
 \secnumdepth 3
 \tocdepth 3
 \paragraph_separation indent
 \paragraph_indentation default
-\quotes_language english
+\quotes_language french
 \papercolumns 1
 \papersides 1
 \paperpagestyle default
@@ -69,9 +79,500 @@
 \begin_body
 
 \begin_layout Enumerate
+
+\series bold
 Множества, операции над множествами
 \end_layout
 
+\begin_deeper
+\begin_layout Standard
+Строгого определения множества нет, т.
+ к.
+ это понятие из которого выводятся многие понятия математики, в то время
+ как оно само невыводится из других понятий и не определяется ими.
+ Понятие множества стольже первично, как понятие точки или числа.
+ Синонимами слова 
+\begin_inset Quotes eld
+\end_inset
+
+множество
+\begin_inset Quotes erd
+\end_inset
+
+ можно считать такие слова, как 
+\begin_inset Quotes eld
+\end_inset
+
+совокупность
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+набор
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+коллекция
+\begin_inset Quotes erd
+\end_inset
+
+, 
+\begin_inset Quotes eld
+\end_inset
+
+семейство
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $x\text{\in}A$
+\end_inset
+
+ обозначает 
+\series bold
+принадлежность элемента 
+\begin_inset Formula $x$
+\end_inset
+
+ к множеству 
+\begin_inset Formula $A$
+\end_inset
+
+
+\series default
+.
+ В таком случае говорят, что элемент 
+\series bold
+
+\begin_inset Formula $x$
+\end_inset
+
+ принадлежит множеству 
+\begin_inset Formula $A$
+\end_inset
+
+
+\series default
+ или 
+\series bold
+
+\begin_inset Formula $x$
+\end_inset
+
+ 
+\series default
+является элементом множества
+\series bold
+ 
+\begin_inset Formula $A$
+\end_inset
+
+
+\series default
+ .
+\end_layout
+
+\begin_layout Standard
+Множество 
+\begin_inset Formula $A$
+\end_inset
+
+ является подмножество множества 
+\begin_inset Formula $B$
+\end_inset
+
+ 
+\begin_inset Formula $(A\subseteq B)$
+\end_inset
+
+, если все элементы множества 
+\begin_inset Formula $A$
+\end_inset
+
+ являются элементами множества 
+\begin_inset Formula $B$
+\end_inset
+
+, т.
+ е.
+ 
+\begin_inset Formula $A\subseteq B\Leftrightarrow\forall x(x\in A\Rightarrow x\in B)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+(Принцип равнообъемности) 
+\series default
+Множества 
+\begin_inset Formula $A$
+\end_inset
+
+ и 
+\begin_inset Formula $B$
+\end_inset
+
+ называются 
+\series bold
+равными
+\series default
+ 
+\begin_inset Formula $(A=B)$
+\end_inset
+
+, если они содержат одни и те же элементы, т.
+ е.
+ для каждого элемента 
+\begin_inset Formula $x$
+\end_inset
+
+ имеем 
+\begin_inset Formula $x\in A\Leftrightarrow A\subseteq B$
+\end_inset
+
+ и 
+\begin_inset Formula $B\subseteq A$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Замечание.
+
+\series default
+ Два множества равны 
+\begin_inset Formula $\Leftrightarrow$
+\end_inset
+
+каждое из них является подмножеством другого 
+\begin_inset Formula $A=B\Leftrightarrow A\subseteq B$
+\end_inset
+
+ и 
+\begin_inset Formula $B\subseteq A$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Доказательство: 
+\series default
+По определению 
+\begin_inset Formula $A=B\Leftrightarrow\forall x(x\in A\Leftrightarrow x\in B)\Leftrightarrow\begin{cases}
+\forall x(x\in A\Rightarrow x\in B)\Leftrightarrow A\subseteq B\\
+\forall x(x\in B\Rightarrow x\in A)\Leftrightarrow B\subseteq A
+\end{cases}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Предложение.
+ 
+\series default
+Отношение включения является 
+\series bold
+отношением частичного порядка
+\series default
+, т.
+ е.
+ обладает следующими свойствами:
+\end_layout
+
+\begin_layout Standard
+1.
+\begin_inset Formula $\forall A(A\subseteq A)$
+\end_inset
+
+ — рефлексивность 2.
+\begin_inset Formula $\forall A,B((A\subseteq B\text{ и }B\subseteq A)\Rightarrow A=B)$
+\end_inset
+
+— антисимметричность 
+\end_layout
+
+\begin_layout Standard
+3.
+ 
+\begin_inset Formula $\forall A,B,C((A\subseteq B\text{ и }B\subseteq C)\Rightarrow A\subseteq C)$
+\end_inset
+
+ — транзитивность
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Доказательство.
+
+\series default
+ 1.
+ По определению отношения включения, утверждение 
+\begin_inset Formula $A\subseteq A$
+\end_inset
+
+ равносильно 
+\begin_inset Formula $\forall x(x\in A\Rightarrow x\in A)$
+\end_inset
+
+, с другой стороны утверждение 
+\begin_inset Formula $x\in A\Rightarrow x\in A$
+\end_inset
+
+ всегда истинно, поэтому верно и 
+\begin_inset Formula $A\subseteq A$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+2.
+ Очевидно из замечания 
+\end_layout
+
+\begin_layout Standard
+3.
+ Пусть 
+\begin_inset Formula $A\subseteq B$
+\end_inset
+
+ и 
+\begin_inset Formula $B\subseteq C$
+\end_inset
+
+.
+ Допустим, что 
+\begin_inset Formula $A\nsubseteq C$
+\end_inset
+
+.
+ Тогда 
+\begin_inset Formula $\exists x:x\in A\text{ и }x\notin C$
+\end_inset
+
+.
+ Поскольку 
+\begin_inset Formula $A\subseteq B\text{ и }x\in A$
+\end_inset
+
+, то 
+\begin_inset Formula $x\in B$
+\end_inset
+
+.
+ С другой стороны, 
+\begin_inset Formula $B\subseteq C$
+\end_inset
+
+ и 
+\begin_inset Formula $x\in C$
+\end_inset
+
+.
+ Противоречие.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Операции над множествами
+\end_layout
+
+\begin_layout Standard
+1.
+ 
+\series bold
+Объединение: 
+\series default
+
+\begin_inset Formula $A\cup B=\{x|x\in A\text{ или }x\in B\}$
+\end_inset
+
+ 2.
+ 
+\series bold
+Пересечение:
+\series default
+ 
+\begin_inset Formula $A\cap B=\{x|x\in A\text{ и }x\in B\}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+3.
+ 
+\series bold
+Разность: 
+\series default
+
+\begin_inset Formula $A\backslash B=\{x|x\in A\text{ и }x\notin B\}$
+\end_inset
+
+ 4.
+ 
+\series bold
+Симметрическая разность: 
+\series default
+
+\begin_inset Formula $A\dot{-}B=(A\backslash B\cup B\backslash A)$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+5.
+ 
+\series bold
+Дополнение: 
+\series default
+
+\begin_inset Formula $\bar{A}=U\backslash A=\{x|x\in U\backslash A\}$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Пустое множество
+\series default
+ 
+\begin_inset Formula $(\emptyset)$
+\end_inset
+
+ есть множество, не содержащее элементов, т.е.
+ множество, которое не имеет ни одного элемента.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Замечание.
+ 
+\series default
+Пустое множество единственно.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Доказательство.
+
+\series default
+ Пусть 
+\begin_inset Formula $\exists\emptyset_{1},\emptyset_{2}$
+\end_inset
+
+ — различные.
+ То 
+\begin_inset Formula $\emptyset_{1}\neq\emptyset_{2}$
+\end_inset
+
+.
+ По определению равенства множеств 
+\begin_inset Formula $\exists x|x\in\emptyset_{1}\text{ и }x\text{\notin}\emptyset_{2}$
+\end_inset
+
+, либо 
+\begin_inset Formula $\exists x|x\notin\emptyset_{1}\text{ и }x\text{\in}\emptyset_{2}$
+\end_inset
+
+.
+ Но т.
+ к.
+ 
+\begin_inset Formula $\emptyset_{1}\text{ и }\emptyset_{2}$
+\end_inset
+
+ не имеют элементов, то такого 
+\begin_inset Formula $x$
+\end_inset
+
+ не существует.
+ Противоречие.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Замечание.
+
+\series default
+ 
+\begin_inset Formula $\emptyset$
+\end_inset
+
+ является подмножеством любого множества
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Доказательство.
+ 
+\series default
+Рассмотрим некоторое множество 
+\begin_inset Formula $A$
+\end_inset
+
+.
+ По определению включение 
+\begin_inset Formula $\emptyset\subseteq A$
+\end_inset
+
+ означает: если 
+\begin_inset Formula $x\in\emptyset\Rightarrow x\in A$
+\end_inset
+
+.
+ Но в 
+\begin_inset Formula $\emptyset$
+\end_inset
+
+ нет элементов и утверждение выполняется автоматически.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Универсум
+\series default
+ 
+\begin_inset Formula $(U)$
+\end_inset
+
+ — множество, содержащее все элементы.
+\end_layout
+
+\end_deeper
 \begin_layout Enumerate
 Логика высказываний: таблицы истинности, понятия формулы, тождественно истинной,
  тождественно ложной, выполнимой и опровержимой формулы
@@ -195,20 +696,6 @@
 \begin_layout Enumerate
 Канторовская нумерация.
  
-\end_layout
-
-\begin_layout Enumerate
-Гомоморфизмы, изоморфизмы.
- 
-\end_layout
-
-\begin_layout Enumerate
-Подмодель.
- 
-\end_layout
-
-\begin_layout Enumerate
-Теорема о существовании наименьшей подмодели 
 \end_layout
 
 \end_body

@@ -27,6 +27,7 @@
 \bibtex_command default
 \index_command default
 \paperfontsize default
+\spacing single
 \use_hyperref false
 \papersize default
 \use_geometry false
@@ -70,8 +71,116 @@
 
 \begin_body
 
-\begin_layout Standard
+\begin_layout Enumerate
+Кольцо целых чисел: теорема о делении с остатком.
+\end_layout
 
+\begin_layout Enumerate
+Наибольший общий делитель и алгоритм Евклида.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Критерий разрешимости линейного диофантова уравнения и алгоритм поиска частного
+ решения.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Свойства взаимно простых чисел.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Общее решение линейного диофантова уравнения.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Основная теорема арифметики.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Конструкция кольца вычетов по модулю 
+\begin_inset Formula $n$
+\end_inset
+
+, критерий обратимости числа по модулю 
+\begin_inset Formula $n$
+\end_inset
+
+, поле вычетов.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Китайская теорема об остатках (древняя и современная формы), сведение к
+ примарному модулю.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Представление арифметики чисел порядка 
+\begin_inset Formula $10^{90}$
+\end_inset
+
+ в 64-х разрядной бинарной арифметике.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Группа обратимых элементов кольца вычетов по модулю n: определение и вычисление
+ 
+\begin_inset Formula $\varphi$
+\end_inset
+
+-функции Эйлера, теорема об общем периоде элементов конечной абелевой группы,
+ малая теорема Ферма и ее обобщение — формула Эйлера.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Порядок элемента группы и три леммы о порядках элементов.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Определение циклической группы и теорема о конечных подгруппах мультипликативной
+ группы поля.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Определение дискретного логарифма и описание RSA-криптографии с открытым
+ ключом.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Группы подстановок: определение, правило умножения и теорема о групповой
+ структуре, знак подстановки и его мультипликативность, разложение на циклы
+ и транспозиции, знак и количество транспозиций в разложении.
+\end_layout
+
+\begin_layout Enumerate
+Определение символа Якоби (по Золотареву), его свойства: мультипликативность,
+ критерий разрешимости квадратичного уравнения по простому модулю, вычисление
+ символа 
+\begin_inset Formula $\left(\frac{-1}{n}\right)$
+\end_inset
+
+, лемма 1 и вычисление символа 
+\begin_inset Formula $\left(\frac{2}{n}\right)$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Определение символа Якоби (по Золотареву), его свойства: периодичность —
+ леммы 2 и 3, закон взаимности Гаусса–Якоби.
 \end_layout
 
 \end_body

@@ -14,12 +14,12 @@
 #define OUTPUT "out.txt"
 
 /**
- * @def Max number of vertexes in graph
+ * @def Max number of vertices in graph
  */
 #define MAX_VERTEX 5000
 
 /**
- * @def Length of edge between unreachable vertexes
+ * @def Length of edge between unreachable vertices
  */
 #define INT_MAX 2147483647
 
@@ -36,11 +36,19 @@
  * <li>ERR_ARG - bad argument
  */
 typedef enum ERRORS {
-    ERR_NO, ERR_OPEN, ERR_CREATE, ERR_SCAN,
+    ERR_NO = 0, ERR_OPEN, ERR_CREATE, ERR_SCAN,
     ERR_PRINT, ERR_CLOSE, ERR_ALLOC, ERR_NULL,
     ERR_ARG
 } Error;
 
+/**
+ * @typedef List of errors of argument:
+ * <li> BAD_NV - bad number of vertices
+ * <li> BAD_V - bad vertex
+ * <li> BAD_NE - bad number of edges
+ * <li> BAD_LEN - bad length
+ * <li> BAD_NL - bad number of lines
+ */
 typedef enum ARG_ERRORS {
     BAD_NV = 1, BAD_V, BAD_NE, BAD_LEN, BAD_NL
 } ArgError;
@@ -92,5 +100,7 @@ typedef struct graph {
 int getGraphFromFile(Graph g, int *s, int *f);
 
 char *getBadArgAnswer(ArgError err);
+
+int printAnswer(char *str);
 
 #endif /*LAB1_SOLUTION_H*/

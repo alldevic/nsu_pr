@@ -5,24 +5,31 @@
 
 #include <stdio.h>
 #include <malloc.h>
+#include <string.h>
 #include "solution.h"
 
 int main(void) {
     Graph g = malloc(sizeof(Graph));
     int s = 0, f = 0;
-    char *error;
+    char *answer = "";
     int err = getGraphFromFile(g, &s, &f);
-    if (!(err % ERR_ARG)) {
-        error = getBadArgAnswer((ArgError) (err / ERR_ARG));
+    if (err != ERR_NO) {
+        if (err % ERR_ARG != 0) {
+            return err;
+        }
+        ERR((answer = getBadArgAnswer((ArgError) (err / ERR_ARG))) != NULL, ERR_NULL);
+        return printAnswer(answer);
     }
 
-    return err;
+
+    printAnswer(answer);
+    return ERR_NO;
 }
 
 /**
  * @function Get data from <b>INPUT</b>
- * @param g - information about count of vertexes and all about edges
- * @param s  begin vertex
+ * @param g - information about count of vertices and all about edges
+ * @param s - begin vertex
  * @param f - destination vertex
  * @return error code
  */
@@ -68,7 +75,7 @@ int getGraphFromFile(Graph g, int *s, int *f) {
     }
     ERR(i == g->m, BAD_NL * ERR_ARG);
 
-    ERR(fclose(file) == EOF, ERR_CLOSE);
+    ERR(fclose(file) == 0, ERR_CLOSE);
     return ERR_NO;
 }
 
@@ -79,7 +86,6 @@ int getGraphFromFile(Graph g, int *s, int *f) {
  */
 char *getBadArgAnswer(enum ARG_ERRORS err) {
     switch (err) {
-
         case BAD_NV:
             return BAD_NV_ANS;
         case BAD_V:
@@ -92,4 +98,17 @@ char *getBadArgAnswer(enum ARG_ERRORS err) {
             return BAD_NL_ANS;
     }
     return NULL;
+}
+
+/**
+ * @function Write text to <b>OUTPUT</b>
+ * @param str -  string to write to <b>OUTPUT</b>
+ * @return error code
+ */
+int printAnswer(char *str) {
+    FILE *file = fopen(OUTPUT, "w");
+    ERR(file != NULL, ERR_CREATE);
+    ERR(fprintf(file, "%s", str) == strlen(str), ERR_PRINT);
+    ERR(fclose(file) == 0, ERR_CLOSE);
+    return ERR_NO;
 }

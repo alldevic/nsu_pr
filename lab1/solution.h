@@ -1,0 +1,4 @@
+#ifndef LAB1_SOLUTION_H
+#define LAB1_SOLUTION_H
+
+#endif /*LAB1_SOLUTION_H*/

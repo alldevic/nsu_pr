@@ -1,6 +1,13 @@
 #ifndef LAB1_SOLUTION_H
 #define LAB1_SOLUTION_H
 
+#include <errno.h>
+
+/**
+ * @def Macros for trapping errors
+ */
+#define ERR(x) {if (x) {perror(__func__); return errno;}};
+
 /**
  * #def File with source values
  * Default for problem: <b>"in.txt"</b>
@@ -23,23 +30,6 @@
  */
 #define INT_MAX 2147483647
 
-/**
- * @enum List of errors:<ul>
- * <li>ERR_NO - successful
- * <li>ERR_OPEN - problem with <b>INPUT</b>
- * <li>ERR_CREATE - problem with <b>OUTPUT</b>
- * <li>ERR_SCAN - can't read from <b>INPUT</b>
- * <li>ERR_PRINT - can't write to <b>OUTPUT</b>
- * <li>ERR_CLOSE - can't correct close file
- * <li>ERR_ALLOC - can't allocation memory
- * <li>ERR_NULL - nullable argument
- * <li>ERR_ARG - bad argument
- */
-typedef enum ERRORS {
-    ERR_NO = 0, ERR_OPEN, ERR_CREATE, ERR_SCAN,
-    ERR_PRINT, ERR_CLOSE, ERR_ALLOC, ERR_NULL,
-    ERR_ARG
-} Error;
 
 /**
  * @typedef List of errors of argument:
@@ -50,7 +40,7 @@ typedef enum ERRORS {
  * <li> BAD_NL - bad number of lines
  */
 typedef enum ARG_ERRORS {
-    BAD_NV = 1, BAD_V, BAD_NE, BAD_LEN, BAD_NL
+    BAD_NV = -10, BAD_V, BAD_NE, BAD_LEN, BAD_NL
 } ArgError;
 
 /**
@@ -83,10 +73,7 @@ typedef enum ARG_ERRORS {
  */
 #define BAD_NL_ANS "bad number of lines"
 
-/**
- * @def Macros for trapping errors from <b>ERRORS</b> enum
- */
-#define ERR(x, y) if (!(x)) return y;
+#define ARG_ERR(x, y) if (!(x)) return y;
 
 /**
  * @typedef Structure for storage information about graph:

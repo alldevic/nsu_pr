@@ -77,7 +77,10 @@ typedef enum ARG_ERRORS {
  */
 #define BAD_NL_ANS "bad number of lines"
 
-#define ARG_ERR(x, y) if (!(x)) return y;
+/**
+ * @def Return error code for error statement
+ */
+#define ARG_ERR(statement, code) if (!(statement)) return code;
 
 /**
  * @typedef Structure for storage information about graph:
@@ -89,6 +92,8 @@ typedef struct graph {
 } *Graph;
 
 int getGraphFromFile(Graph g, int *s, int *f);
+
+int initEdges(Graph g);
 
 char *getBadArgAnswer(ArgError err);
 

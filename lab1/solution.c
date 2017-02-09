@@ -6,11 +6,9 @@
 #include <stdio.h>
 #include <malloc.h>
 #include <string.h>
-#include <unistd.h>
 #include "solution.h"
 
 int main(void) {
-    int i = 0;
     Graph g = malloc(sizeof(Graph));
     ERR(g == NULL);
     int s = 0, f = 0;
@@ -30,8 +28,7 @@ int main(void) {
  * @return error code
  */
 int getGraphFromFile(Graph g, int *s, int *f) {
-    int i = 0, j = 0;
-    int a = 0, b = 0, c = 0;
+    int i = 0, a = 0, b = 0, c = 0;
     FILE *file = fopen(INPUT, "r");
     ERR(file == NULL);
 
@@ -41,33 +38,19 @@ int getGraphFromFile(Graph g, int *s, int *f) {
 
     /*Read 2nd line*/
     ERR(fscanf(file, "%d %d", s, f) != 2);
-    ARG_ERR((*s > 0) && (*s <= g->n), BAD_V);
-    ARG_ERR((*f > 0) && (*f <= g->n), BAD_V);
+    ARG_ERR(((*s > 0) && (*s <= g->n)) || ((*f > 0) && (*f <= g->n)), BAD_V);
 
     /*Read 3rd line*/
     ERR(fscanf(file, "%d", &(g->m)) != 1);
     ARG_ERR((g->m >= 0) && (g->m <= (g->n * (g->n + 1) / 2)), BAD_NE);
-
-    if (!g->m)
-        return 0;
-    /*Allocation memory for edges array*/
-    g->edges = (int **) malloc(g->n * sizeof(int *));
-    ERR(g->edges == NULL);
-
-    for (i = 0; i < g->n; i++) {
-        g->edges[i] = (int *) malloc(g->n * sizeof(int));
-        ERR(g->edges[i] == NULL);
-        for (j = 0; j < g->n; j++) {
-            g->edges[i][j] = INFTY;
-        }
-    }
+    ARG_ERR(g->m, 0);
 
     /*Read edges data*/
+    ERR(initEdges(g) != 0);
     i = 0;
     while (!feof(file)) {
         ERR(fscanf(file, "%d %d %d", &a, &b, &c) != 3);
-        ARG_ERR((a > 0) && (a <= g->n), BAD_V);
-        ARG_ERR((b > 0) && (b <= g->n), BAD_V);
+        ARG_ERR(((a > 0) && (a <= g->n)) || ((b > 0) && (b <= g->n)), BAD_V);
         ARG_ERR((c >= 0) && (b <= INT_MAX), BAD_LEN);
         g->edges[a - 1][b - 1] = c;
         i++;
@@ -76,6 +59,23 @@ int getGraphFromFile(Graph g, int *s, int *f) {
 
     ERR(fclose(file) != 0);
     return 0;
+}
+
+/**
+ * @function Allocation memory for edges array in graph
+ * @param g - graph for allocation
+ * @return error code
+ */
+int initEdges(Graph g)
+{
+    int i = 0, j = 0;
+    ERR((g->edges = (int **) malloc(g->n * sizeof(int *))) == NULL);
+    for (i = 0; i < g->n; i++) {
+        ERR((g->edges[i] = (int *) malloc(g->n * sizeof(int))) == NULL);
+        for (j = 0; j < g->n; j++) {
+            g->edges[i][j] = INFTY;
+        }
+    }
 }
 
 /**
@@ -102,6 +102,7 @@ char *getBadArgAnswer(enum ARG_ERRORS err) {
 /**
  * @function Write text to <b>OUTPUT</b>
  * @param str -  string to write to <b>OUTPUT</b>
+ * @param fl -  0 - "w+" for open, else "w"
  * @return error code
  */
 int printAnswer(char *str, int fl) {

@@ -30,6 +30,10 @@
  */
 #define INT_MAX 2147483647
 
+/**
+ * @def Unreachable destinantion
+ */
+#define INFTY -1
 
 /**
  * @typedef List of errors of argument:
@@ -88,6 +92,6 @@ int getGraphFromFile(Graph g, int *s, int *f);
 
 char *getBadArgAnswer(ArgError err);
 
-int printAnswer(char *str);
+int printAnswer(char *str, int fl);
 
 #endif /*LAB1_SOLUTION_H*/

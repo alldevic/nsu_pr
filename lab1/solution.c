@@ -10,13 +10,15 @@
 #include "solution.h"
 
 int main(void) {
+    int i = 0;
     Graph g = malloc(sizeof(Graph));
     ERR(g == NULL);
     int s = 0, f = 0;
-    char *answer = "";
+    char answer[20];
     int err = getGraphFromFile(g, &s, &f);
     ERR(err > 0);
-    if (err < 0) { return printAnswer(getBadArgAnswer((ArgError) err)); }
+    if (err < 0) { return printAnswer(getBadArgAnswer((ArgError) err), 1); }
+
 
     return err;
 }
@@ -55,7 +57,7 @@ int getGraphFromFile(Graph g, int *s, int *f) {
         g->edges[i] = (int *) malloc(g->n * sizeof(int));
         ERR(g->edges[i] == NULL);
         for (j = 0; j < g->n; j++) {
-            g->edges[i][j] = INT_MAX;
+            g->edges[i][j] = INFTY;
         }
     }
 
@@ -101,8 +103,8 @@ char *getBadArgAnswer(enum ARG_ERRORS err) {
  * @param str -  string to write to <b>OUTPUT</b>
  * @return error code
  */
-int printAnswer(char *str) {
-    FILE *file = fopen(OUTPUT, "w");
+int printAnswer(char *str, int fl) {
+    FILE *file = fopen(OUTPUT, fl ? "w" : "w+");
     ERR(file == NULL);
     ERR(fprintf(file, "%s", str) != strlen(str));
     ERR(fclose(file) != 0);

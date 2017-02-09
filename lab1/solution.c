@@ -14,7 +14,6 @@ int main(void) {
     Graph g = malloc(sizeof(Graph));
     ERR(g == NULL);
     int s = 0, f = 0;
-    char answer[20];
     int err = getGraphFromFile(g, &s, &f);
     ERR(err > 0);
     if (err < 0) { return printAnswer(getBadArgAnswer((ArgError) err), 1); }
@@ -37,7 +36,7 @@ int getGraphFromFile(Graph g, int *s, int *f) {
     ERR(file == NULL);
 
     /*Read 1st line*/
-    ERR(fscanf(file, "%d", &(g->n)) == EOF);
+    ERR(fscanf(file, "%d", &(g->n)) != 1);
     ARG_ERR((g->n >= 0) && (g->n <= MAX_VERTEX), BAD_NV);
 
     /*Read 2nd line*/
@@ -49,6 +48,8 @@ int getGraphFromFile(Graph g, int *s, int *f) {
     ERR(fscanf(file, "%d", &(g->m)) != 1);
     ARG_ERR((g->m >= 0) && (g->m <= (g->n * (g->n + 1) / 2)), BAD_NE);
 
+    if (!g->m)
+        return 0;
     /*Allocation memory for edges array*/
     g->edges = (int **) malloc(g->n * sizeof(int *));
     ERR(g->edges == NULL);

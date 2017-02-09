@@ -9,7 +9,7 @@
 #define ERR(x) {if (x) {perror(__func__); return errno;}};
 
 /**
- * #def File with source values
+ * @def File with source values
  * Default for problem: <b>"in.txt"</b>
  */
 #define INPUT "in.txt"

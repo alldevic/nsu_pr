@@ -11,11 +11,12 @@
 int main(void) {
     Graph g = malloc(sizeof(Graph));
     ERR(g == NULL);
-    int s = 0, f = 0;
-    int err = getGraphFromFile(g, &s, &f);
-    ERR(err > 0);
-    if (err < 0) { return printAnswer(getBadArgAnswer((ArgError) err), 1); }
 
+    int err = getGraphFromFile(g);
+    ERR(err > 0);
+    if (err < 0) {
+        return printAnswer(getBadArgAnswer((ArgError) err), 1);
+    }
 
     return err;
 }
@@ -27,7 +28,7 @@ int main(void) {
  * @param f - destination vertex
  * @return error code
  */
-int getGraphFromFile(Graph g, int *s, int *f) {
+int getGraphFromFile(Graph g) {
     int i = 0, a = 0, b = 0, c = 0;
     FILE *file = fopen(INPUT, "r");
     ERR(file == NULL);
@@ -37,8 +38,8 @@ int getGraphFromFile(Graph g, int *s, int *f) {
     ARG_ERR((g->n >= 0) && (g->n <= MAX_VERTEX), BAD_NV);
 
     /*Read 2nd line*/
-    ERR(fscanf(file, "%d %d", s, f) != 2);
-    ARG_ERR(((*s > 0) && (*s <= g->n)) || ((*f > 0) && (*f <= g->n)), BAD_V);
+    ERR(fscanf(file, "%d %d", &g->s, &g->f) != 2);
+    ARG_ERR(((g->s > 0) && (g->s <= g->n)) || ((g->f > 0) && (g->f <= g->n)), BAD_V);
 
     /*Read 3rd line*/
     ERR(fscanf(file, "%d", &(g->m)) != 1);
@@ -66,16 +67,23 @@ int getGraphFromFile(Graph g, int *s, int *f) {
  * @param g - graph for allocation
  * @return error code
  */
-int initEdges(Graph g)
-{
+int initEdges(Graph g) {
     int i = 0, j = 0;
     ERR((g->edges = (int **) malloc(g->n * sizeof(int *))) == NULL);
+    ERR((g->dest = (int *) malloc(g->n * sizeof(int))) == NULL);
+
     for (i = 0; i < g->n; i++) {
         ERR((g->edges[i] = (int *) malloc(g->n * sizeof(int))) == NULL);
+
         for (j = 0; j < g->n; j++) {
             g->edges[i][j] = INFTY;
         }
+
+        g->dest[i] = INFTY;
     }
+    g->dest[g->s] = 0;
+
+    return 0;
 }
 
 /**
@@ -96,6 +104,7 @@ char *getBadArgAnswer(enum ARG_ERRORS err) {
         case BAD_NL:
             return BAD_NL_ANS;
     }
+
     return NULL;
 }
 
@@ -108,7 +117,9 @@ char *getBadArgAnswer(enum ARG_ERRORS err) {
 int printAnswer(char *str, int fl) {
     FILE *file = fopen(OUTPUT, fl ? "w" : "w+");
     ERR(file == NULL);
+
     ERR(fprintf(file, "%s", str) != strlen(str));
+
     ERR(fclose(file) != 0);
     return 0;
 }

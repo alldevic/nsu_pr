@@ -86,12 +86,15 @@ typedef enum ARG_ERRORS {
  * @typedef Structure for storage information about graph:
  */
 typedef struct graph {
-    int n; /**Number of vertices*/
-    int m; /**Number of edges*/
-    int **edges; /**Matrix of values*/
+    int n;        /**  Number of vertices */
+    int m;        /**  Number of edges */
+    int **edges;  /**  Matrix of values */
+    int s;        /**  Start point */
+    int f;        /**  Finish point */
+    int *dest;    /**  Table of destinations from S */
 } *Graph;
 
-int getGraphFromFile(Graph g, int *s, int *f);
+int getGraphFromFile(Graph g);
 
 int initEdges(Graph g);
 

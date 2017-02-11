@@ -1,5 +1,5 @@
 /**
- * * Laboratory work #1
+ * Laboratory work #1
  * Dijkstra algorithm
  */
 
@@ -7,7 +7,6 @@
 #include <malloc.h>
 #include <string.h>
 #include "solution.h"
-
 
 int main(void)
 {
@@ -43,17 +42,19 @@ int main(void)
     printAnswer("\n", 0);
 
     if (g->dest[g->f] == INFTY)
-    {
         printAnswer("no path", 0);
-    } else if (g->dest[g->f] < 0)
+    else
     {
-        printAnswer("overflow", 0);
-    } else
-    {
-        for (i = 0; i < g->path_len; i++)
+/*        for (i =0; i<g->n; i++)
+            printIntAnswer(g->path[i], 0);*/
+
+        while ((g->path[g->f] != INFTY))
         {
-            printIntAnswer(g->path[i], 0);
+            printIntAnswer(g->f + 1, 0);
+            g->f = g->path[g->f];
         }
+        printIntAnswer(g->f + 1, 0);
+
     }
 
     return err;
@@ -62,44 +63,52 @@ int main(void)
 int dijkstra_dist(Graph g)
 {
     int *visited = (int *) malloc(g->n * sizeof(int));
-    int u = 0, i = 0, j = 0, min;
-
-    ERR(visited == NULL);
+    int i = 0, j = 0, min, u = 0, ind = 0, tmpf = g->f;
     for (i = 0; i < g->n; i++)
     {
         visited[i] = 0;
     }
     visited[g->s] = 1;
-
+/*    for (j = 0; j < g->n; j++)
+        fprintf(stdout, "%d ", g->dest[j]);
+    fprintf(stdout, "\n");*/
     for (i = 0; i < g->n; i++)
     {
         min = INT_MAX;
         for (j = 0; j < g->n; j++)
         {
-            if (!visited[j] && g->dest[j] <= min && g->dest[j] > INFTY)
+            /*fprintf(stdout, "%d %d %d\n", j, visited[j], g->dest[j]);*/
+            if (!visited[j] && g->dest[j] > 0 && g->dest[j] <= min)
             {
                 min = g->dest[j];
-                u = j;
+                ind = j;
             }
         }
 
-        visited[u] = 1;
-
+        visited[ind] = 1;
+        u = ind;
         for (j = 0; j < g->n; j++)
         {
-            if (!visited[j] && (g->edges[u][j] != INFTY) && (g->dest[u] != INFTY) &&
-                (g->dest[u] + g->edges[u][j] < g->dest[j]))
+            if (!visited[j] && g->edges[j][u] != INFTY &&
+                g->dest[u] + g->edges[u][j] < g->dest[j] &&
+                g->dest[u] + g->edges[u][j] >= 0)
             {
                 g->dest[j] = g->dest[u] + g->edges[u][j];
+                g->path[j] = u;
+            }
+
+            if (g->dest[j] < 0)
+            {
+                g->dest[j] = g->dest[u] + g->edges[u][j];
+                g->path[j] = u;
+
             }
         }
+
     }
+/*    for (j = 0; j < g->n; j++)
+        fprintf(stdout, "%d %d %d\n", j, visited[j], g->dest[j]);*/
     return 0;
-}
-
-void dijkstra_path(Graph g)
-{
-
 }
 
 /**
@@ -120,7 +129,9 @@ int getGraphFromFile(Graph g)
 
     /*Read 2nd line*/
     ERR(fscanf(file, "%d %d", &g->s, &g->f) != 2);
-    ARG_ERR(((g->s > 0) && (g->s <= g->n)) || ((g->f > 0) && (g->f <= g->n)), BAD_V);
+    ARG_ERR(((g->s > 0) && (g->s <= g->n)), BAD_V);
+    ARG_ERR(((g->f > 0) && (g->f <= g->n)), BAD_V);
+
     g->s--;
     g->f--;
 
@@ -135,8 +146,9 @@ int getGraphFromFile(Graph g)
     while (!feof(file))
     {
         ERR(fscanf(file, "%d %d %d\n", &a, &b, &c) != 3);
-        ARG_ERR(((a > 0) && (a <= g->n)) || ((b > 0) && (b <= g->n)), BAD_V);
-        ARG_ERR((c >= 0) && (b <= INT_MAX), BAD_LEN);
+        ARG_ERR(((a > 0) && (a <= g->n)), BAD_V);
+        ARG_ERR(((b > 0) && (b <= g->n)), BAD_V);
+        ARG_ERR((c >= 0) && (c <= INT_MAX), BAD_LEN);
         g->edges[a - 1][b - 1] = c;
         g->edges[b - 1][a - 1] = c;
 
@@ -178,7 +190,7 @@ int initEdges(Graph g)
         g->path[i] = 0;
     }
     g->dest[g->s] = 0;
-
+    g->path[g->s] = -1;
     return 0;
 }
 

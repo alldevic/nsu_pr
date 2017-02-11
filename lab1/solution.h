@@ -95,12 +95,9 @@ typedef struct graph
     int f;        /**  Finish point */
     int *dest;    /**  Table of destinations from S */
     int *path;    /**  Path from start to finish */
-    int path_len;  /**  length of path */
 } *Graph;
 
 int dijkstra_dist(Graph g);
-
-void dijkstra_path(Graph g);
 
 int getGraphFromFile(Graph g);
 

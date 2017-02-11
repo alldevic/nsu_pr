@@ -43,7 +43,8 @@
  * <li> BAD_LEN - bad length
  * <li> BAD_NL - bad number of lines
  */
-typedef enum ARG_ERRORS {
+typedef enum ARG_ERRORS
+{
     BAD_NV = -10, BAD_V, BAD_NE, BAD_LEN, BAD_NL
 } ArgError;
 
@@ -85,14 +86,21 @@ typedef enum ARG_ERRORS {
 /**
  * @typedef Structure for storage information about graph:
  */
-typedef struct graph {
+typedef struct graph
+{
     int n;        /**  Number of vertices */
     int m;        /**  Number of edges */
     int **edges;  /**  Matrix of values */
     int s;        /**  Start point */
     int f;        /**  Finish point */
     int *dest;    /**  Table of destinations from S */
+    int *path;    /**  Path from start to finish */
+    int path_len;  /**  length of path */
 } *Graph;
+
+void dijkstra_dist(Graph g);
+
+void dijkstra_path(Graph g);
 
 int getGraphFromFile(Graph g);
 
@@ -101,5 +109,7 @@ int initEdges(Graph g);
 char *getBadArgAnswer(ArgError err);
 
 int printAnswer(char *str, int fl);
+
+int printIntAnswer(int str, int fl);
 
 #endif /*LAB1_SOLUTION_H*/

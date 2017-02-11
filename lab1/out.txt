@@ -1,1 +1,2 @@
-bad length
+0 oo oo 
+no path

@@ -1,5 +1,5 @@
 /**
- * Laboratory work #1
+ * * Laboratory work #1
  * Dijkstra algorithm
  */
 
@@ -59,9 +59,42 @@ int main(void)
     return err;
 }
 
-void dijkstra_dist(Graph g)
+int dijkstra_dist(Graph g)
 {
+    int *visited = (int *) malloc(g->n * sizeof(int));
+    int u = 0, i = 0, j = 0, min;
 
+    ERR(visited == NULL);
+    for (i = 0; i < g->n; i++)
+    {
+        visited[i] = 0;
+    }
+    visited[g->s] = 1;
+
+    for (i = 0; i < g->n; i++)
+    {
+        min = INT_MAX;
+        for (j = 0; j < g->n; j++)
+        {
+            if (!visited[j] && g->dest[j] <= min && g->dest[j] > INFTY)
+            {
+                min = g->dest[j];
+                u = j;
+            }
+        }
+
+        visited[u] = 1;
+
+        for (j = 0; j < g->n; j++)
+        {
+            if (!visited[j] && (g->edges[u][j] != INFTY) && (g->dest[u] != INFTY) &&
+                (g->dest[u] + g->edges[u][j] < g->dest[j]))
+            {
+                g->dest[j] = g->dest[u] + g->edges[u][j];
+            }
+        }
+    }
+    return 0;
 }
 
 void dijkstra_path(Graph g)
@@ -87,14 +120,13 @@ int getGraphFromFile(Graph g)
 
     /*Read 2nd line*/
     ERR(fscanf(file, "%d %d", &g->s, &g->f) != 2);
+    ARG_ERR(((g->s > 0) && (g->s <= g->n)) || ((g->f > 0) && (g->f <= g->n)), BAD_V);
     g->s--;
     g->f--;
-    ARG_ERR(((g->s > 0) && (g->s <= g->n)) || ((g->f > 0) && (g->f <= g->n)), BAD_V);
 
     /*Read 3rd line*/
     ERR(fscanf(file, "%d", &(g->m)) != 1);
     ARG_ERR((g->m >= 0) && (g->m <= (g->n * (g->n + 1) / 2)), BAD_NE);
-
 
     /*Read edges data*/
     ERR(initEdges(g) != 0);
@@ -102,10 +134,17 @@ int getGraphFromFile(Graph g)
     i = 0;
     while (!feof(file))
     {
-        ERR(fscanf(file, "%d %d %d", &a, &b, &c) != 3);
+        ERR(fscanf(file, "%d %d %d\n", &a, &b, &c) != 3);
         ARG_ERR(((a > 0) && (a <= g->n)) || ((b > 0) && (b <= g->n)), BAD_V);
         ARG_ERR((c >= 0) && (b <= INT_MAX), BAD_LEN);
         g->edges[a - 1][b - 1] = c;
+        g->edges[b - 1][a - 1] = c;
+
+        if (a - 1 == g->s)
+        {
+            g->dest[b - 1] = c;
+        }
+
         i++;
     }
     ARG_ERR(i == g->m, BAD_NL);

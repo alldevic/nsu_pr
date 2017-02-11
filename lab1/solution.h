@@ -98,7 +98,7 @@ typedef struct graph
     int path_len;  /**  length of path */
 } *Graph;
 
-void dijkstra_dist(Graph g);
+int dijkstra_dist(Graph g);
 
 void dijkstra_path(Graph g);
 

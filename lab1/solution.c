@@ -1,253 +1,201 @@
-/**
- * Laboratory work #1
- * Dijkstra algorithm
- */
-
 #include <stdio.h>
-#include <malloc.h>
+#include <stdlib.h>
+#include <errno.h>
 #include <string.h>
 #include "solution.h"
 
-int main(void)
+#define ERR(x) if (x) {perror(__func__); return errno;};
+#define ARG_ERR(statement, code) if (statement) {return code;}
+
+int main()
 {
-    int i = 0;
-    Graph g = malloc(sizeof(Graph));
-    ERR(g == NULL);
+    int i = 0, ov = 0;
+    char tmp[10] = "";
+    Graph gr = malloc(sizeof(Graph));
+    ERR(gr == NULL);
+    int er = readData(gr);
+    ERR(er > 0);
+    /*ARG_ERR(er < 0, printAnswer(getStrArgErr((ArgError)er), 1));*/
 
-    int err = getGraphFromFile(g);
-    ERR(err > 0);
-    if (err < 0)
-    {
-        return printAnswer(getBadArgAnswer((ArgError) err), 1);
-    }
+    if (er < 0)
+        return printAnswer(getStrArgErr((ArgError) er), 1);
 
-    if (g->m != 0)
-    {
-        dijkstra_dist(g);
-    }
+    dijkstra(gr);
     printAnswer("", 1);
-    for (i = 0; i < g->n; i++)
+
+/*
+    for (i = 0; i < gr->n; i++)
+        fprintf(stdout, "%u ", gr->dest[i]);
+*/
+
+
+    for (i = 0; i < gr->n; i++)
     {
-        if (g->dest[i] == INFTY)
-        {
+        if (gr->dest[i] == INFTY)
             printAnswer("oo ", 0);
-        } else if (g->dest[i] < 0)
+        else if (gr->dest[i] > MAX_INT)
         {
             printAnswer("INT_MAX+ ", 0);
         } else
         {
-            printIntAnswer(g->dest[i], 0);
+            ov += (gr->dest[i] == MAX_INT) ? 1 : 0;
+            sprintf(tmp, "%u ", gr->dest[i]);
+            printAnswer(tmp, 0);
         }
     }
     printAnswer("\n", 0);
 
-    if (g->dest[g->f] == INFTY)
+
+    if (gr->dest[gr->f] == NO_PATH)
         printAnswer("no path", 0);
+    else if ((gr->dest[gr->f] > MAX_INT) && (ov > 1))
+        printAnswer("overflow", 0);
     else
     {
-/*        for (i =0; i<g->n; i++)
-            printIntAnswer(g->path[i], 0);*/
+        /*for (i = 0; i < gr->n; i++)
+            fprintf(stdout, "%i ", gr->path[i]);*/
 
-        while ((g->path[g->f] != INFTY))
+        while ((gr->path[gr->f] != -1))
         {
-            printIntAnswer(g->f + 1, 0);
-            g->f = g->path[g->f];
+            memset(tmp, 0, strlen(tmp));
+            sprintf(tmp, "%d ", gr->f + 1);
+            printAnswer(tmp, 0);
+            gr->f = gr->path[gr->f];
         }
-        printIntAnswer(g->f + 1, 0);
-
+        memset(tmp, 0, strlen(tmp));
+        sprintf(tmp, "%d ", gr->f + 1);
+        printAnswer(tmp, 0);
     }
 
-    return err;
-}
 
-int dijkstra_dist(Graph g)
-{
-    int *visited = (int *) malloc(g->n * sizeof(int));
-    int i = 0, j = 0, min, u = 0, ind = 0, tmpf = g->f;
-    for (i = 0; i < g->n; i++)
-    {
-        visited[i] = 0;
-    }
-    visited[g->s] = 1;
-/*    for (j = 0; j < g->n; j++)
-        fprintf(stdout, "%d ", g->dest[j]);
-    fprintf(stdout, "\n");*/
-    for (i = 0; i < g->n; i++)
-    {
-        min = INT_MAX;
-        for (j = 0; j < g->n; j++)
-        {
-            /*fprintf(stdout, "%d %d %d\n", j, visited[j], g->dest[j]);*/
-            if (!visited[j] && g->dest[j] > 0 && g->dest[j] <= min)
-            {
-                min = g->dest[j];
-                ind = j;
-            }
-        }
-
-        visited[ind] = 1;
-        u = ind;
-        for (j = 0; j < g->n; j++)
-        {
-            if (!visited[j] && g->edges[j][u] != INFTY &&
-                g->dest[u] + g->edges[u][j] < g->dest[j] &&
-                g->dest[u] + g->edges[u][j] >= 0)
-            {
-                g->dest[j] = g->dest[u] + g->edges[u][j];
-                g->path[j] = u;
-            }
-
-            if (g->dest[j] < 0)
-            {
-                g->dest[j] = g->dest[u] + g->edges[u][j];
-                g->path[j] = u;
-
-            }
-        }
-
-    }
-/*    for (j = 0; j < g->n; j++)
-        fprintf(stdout, "%d %d %d\n", j, visited[j], g->dest[j]);*/
     return 0;
 }
 
-/**
- * @function Get data from <b>INPUT</b>
- * @param g - information about count of vertices and all about edges
- * @param s - begin vertex
- * @param f - destination vertex
- * @return error code
- */
-int getGraphFromFile(Graph g)
+void dijkstra(Graph gr)
+{
+    int i = 0, j = 0, u = 0, min;
+    char *visited = (char *) malloc(gr->n * sizeof(char));
+    for (i = 0; i < gr->n; i++)
+        visited[i] = 0;
+    visited[gr->s] = 1;
+    for (i = 0; i < gr->n; i++)
+    {
+        min = MAX_INT;
+        for (j = 0; j < gr->n; j++)
+            if (!visited[j] && gr->dest[j] <= min)
+            {
+                min = gr->dest[j];
+                u = j;
+            }
+        visited[u] = 1;
+
+        for (j = 0; j < gr->n; j++)
+            if (!visited[j] && (gr->edges[u][j] <= MAX_INT) && (gr->dest[u] <= MAX_INT) &&
+                (gr->edges[u][j] + gr->dest[u] < gr->dest[j]))
+            {
+                gr->dest[j] = gr->edges[u][j] + gr->dest[u];
+                gr->path[j] = u;
+            }
+    }
+}
+
+int readData(Graph gr)
 {
     int i = 0, a = 0, b = 0, c = 0;
+
     FILE *file = fopen(INPUT, "r");
     ERR(file == NULL);
+
     /*Read 1st line*/
-    ERR(fscanf(file, "%d", &(g->n)) != 1);
-    ARG_ERR((g->n >= 0) && (g->n <= MAX_VERTEX), BAD_NV);
+    ERR(fscanf(file, "%d", &(gr->n)) != 1);
+    ARG_ERR((gr->n < 0) || (gr->n >= MAX_VERTEX), BAD_NV);
 
     /*Read 2nd line*/
-    ERR(fscanf(file, "%d %d", &g->s, &g->f) != 2);
-    ARG_ERR(((g->s > 0) && (g->s <= g->n)), BAD_V);
-    ARG_ERR(((g->f > 0) && (g->f <= g->n)), BAD_V);
+    ERR(fscanf(file, "%d %d", &gr->s, &gr->f) != 2);
+    ARG_ERR(((gr->s < 1) || (gr->s > gr->n)), BAD_V);
+    ARG_ERR(((gr->f < 1) || (gr->f > gr->n)), BAD_V);
 
-    g->s--;
-    g->f--;
+    gr->s--;
+    gr->f--;
 
     /*Read 3rd line*/
-    ERR(fscanf(file, "%d", &(g->m)) != 1);
-    ARG_ERR((g->m >= 0) && (g->m <= (g->n * (g->n + 1) / 2)), BAD_NE);
+    ERR(fscanf(file, "%d", &(gr->m)) != 1);
+    ARG_ERR((gr->m < 0) || (gr->m > (gr->n * (gr->n + 1) / 2)), BAD_NE);
 
     /*Read edges data*/
-    ERR(initEdges(g) != 0);
-    ARG_ERR(g->m, 0);
+    ERR(initArrays(gr) != 0);
+    ARG_ERR(gr->m == 0, 0);
     i = 0;
     while (!feof(file))
     {
         ERR(fscanf(file, "%d %d %d\n", &a, &b, &c) != 3);
-        ARG_ERR(((a > 0) && (a <= g->n)), BAD_V);
-        ARG_ERR(((b > 0) && (b <= g->n)), BAD_V);
-        ARG_ERR((c >= 0) && (c <= INT_MAX), BAD_LEN);
-        g->edges[a - 1][b - 1] = c;
-        g->edges[b - 1][a - 1] = c;
-
-        if (a - 1 == g->s)
+        ARG_ERR(((a < 1) || (a > gr->n)), BAD_V);
+        ARG_ERR(((b < 1) || (b > gr->n)), BAD_V);
+        ARG_ERR((c < 0) || (c > MAX_INT), BAD_LEN);
+        if (a != b)
         {
-            g->dest[b - 1] = c;
+            gr->edges[a - 1][b - 1] = (unsigned int) c;
+            gr->edges[b - 1][a - 1] = (unsigned int) c;
+
+            gr->dest[a - 1] = (b - 1 == gr->s) ? (unsigned int) c : gr->dest[a - 1];
+            gr->dest[b - 1] = (a - 1 == gr->s) ? (unsigned int) c : gr->dest[b - 1];
         }
 
         i++;
     }
-    ARG_ERR(i == g->m, BAD_NL);
+    ARG_ERR(i != (gr->m), BAD_NL);
 
     ERR(fclose(file) != 0);
     return 0;
 }
 
-/**
- * @function Allocation memory for edges array in graph
- * @param g - graph for allocation
- * @return error code
- */
-int initEdges(Graph g)
+int initArrays(Graph gr)
 {
     int i = 0, j = 0;
-    ERR((g->edges = (int **) malloc(g->n * sizeof(int *))) == NULL);
-    ERR((g->dest = (int *) malloc(g->n * sizeof(int))) == NULL);
-    ERR((g->path = (int *) malloc(g->n * sizeof(int))) == NULL);
+    ERR((gr->edges = (unsigned int **) malloc(gr->n * sizeof(int *))) == NULL);
+    ERR((gr->dest = (unsigned int *) malloc(gr->n * sizeof(int))) == NULL);
+    ERR((gr->path = (int *) malloc(gr->n * sizeof(int))) == NULL);
 
-    for (i = 0; i < g->n; i++)
+    for (i = 0; i < gr->n; i++)
     {
-        ERR((g->edges[i] = (int *) malloc(g->n * sizeof(int))) == NULL);
+        ERR((gr->edges[i] = (unsigned int *) malloc(gr->n * sizeof(int))) == NULL);
 
-        for (j = 0; j < g->n; j++)
-        {
-            g->edges[i][j] = INFTY;
-        }
+        for (j = 0; j < gr->n; j++)
+            gr->edges[i][j] = INFTY;
 
-        g->dest[i] = INFTY;
-        g->path[i] = 0;
+        gr->dest[i] = INFTY;
+        gr->path[i] = 0;
     }
-    g->dest[g->s] = 0;
-    g->path[g->s] = -1;
+    gr->dest[gr->s] = 0;
+    gr->path[gr->s] = -1;
+
     return 0;
 }
 
-/**
- * @function Matching <b>ARG_ERRORS</b> value with string interpretation
- * @param err - ARG_ERROR code
- * @return string interpretation
- */
-char *getBadArgAnswer(enum ARG_ERRORS err)
+char *getStrArgErr(ArgError arg)
 {
-    switch (err)
+    switch (arg)
     {
         case BAD_NV:
-            return BAD_NV_ANS;
+            return "bad number of vertices";
         case BAD_V:
-            return BAD_V_ANS;
+            return "bad vertex";
         case BAD_NE:
-            return BAD_NE_ANS;
+            return "bad number of edges";
         case BAD_LEN:
-            return BAD_LEN_ANS;
+            return "bad length";
         case BAD_NL:
-            return BAD_NL_ANS;
+            return "bad number of lines";
     }
 
     return NULL;
 }
 
-/**
- * @function Write text to <b>OUTPUT</b>
- * @param str -  string to write to <b>OUTPUT</b>
- * @param fl -  0 - "w+" for open, else "w"
- * @return error code
- */
 int printAnswer(char *str, int fl)
 {
     FILE *file = fopen(OUTPUT, fl ? "w" : "at");
     ERR(file == NULL);
-
     ERR(fprintf(file, "%s", str) != strlen(str));
-
-    ERR(fclose(file) != 0);
-    return 0;
-}
-
-/**
- * @function Write text to <b>OUTPUT</b>
- * @param str -  string to write to <b>OUTPUT</b>
- * @param fl -  0 - "w+" for open, else "w"
- * @return error code
- */
-int printIntAnswer(int str, int fl)
-{
-    FILE *file = fopen(OUTPUT, fl ? "w" : "at");
-    ERR(file == NULL);
-
-    ERR(fprintf(file, "%d ", str) < 1);
-
     ERR(fclose(file) != 0);
     return 0;
 }

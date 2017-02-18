@@ -6,7 +6,7 @@
 
 #define ERR(x) if (x) {perror(__func__); return errno;};
 #define ARG_ERR(statement, code) if (statement) {return code;}
-
+    
 int main()
 {
     int i = 0, ov = 0;
@@ -23,10 +23,10 @@ int main()
     dijkstra(gr);
     printAnswer("", 1);
 
-/*
-    for (i = 0; i < gr->n; i++)
-        fprintf(stdout, "%u ", gr->dest[i]);
-*/
+
+    /*for (i = 0; i < gr->n; i++)
+        fprintf(stdout, "%u ", gr->dest[i]);*/
+
 
 
     for (i = 0; i < gr->n; i++)
@@ -52,19 +52,27 @@ int main()
         printAnswer("overflow", 0);
     else
     {
-        /*for (i = 0; i < gr->n; i++)
-            fprintf(stdout, "%i ", gr->path[i]);*/
-
-        while ((gr->path[gr->f] != -1))
+        for (i = 0; i < gr->n; i++)
+            fprintf(stdout, "%i ", gr->path[i]);
+        if (gr->f > gr->s)
         {
+            while ((gr->path[gr->f] != -1))
+            {
+                memset(tmp, 0, strlen(tmp));
+                sprintf(tmp, "%d ", gr->f + 1);
+                printAnswer(tmp, 0);
+                gr->f = gr->path[gr->f];
+            }
             memset(tmp, 0, strlen(tmp));
-            sprintf(tmp, "%d ", gr->f + 1);
+            sprintf(tmp, "%d ", gr->s + 1);
             printAnswer(tmp, 0);
-            gr->f = gr->path[gr->f];
+        } else
+        {
+
+
         }
-        memset(tmp, 0, strlen(tmp));
-        sprintf(tmp, "%d ", gr->f + 1);
-        printAnswer(tmp, 0);
+
+
     }
 
 
@@ -90,12 +98,12 @@ void dijkstra(Graph gr)
         visited[u] = 1;
 
         for (j = 0; j < gr->n; j++)
-            if (!visited[j] && (gr->edges[u][j] <= MAX_INT) && (gr->dest[u] <= MAX_INT) &&
-                (gr->edges[u][j] + gr->dest[u] < gr->dest[j]))
-            {
-                gr->dest[j] = gr->edges[u][j] + gr->dest[u];
-                gr->path[j] = u;
-            }
+            if (!visited[j] && (gr->edges[u][j] + gr->dest[u] < gr->dest[j]) &&
+                (gr->edges[u][j] <= MAX_INT) && (gr->dest[u] <= MAX_INT))
+        {
+            gr->dest[j] = gr->edges[u][j] + gr->dest[u];
+            gr->path[j] = u;
+        }
     }
 }
 
@@ -166,6 +174,7 @@ int initArrays(Graph gr)
         gr->dest[i] = INFTY;
         gr->path[i] = 0;
     }
+
     gr->dest[gr->s] = 0;
     gr->path[gr->s] = -1;
 

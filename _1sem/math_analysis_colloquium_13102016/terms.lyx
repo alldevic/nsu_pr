@@ -1,0 +1,638 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\begin_modules
+theorems-ams
+eqs-within-sections
+figs-within-sections
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize a4paper
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1cm
+\topmargin 1cm
+\rightmargin 1cm
+\bottommargin 1cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle empty
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+Белый Николай, 16210, 11.10.2016
+\end_layout
+
+\begin_layout Section
+Определения
+\end_layout
+
+\begin_layout Enumerate
+Абсолютная величина:
+\begin_inset Formula 
+\[
+|x|=\begin{cases}
+-x, & x<0\\
+\ x, & x\geqslant0
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Инъекция: 
+\begin_inset Formula $f:X\rightarrow Y$
+\end_inset
+
+ называется инъективным (однозначным), если 
+\begin_inset Formula $(\forall x_{1},x_{2}\in X)(x_{1}\neq x_{2}\Rightarrow f(x_{1})\neq f(x_{2})$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Сюръекция: 
+\begin_inset Formula $f:X\rightarrow Y$
+\end_inset
+
+ называется сюръективным (накрывающим), если 
+\begin_inset Formula $\forall y\in Y\ \exists x\in X\ |\ f(x)=y$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Биекция: отображение называют биективным, если он инъективно и сюръективно.
+\end_layout
+
+\begin_layout Enumerate
+Счетное множество --- это множество, равномощное 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ℕ
+\family default
+\series default
+\shape default
+\size default
+\emph default
+\bar default
+\strikeout default
+\uuline default
+\uwave default
+\noun default
+\color inherit
+, т.
+ е.
+ элементы которого можно пронумеровать.
+\end_layout
+
+\begin_layout Enumerate
+Континуальное множество --- это множество, равномощное 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ℝ.
+\end_layout
+
+\begin_layout Enumerate
+Область определения функции --- множество, на котором задается функция.
+\end_layout
+
+\begin_layout Enumerate
+Область значений функции --- множество, состоящее из всех значений, которые
+ принимает функция.
+\end_layout
+
+\begin_layout Enumerate
+Принцип Архимеда: 
+\begin_inset Formula $\forall x\in\text{ℝ}\ \exists n\in\ensuremath{ℕ}\ |\ n>x$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Последовательность: Числовой последовательностью называется любое отображение
+ 
+\begin_inset Formula $f:\text{ℕ}\rightarrow\text{ℝ}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Возрастающая последовательность (строго монотонно возрастающая): 
+\begin_inset Formula $\forall n\in\text{ℕ}\ x_{n}<x_{n+1}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Убывающая последовательность (строго монотонно убывающая): 
+\begin_inset Formula $\forall n\in\text{ℕ}\ x_{n}>x_{n+1}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Строго монотонная последовательность либо возрастающая, либо убывающая.
+\end_layout
+
+\begin_layout Enumerate
+Невозрастающая последовательность (монотонно убывающая): 
+\begin_inset Formula $\forall n\in\text{ℕ}\ x_{n}\geqslant x_{n+1}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Неубывающая последовательность (монотонно возрастающая): 
+\begin_inset Formula $\forall n\in\text{ℕ}\ x_{n}\leqslant x_{n+1}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Монотонная последовательность либо невозрастающая, либо неубывающая.
+\end_layout
+
+\begin_layout Enumerate
+Существует нижняя граница (посл.
+ огр.
+ снизу): 
+\begin_inset Formula $\exists\varepsilon\in\text{ℝ}\ |\ \forall n\in\text{ℕ}\ a_{n}\geqslant\varepsilon$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Нижней границы не существует (посл.
+ не огр.
+ снизу): 
+\begin_inset Formula $\forall\varepsilon\in\text{ℝ}\ |\ \exists n\in\text{ℕ}\ a_{n}<\varepsilon$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Точная нижняя грань (наибольшая нижняя граница):
+\begin_inset Formula 
+\[
+\inf\ \{a_{n}\}=A\Leftrightarrow\begin{cases}
+1) & A\ |\ \forall n\in\text{ℕ}\ a_{n}\geqslant A\\
+2) & \forall A'>A\ \exists a_{n}\in\text{ℕ}\ |\ a_{n}<A'
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Существует верхняя граница (посл.
+ огр.
+ сверху): 
+\begin_inset Formula $\exists\varepsilon\in\text{ℝ}\ |\ \forall n\in\text{ℕ}\ a_{n}\leqslant\varepsilon$
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Enumerate
+Верхней границы не сущ.
+ (посл.
+ не огр.
+ сверху): 
+\begin_inset Formula $\forall\varepsilon\in\text{ℝ}\ |\ \exists n\in\text{ℕ}\ a_{n}>\varepsilon$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Точная верхняя грань (наименьшая верхняя граница):
+\begin_inset Formula 
+\[
+\sup\ \{a_{n}\}=A\Leftrightarrow\begin{cases}
+1) & A\ |\ \forall n\in\text{ℕ}\ a_{n}\leqslant A\\
+2) & \forall A'\text{<}A\ \exists a_{n}\ |\ a_{n}>A'
+\end{cases}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Последовательность ограничена: 
+\begin_inset Formula $\exists M>0\ |\ \forall n\in\text{ℕ}\ |a_{n}|<M$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Последовательность неограничена: 
+\begin_inset Formula $\forall M>0\ \exists n\in\text{ℕ}\ |\ |a_{n}|\geqslant M$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Предел последовательности: 
+\begin_inset Formula $\lim_{n\rightarrow\infty}a_{n}=A\ \Leftrightarrow\ \forall\varepsilon>0\ \exists n_{0}\inℕ\ |\ \forall n>n_{0}\ |a_{n}-A|<\varepsilon$
+\end_inset
+
+ .
+\end_layout
+
+\begin_layout Enumerate
+Сходимость: последовательность сходится, если она имееет конечный предел:
+ 
+\begin_inset Formula 
+\[
+\lim_{n\rightarrow\infty}a_{n}=A\in\text{\ensuremath{\mathbb{R}}}\ \Leftrightarrow\ \forall\varepsilon>0\ \exists n_{0}\in\text{ℕ}\ |\ \forall n>n_{0}\ |a_{n}-A|<\varepsilon,\ A\in\text{ℝ}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Расходимость: последовательность расходится
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+, если у нее либо бесконечный предел, либо предел не существует.
+\end_layout
+
+\begin_layout Enumerate
+Бесконечно малая (
+\begin_inset Formula $a_{n}\rightarrow0$
+\end_inset
+
+): 
+\begin_inset Formula $\lim_{n\rightarrow\infty}a_{n}=0\ \Leftrightarrow\ \forall\varepsilon>0\ \exists n_{0}\in\text{ℕ}\ |\ \forall n>n_{0}\ |a_{n}|<\varepsilon$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Не является бесконечно малой: 
+\begin_inset Formula $\lim_{n\rightarrow\infty}a_{n}\neq0\ \Leftrightarrow\ \exists\varepsilon>0\ |\ \forall n_{0}\in\text{ℕ}\ \exists n>n_{0}\ |\ |a_{n}|\geqslant\varepsilon$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Бесконечно большая (
+\begin_inset Formula $a_{n}\rightarrow\infty$
+\end_inset
+
+): 
+\begin_inset Formula $\lim_{n\rightarrow\infty}a_{n}=\infty\ \Leftrightarrow\ \forall\varepsilon>0\ \exists n_{0}\in\text{ℕ}\ |\ \forall n>n_{0}\ |a_{n}|>\varepsilon$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Не является бесконечно большой: 
+\begin_inset Formula $\lim_{n\rightarrow\infty}a_{n}\neq\infty\ \Leftrightarrow\exists\varepsilon>0\ |\ \forall n_{0}\in\text{ℕ}\ \exists n>n_{0}\ |\ |a_{n}|\leqslant\varepsilon$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Стремится к 
+\begin_inset Formula $+\infty$
+\end_inset
+
+: 
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+
+\begin_inset Formula $\lim_{n\rightarrow\infty}a_{n}=+\infty\ \Leftrightarrow\ \forall\varepsilon>0\ \exists n_{0}\in\text{ℕ}\ |\ \forall n>n_{0}\ a_{n}>\varepsilon$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Не стремится к 
+\begin_inset Formula $+\infty$
+\end_inset
+
+: 
+\begin_inset Formula $\lim_{n\rightarrow\infty}a_{n}\neq+\infty\ \Leftrightarrow\ \exists\varepsilon>0\ |\ \forall n_{0}\in\text{ℕ}\ \exists n>n_{0}\ |\ a_{n}\leqslant\varepsilon$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Стремится к 
+\begin_inset Formula $-\infty$
+\end_inset
+
+: 
+\begin_inset Formula $\lim_{n\rightarrow\infty}a_{n}=-\infty\ \Leftrightarrow\ \forall\varepsilon>0\ \exists n_{0}\in\text{ℕ}\ |\ \forall n>n_{0}\ a_{n}<\varepsilon$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Не стремится к 
+\begin_inset Formula $-\infty$
+\end_inset
+
+: 
+\begin_inset Formula $\lim_{n\rightarrow\infty}a_{n}\neq-\infty\ \Leftrightarrow\ \exists\varepsilon>0\ |\ \forall n_{0}\in\text{ℕ}\ \exists n>n_{0}\ |\ a_{n}\geqslant\varepsilon$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Теорема о зажатой последовательности: Если 
+\begin_inset Formula $\forall n\ b_{n}\leqslant a_{n}\leqslant c_{n}$
+\end_inset
+
+, то при 
+\begin_inset Formula $\text{n\rightarrow\infty}$
+\end_inset
+
+: 
+\begin_inset Formula $\lim b_{n}=\lim c_{n}=A\ \Rightarrow\ \lim a_{n}=A.$
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Теорема Вейерштрасса: Любая монотонно возр.
+ (убывающая) и огр.
+ сверху (снизу) посл.
+ имеет предел.
+\end_layout
+
+\begin_layout Enumerate
+Последовательность фундаментальна, если
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+ 
+\begin_inset Formula $\forall\varepsilon>0\ \exists n_{0}\in\text{ℕ}\ |\ \forall m,n>n_{0}\ \Rightarrow\ |a_{m}-a_{n}|<\varepsilon$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Последовательность не фундаментальна, если 
+\begin_inset Formula $\exists\varepsilon>0\ \forall n_{0}\in\text{ℕ}\ |\ \exists m,n>n_{0}\ (|a_{m}-a_{n}|\geqslant\varepsilon)$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Критерий Коши: 
+\begin_inset Formula $\{a_{n}\}$
+\end_inset
+
+ --- фундаментальна 
+\begin_inset Formula $\Leftrightarrow\ \{a_{n}\}$
+\end_inset
+
+ --- имеет конечный предел (сходится).
+\end_layout
+
+\begin_layout Enumerate
+Отрицание критерия Коши: 
+\begin_inset Formula $\{a_{n}\}$
+\end_inset
+
+ --- не фундаментальна 
+\begin_inset Formula $\Leftrightarrow\ \{a_{n}\}$
+\end_inset
+
+ --- не имеет конечного предела (расходится).
+\end_layout
+
+\begin_layout Enumerate
+Подпоследовательность: 
+\begin_inset Formula $\{a_{n_{k}}\}$
+\end_inset
+
+ --- подпоследовательнось 
+\begin_inset Formula $\{a_{n}\}$
+\end_inset
+
+, если
+\begin_inset Formula $\ \{n_{k}\}$
+\end_inset
+
+ --- строго возр.
+ посл.
+\end_layout
+
+\begin_layout Enumerate
+Частичный предел: Если 
+\begin_inset Formula $\lim_{k\rightarrow\infty}a_{n_{k}}=A$
+\end_inset
+
+, то 
+\begin_inset Formula $A$
+\end_inset
+
+ --- частичный предел последовательности 
+\begin_inset Formula $\{a_{n}\}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Нижний предел последовательности есть наименьший частичный предел:
+\begin_inset Formula 
+\[
+\underline{\lim}_{n\rightarrow\infty}a_{n}=\lim_{n\rightarrow\infty}\inf_{k>n}a_{k}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Верхний предел последовательности есть наибольший частичный предел:
+\begin_inset Formula 
+\[
+\overline{\lim}_{n\rightarrow\infty}a_{n}=\lim_{n\rightarrow\infty}\sup_{k>n}a_{k}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Необходимое и достаточное условие существования предела: 
+\begin_inset Formula $\underline{\lim}_{n\rightarrow\infty}a_{n}=\overline{\lim}_{n\rightarrow\infty}a_{n}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Теорема Больцано-Вейерштрасса: Из ограниченной посл.
+ вещь.
+ чисел можно выделить сходящуюся подпосл.
+\end_layout
+
+\begin_layout Enumerate
+Число 
+\begin_inset Formula $e=\lim_{n\rightarrow\infty}\left(1+\frac{1}{n}\right)^{n}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Окрестностью точки 
+\begin_inset Formula $\ x_{0}$
+\end_inset
+
+ на числовой прямой наывается множество точек, удаленных от 
+\begin_inset Formula $x_{0}$
+\end_inset
+
+ менее чем на 
+\begin_inset Formula $\varepsilon$
+\end_inset
+
+, т.
+ е.
+ 
+\begin_inset Formula $O_{\varepsilon}(x_{0})=\{x\ |\ |x-x_{0}|<\varepsilon\}$
+\end_inset
+
+.
+\end_layout
+
+\end_body
+\end_document

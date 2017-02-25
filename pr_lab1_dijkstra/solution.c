@@ -9,7 +9,7 @@
 
 int main() {
     int i = 0, ov = 0;
-    int aa = 0;
+    int len = 0;
     char tmp[10] = "";
     Graph gr = malloc(sizeof(Graph));
     ERR(gr == NULL);
@@ -22,12 +22,6 @@ int main() {
 
     dijkstra(gr);
     printAnswer("", 1);
-
-
-    /*for (i = 0; i < gr->n; i++)
-        fprintf(stdout, "%u ", gr->dest[i]);*/
-
-
 
     for (i = 0; i < gr->n; i++) {
         if (gr->dest[i] == INFTY)
@@ -48,11 +42,10 @@ int main() {
     else if ((gr->dest[gr->f] > MAX_INT) && (ov > 1))
         printAnswer("overflow", 0);
     else {
-        /*for (i = 0; i < gr->n; i++)
-            fprintf(stdout, "%i ", gr->path[i]);*/
-        aa = abs(gr->s - gr->f);
+        len = abs(gr->s - gr->f);
+
         i = 0;
-        while (i != aa) {
+        while (i < len) {
             memset(tmp, 0, strlen(tmp));
             sprintf(tmp, "%d ", gr->f + 1);
             printAnswer(tmp, 0);

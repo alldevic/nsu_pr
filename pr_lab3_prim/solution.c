@@ -11,15 +11,64 @@ int main() {
 
     Graph gr = malloc(sizeof(Graph));
     ERR(gr == NULL);
-    int er = readData(gr);
+    int er = readData(gr), i = 0;
+    char tmp[10] = "";
     ERR(er > 0);
     /*ARG_ERR(er < 0, printAnswer(getStrArgErr((ArgError)er), 1));*/
 
     if (er < 0)
         return printAnswer(getStrArgErr((ArgError) er), 1);
 
+    prim(gr);
     printAnswer("", 1);
+    if (gr->m < (gr->n - 1))
+    {
+        printAnswer("no spanning tree", 0);
+    }
+    else
+    {
+        for (i = 1; i < gr->n; i++) {
+            memset(tmp, 0, strlen(tmp));
+            sprintf(tmp, "%d %d\n", gr->minTree[i] + 1, i + 1);
+            printAnswer(tmp, 0);
+        }
+    }
 
+
+    return 0;
+}
+
+
+int prim(Graph gr) {
+    int key[gr->n], count = 0, i = 0, v = 0;
+    char mstSet[gr->n];
+
+    for (i = 0; i < gr->n; i++) {
+        key[i] = MAX_INT;
+        mstSet[i] = 0;
+    }
+
+    key[0] = 0;
+
+    for (count = 0; count < gr->n - 1; count++) {
+        int min = MAX_INT, u = 0;
+
+        for (v = 0; v < gr->n; v++) {
+            if (!mstSet[v] && key[v] < min) {
+                min = key[v];
+                u = v;
+            }
+        }
+
+        mstSet[u] = 1;
+        for (v = 0; v < gr->n; v++) {
+            if (gr->edges[u][v] && !mstSet[v] && gr->edges[u][v] < key[v]) {
+                gr->minTree[v] = u;
+                key[v] = gr->edges[u][v];
+            }
+        }
+
+    }
     return 0;
 }
 
@@ -62,15 +111,18 @@ int readData(Graph gr) {
 int initArrays(Graph gr) {
     int i = 0, j = 0;
     ERR((gr->edges = (unsigned int **) malloc(gr->n * sizeof(int *))) == NULL);
-    
+    ERR((gr->minTree = (int *) malloc(gr->n * sizeof(int))) == NULL);
+
     for (i = 0; i < gr->n; i++) {
         ERR((gr->edges[i] = (unsigned int *) malloc(gr->n * sizeof(int))) == NULL);
 
-        for (j = 0; j < gr->n; j++){
+        for (j = 0; j < gr->n; j++) {
             gr->edges[i][j] = INFTY;
         }
-
+        gr->minTree[i] = 0;
     }
+    gr->minTree[1] = ROOT;
+
     return 0;
 }
 

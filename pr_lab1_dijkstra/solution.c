@@ -6,10 +6,10 @@
 
 #define ERR(x) if (x) {perror(__func__); return errno;};
 #define ARG_ERR(statement, code) if (statement) {return code;}
-    
-int main()
-{
+
+int main() {
     int i = 0, ov = 0;
+    int aa = 0;
     char tmp[10] = "";
     Graph gr = malloc(sizeof(Graph));
     ERR(gr == NULL);
@@ -29,15 +29,12 @@ int main()
 
 
 
-    for (i = 0; i < gr->n; i++)
-    {
+    for (i = 0; i < gr->n; i++) {
         if (gr->dest[i] == INFTY)
             printAnswer("oo ", 0);
-        else if (gr->dest[i] > MAX_INT)
-        {
+        else if (gr->dest[i] > MAX_INT) {
             printAnswer("INT_MAX+ ", 0);
-        } else
-        {
+        } else {
             ov += (gr->dest[i] == MAX_INT) ? 1 : 0;
             sprintf(tmp, "%u ", gr->dest[i]);
             printAnswer(tmp, 0);
@@ -50,28 +47,21 @@ int main()
         printAnswer("no path", 0);
     else if ((gr->dest[gr->f] > MAX_INT) && (ov > 1))
         printAnswer("overflow", 0);
-    else
-    {
-        for (i = 0; i < gr->n; i++)
-            fprintf(stdout, "%i ", gr->path[i]);
-        if (gr->f > gr->s)
-        {
-            while ((gr->path[gr->f] != -1))
-            {
-                memset(tmp, 0, strlen(tmp));
-                sprintf(tmp, "%d ", gr->f + 1);
-                printAnswer(tmp, 0);
-                gr->f = gr->path[gr->f];
-            }
+    else {
+        /*for (i = 0; i < gr->n; i++)
+            fprintf(stdout, "%i ", gr->path[i]);*/
+        aa = abs(gr->s - gr->f);
+        i = 0;
+        while (i != aa) {
             memset(tmp, 0, strlen(tmp));
-            sprintf(tmp, "%d ", gr->s + 1);
+            sprintf(tmp, "%d ", gr->f + 1);
             printAnswer(tmp, 0);
-        } else
-        {
-
-
+            gr->f = gr->path[gr->f];
+            i++;
         }
-
+        memset(tmp, 0, strlen(tmp));
+        sprintf(tmp, "%d ", gr->s + 1);
+        printAnswer(tmp, 0);
 
     }
 
@@ -79,19 +69,16 @@ int main()
     return 0;
 }
 
-void dijkstra(Graph gr)
-{
+void dijkstra(Graph gr) {
     int i = 0, j = 0, u = 0, min;
     char *visited = (char *) malloc(gr->n * sizeof(char));
     for (i = 0; i < gr->n; i++)
         visited[i] = 0;
     visited[gr->s] = 1;
-    for (i = 0; i < gr->n; i++)
-    {
+    for (i = 0; i < gr->n; i++) {
         min = MAX_INT;
         for (j = 0; j < gr->n; j++)
-            if (!visited[j] && gr->dest[j] <= min)
-            {
+            if (!visited[j] && gr->dest[j] <= min) {
                 min = gr->dest[j];
                 u = j;
             }
@@ -99,16 +86,14 @@ void dijkstra(Graph gr)
 
         for (j = 0; j < gr->n; j++)
             if (!visited[j] && (gr->edges[u][j] + gr->dest[u] < gr->dest[j]) &&
-                (gr->edges[u][j] <= MAX_INT) && (gr->dest[u] <= MAX_INT))
-        {
-            gr->dest[j] = gr->edges[u][j] + gr->dest[u];
-            gr->path[j] = u;
-        }
+                (gr->edges[u][j] <= MAX_INT) && (gr->dest[u] <= MAX_INT)) {
+                gr->dest[j] = gr->edges[u][j] + gr->dest[u];
+                gr->path[j] = u;
+            }
     }
 }
 
-int readData(Graph gr)
-{
+int readData(Graph gr) {
     int i = 0, a = 0, b = 0, c = 0;
 
     FILE *file = fopen(INPUT, "r");
@@ -134,14 +119,12 @@ int readData(Graph gr)
     ERR(initArrays(gr) != 0);
     ARG_ERR(gr->m == 0, 0);
     i = 0;
-    while (!feof(file))
-    {
+    while (!feof(file)) {
         ERR(fscanf(file, "%d %d %d\n", &a, &b, &c) != 3);
         ARG_ERR(((a < 1) || (a > gr->n)), BAD_V);
         ARG_ERR(((b < 1) || (b > gr->n)), BAD_V);
         ARG_ERR((c < 0) || (c > MAX_INT), BAD_LEN);
-        if (a != b)
-        {
+        if (a != b) {
             gr->edges[a - 1][b - 1] = (unsigned int) c;
             gr->edges[b - 1][a - 1] = (unsigned int) c;
 
@@ -157,15 +140,13 @@ int readData(Graph gr)
     return 0;
 }
 
-int initArrays(Graph gr)
-{
+int initArrays(Graph gr) {
     int i = 0, j = 0;
     ERR((gr->edges = (unsigned int **) malloc(gr->n * sizeof(int *))) == NULL);
     ERR((gr->dest = (unsigned int *) malloc(gr->n * sizeof(int))) == NULL);
     ERR((gr->path = (int *) malloc(gr->n * sizeof(int))) == NULL);
 
-    for (i = 0; i < gr->n; i++)
-    {
+    for (i = 0; i < gr->n; i++) {
         ERR((gr->edges[i] = (unsigned int *) malloc(gr->n * sizeof(int))) == NULL);
 
         for (j = 0; j < gr->n; j++)
@@ -181,10 +162,8 @@ int initArrays(Graph gr)
     return 0;
 }
 
-char *getStrArgErr(ArgError arg)
-{
-    switch (arg)
-    {
+char *getStrArgErr(ArgError arg) {
+    switch (arg) {
         case BAD_NV:
             return "bad number of vertices";
         case BAD_V:
@@ -200,8 +179,7 @@ char *getStrArgErr(ArgError arg)
     return NULL;
 }
 
-int printAnswer(char *str, int fl)
-{
+int printAnswer(char *str, int fl) {
     FILE *file = fopen(OUTPUT, fl ? "w" : "at");
     ERR(file == NULL);
     ERR(fprintf(file, "%s", str) != strlen(str));

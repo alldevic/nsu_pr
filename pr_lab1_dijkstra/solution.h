@@ -110,13 +110,13 @@ typedef struct {
 
 void dijkstra(Graph gr);
 
-int readData(Graph gr);
+int read_data(Graph gr);
 
 int fread_edges(FILE *file, Graph gr);
 
-int initArrays(Graph gr);
+int init_arrays(Graph gr);
 
-char *getStrArgErr(ArgError arg);
+char *get_err_str(ArgError code);
 
 int fprint_dests(FILE *file, Graph gr);
 

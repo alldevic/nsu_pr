@@ -12,15 +12,20 @@
  */
 #define ERR(x) if (x) {perror(__func__); return errno;};
 
+/**
+ * @function Entry point. At begin get data from <b>INPUT</b>, then run dijkstra algorithm and at
+ * the end print answer to <b>OUTPUT</b>
+ * @return error code
+ */
 int main(void) {
-    int er = 0;
+    int er = 0; /* Error code for read_data() */
     Graph gr = malloc(sizeof(Graph));
     ERR(gr == NULL);
-    ERR((er = readData(gr)) > 0);
+    ERR((er = read_data(gr)) > 0);
     FILE *file = fopen(OUTPUT, "w");
     ERR(file == NULL);
     if (er < 0) {
-        fprintf(file, getStrArgErr((ArgError) er));
+        fprintf(file, get_err_str((ArgError) er));
         fclose(file);
         return 0;
     }
@@ -32,14 +37,22 @@ int main(void) {
     return 0;
 }
 
+/**
+ * @function Implementation of Dijkstra algorithm for finding shortest path from start vertex to
+ * others. At first step mark all vertex as unvisited, except for start vertex. Next for all vertex
+ * in graph we finding nearest unvisited vertex and mark their as visited. Further get relaxing for
+ * other unvisited vertex and set history for shortest path.
+ * @param gr - graph for finding shortest path
+ */
 void dijkstra(Graph gr) {
     int i = 0, j = 0, u = 0, min;
+
     char *visited = (char *) malloc(gr->n * sizeof(char));
     for (i = 0; i < gr->n; i++) {
         visited[i] = 0;
     }
-
     visited[gr->s] = 1;
+
     for (i = 0; i < gr->n; i++) {
         min = INT_MAX;
         for (j = 0; j < gr->n; j++) {
@@ -61,7 +74,13 @@ void dijkstra(Graph gr) {
     }
 }
 
-int readData(Graph gr) {
+/**
+ * @function Function for getting main information about graph from <b>FILE</b>
+ * @param gr - empty graph for setting data
+ * @return error code
+ */
+int read_data(Graph gr) {
+    int er; /* Error code for fread_edges */
     FILE *file = fopen(INPUT, "r");
     ERR(file == NULL);
 
@@ -81,8 +100,8 @@ int readData(Graph gr) {
     ARG_ERR((gr->m < 0) || (gr->m > (gr->n * (gr->n + 1) / 2)), BAD_NE);
 
     /*Read edges data*/
-    ERR(initArrays(gr) != 0);
-    int er = fread_edges(file, gr);
+    ERR(init_arrays(gr) != 0);
+    er = fread_edges(file, gr);
     fclose(file);
     ERR(er > 0);
 
@@ -121,7 +140,7 @@ int fread_edges(FILE *file, Graph gr) {
  * @param gr - graph for initialisation
  * @return error code
  */
-int initArrays(Graph gr) {
+int init_arrays(Graph gr) {
     int i = 0, j = 0;
     ERR((gr->edges = (unsigned int **) malloc(gr->n * sizeof(int *))) == NULL);
     ERR((gr->dest = (unsigned int *) malloc(gr->n * sizeof(int))) == NULL);
@@ -147,7 +166,7 @@ int initArrays(Graph gr) {
  * @param code - argument error code
  * @return STR code or NULL if <b>code</v> not in ArgError enum
  */
-char *getStrArgErr(ArgError code) {
+char *get_err_str(ArgError code) {
     switch (code) {
         case BAD_NV:
             return BAD_NV_STR;

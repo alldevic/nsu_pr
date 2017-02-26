@@ -8,56 +8,61 @@
 #define ARG_ERR(statement, code) if (statement) {return code;}
 
 int main() {
-    int i = 0, ov = 0;
-    char tmp[10] = "";
+    int er = 0;
     Graph gr = malloc(sizeof(Graph));
     ERR(gr == NULL);
-    int er = readData(gr);
-    ERR(er > 0);
-
+    ERR((er = readData(gr)) > 0);
     FILE *file = fopen(OUTPUT, "w");
     ERR(file == NULL);
-
     if (er < 0) {
         fprintf(file, getStrArgErr((ArgError) er));
         fclose(file);
         return 0;
     }
-
     dijkstra(gr);
+    fprint_dests(file, gr);
+    fprintf(file, "\n");
+    fprint_path(file, gr);
+    fclose(file);
+    return 0;
+}
 
-
+int fprint_dests(FILE *file, Graph gr) {
+    int i = 0;
     for (i = 0; i < gr->n; i++) {
         if (gr->dest[i] == INFTY) {
-            ERR(fprintf(file, "oo ") != strlen("oo "));
+            fprintf(file, INFTY_STR);
         } else if (gr->dest[i] > MAX_INT) {
-            ERR(fprintf(file, "INT_MAX+ ") != strlen("INT_MAX+ "));
+            fprintf(file, MAX_INT_STR);
         } else {
             fprintf(file, "%u ", gr->dest[i]);
-            ov += (gr->dest[i] == MAX_INT) ? 1 : 0;
         }
     }
-    fprintf(file, "\n");
+    return 0;
+}
 
+int fprint_path(FILE *file, Graph gr) {
+    int overflow = 0, i = 0;
+    for (i = 0; i < gr->n; i++) {
+        overflow += (gr->dest[i] == MAX_INT) ? 1 : 0;
+    }
 
     if (gr->dest[gr->f] == NO_PATH) {
-        fprintf(file, "no path");
-    } else if ((gr->dest[gr->f] > MAX_INT) && (ov > 1)) {
-        fprintf(file, "overflow");
+        fprintf(file, NO_PATH_STR);
+    } else if ((gr->dest[gr->f] > MAX_INT) && (overflow > 1)) {
+        fprintf(file, OVERFLOW_STR);
     } else {
         if (gr->f == gr->s) {
-            fprintf(file, "%d ", gr->f + 1);
+            fprintf(file, "%d", gr->f + 1);
         } else {
             fprintf(file, "%d ", gr->f + 1);
             while ((gr->f = gr->path[gr->f]) != NO_PATH) {
                 fprintf(file, "%d ", gr->f + 1);
             };
-            fprintf(file, "%d ", gr->s + 1);
-
+            fprintf(file, "%d", gr->s + 1);
         }
     }
 
-    fclose(file);
     return 0;
 }
 
@@ -80,8 +85,9 @@ void dijkstra(Graph gr) {
         visited[u] = 1;
 
         for (j = 0; j < gr->n; j++) {
-            if (!visited[j] && (gr->edges[u][j] + gr->dest[u] < gr->dest[j]) &&
-                (gr->edges[u][j] <= MAX_INT) && (gr->dest[u] <= MAX_INT)) {
+            if (!visited[j] && (gr->edges[u][j] <= MAX_INT) && (gr->dest[u] <= MAX_INT) &&
+                (gr->edges[u][j] + gr->dest[u] < gr->dest[j])) {
+
                 gr->dest[j] = gr->edges[u][j] + gr->dest[u];
                 gr->path[j] = u;
             }
@@ -90,8 +96,6 @@ void dijkstra(Graph gr) {
 }
 
 int readData(Graph gr) {
-    int i = 0, a = 0, b = 0, c = 0;
-
     FILE *file = fopen(INPUT, "r");
     ERR(file == NULL);
 
@@ -103,7 +107,6 @@ int readData(Graph gr) {
     ERR(fscanf(file, "%d %d", &gr->s, &gr->f) != 2);
     ARG_ERR(((gr->s < 1) || (gr->s > gr->n)), BAD_V);
     ARG_ERR(((gr->f < 1) || (gr->f > gr->n)), BAD_V);
-
     gr->s--;
     gr->f--;
 
@@ -113,23 +116,30 @@ int readData(Graph gr) {
 
     /*Read edges data*/
     ERR(initArrays(gr) != 0);
+    int er = fread_edges(file, gr);
+    fclose(file);
+    ERR(er > 0);
+
+    return er;
+}
+
+int fread_edges(FILE *file, Graph gr) {
+    int i = 0, src = 0, dest = 0, weight = 0;
     ARG_ERR(gr->m == 0, 0);
     for (i = 0; ((i < gr->m) && (!feof(file))); i++) {
-        ERR(fscanf(file, "%d %d %d", &a, &b, &c) != 3);
-        ARG_ERR(((a < 1) || (a > gr->n)), BAD_V);
-        ARG_ERR(((b < 1) || (b > gr->n)), BAD_V);
-        ARG_ERR((c < 0) || (c > MAX_INT), BAD_LEN);
-        if (a != b) {
-            gr->edges[a - 1][b - 1] = (unsigned int) c;
-            gr->edges[b - 1][a - 1] = (unsigned int) c;
+        ERR(fscanf(file, "%d %d %d", &src, &dest, &weight) != 3);
+        ARG_ERR(((src < 1) || (src > gr->n)), BAD_V);
+        ARG_ERR(((dest < 1) || (dest > gr->n)), BAD_V);
+        ARG_ERR((weight < 0) || (weight > MAX_INT), BAD_LEN);
+        if (src != dest) {
+            gr->edges[src - 1][dest - 1] = (unsigned int) weight;
+            gr->edges[dest - 1][src - 1] = (unsigned int) weight;
 
-            gr->dest[a - 1] = (b - 1 == gr->s) ? (unsigned int) c : gr->dest[a - 1];
-            gr->dest[b - 1] = (a - 1 == gr->s) ? (unsigned int) c : gr->dest[b - 1];
+            gr->dest[src - 1] = (dest - 1 == gr->s) ? (unsigned int) weight : gr->dest[src - 1];
+            gr->dest[dest - 1] = (src - 1 == gr->s) ? (unsigned int) weight : gr->dest[dest - 1];
         }
     }
     ARG_ERR(i != (gr->m), BAD_NL);
-
-    ERR(fclose(file) != 0);
     return 0;
 }
 
@@ -157,18 +167,16 @@ int initArrays(Graph gr) {
 char *getStrArgErr(ArgError arg) {
     switch (arg) {
         case BAD_NV:
-            return "bad number of vertices";
+            return BAD_NV_STR;
         case BAD_V:
-            return "bad vertex";
+            return BAD_V_STR;
         case BAD_NE:
-            return "bad number of edges";
+            return BAD_NE_STR;
         case BAD_LEN:
-            return "bad length";
+            return BAD_LEN_STR;
         case BAD_NL:
-            return "bad number of lines";
+            return BAD_NL_STR;
     }
 
     return NULL;
 }
-
-

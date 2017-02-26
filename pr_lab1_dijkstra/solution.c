@@ -1,11 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
-#include <string.h>
 #include "solution.h"
 
 #define ERR(x) if (x) {perror(__func__); return errno;};
-#define ARG_ERR(statement, code) if (statement) {return code;}
 
 int main() {
     int er = 0;
@@ -27,45 +25,6 @@ int main() {
     return 0;
 }
 
-int fprint_dests(FILE *file, Graph gr) {
-    int i = 0;
-    for (i = 0; i < gr->n; i++) {
-        if (gr->dest[i] == INFTY) {
-            fprintf(file, INFTY_STR);
-        } else if (gr->dest[i] > MAX_INT) {
-            fprintf(file, MAX_INT_STR);
-        } else {
-            fprintf(file, "%u ", gr->dest[i]);
-        }
-    }
-    return 0;
-}
-
-int fprint_path(FILE *file, Graph gr) {
-    int overflow = 0, i = 0;
-    for (i = 0; i < gr->n; i++) {
-        overflow += (gr->dest[i] == MAX_INT) ? 1 : 0;
-    }
-
-    if (gr->dest[gr->f] == NO_PATH) {
-        fprintf(file, NO_PATH_STR);
-    } else if ((gr->dest[gr->f] > MAX_INT) && (overflow > 1)) {
-        fprintf(file, OVERFLOW_STR);
-    } else {
-        if (gr->f == gr->s) {
-            fprintf(file, "%d", gr->f + 1);
-        } else {
-            fprintf(file, "%d ", gr->f + 1);
-            while ((gr->f = gr->path[gr->f]) != NO_PATH) {
-                fprintf(file, "%d ", gr->f + 1);
-            };
-            fprintf(file, "%d", gr->s + 1);
-        }
-    }
-
-    return 0;
-}
-
 void dijkstra(Graph gr) {
     int i = 0, j = 0, u = 0, min;
     char *visited = (char *) malloc(gr->n * sizeof(char));
@@ -75,7 +34,7 @@ void dijkstra(Graph gr) {
 
     visited[gr->s] = 1;
     for (i = 0; i < gr->n; i++) {
-        min = MAX_INT;
+        min = INT_MAX;
         for (j = 0; j < gr->n; j++) {
             if (!visited[j] && gr->dest[j] <= min) {
                 min = gr->dest[j];
@@ -85,7 +44,7 @@ void dijkstra(Graph gr) {
         visited[u] = 1;
 
         for (j = 0; j < gr->n; j++) {
-            if (!visited[j] && (gr->edges[u][j] <= MAX_INT) && (gr->dest[u] <= MAX_INT) &&
+            if (!visited[j] && (gr->edges[u][j] <= INT_MAX) && (gr->dest[u] <= INT_MAX) &&
                 (gr->edges[u][j] + gr->dest[u] < gr->dest[j])) {
 
                 gr->dest[j] = gr->edges[u][j] + gr->dest[u];
@@ -130,7 +89,7 @@ int fread_edges(FILE *file, Graph gr) {
         ERR(fscanf(file, "%d %d %d", &src, &dest, &weight) != 3);
         ARG_ERR(((src < 1) || (src > gr->n)), BAD_V);
         ARG_ERR(((dest < 1) || (dest > gr->n)), BAD_V);
-        ARG_ERR((weight < 0) || (weight > MAX_INT), BAD_LEN);
+        ARG_ERR((weight < 0) || (weight > INT_MAX), BAD_LEN);
         if (src != dest) {
             gr->edges[src - 1][dest - 1] = (unsigned int) weight;
             gr->edges[dest - 1][src - 1] = (unsigned int) weight;
@@ -179,4 +138,43 @@ char *getStrArgErr(ArgError arg) {
     }
 
     return NULL;
+}
+
+int fprint_dests(FILE *file, Graph gr) {
+    int i = 0;
+    for (i = 0; i < gr->n; i++) {
+        if (gr->dest[i] == INFTY) {
+            fprintf(file, INFTY_STR);
+        } else if (gr->dest[i] > INT_MAX) {
+            fprintf(file, INT_MAX_STR);
+        } else {
+            fprintf(file, "%u ", gr->dest[i]);
+        }
+    }
+    return 0;
+}
+
+int fprint_path(FILE *file, Graph gr) {
+    int overflow = 0, i = 0;
+    for (i = 0; i < gr->n; i++) {
+        overflow += (gr->dest[i] == INT_MAX) ? 1 : 0;
+    }
+
+    if (gr->dest[gr->f] == NO_PATH) {
+        fprintf(file, NO_PATH_STR);
+    } else if ((gr->dest[gr->f] > INT_MAX) && (overflow > 1)) {
+        fprintf(file, OVERFLOW_STR);
+    } else {
+        if (gr->f == gr->s) {
+            fprintf(file, "%d", gr->f + 1);
+        } else {
+            fprintf(file, "%d ", gr->f + 1);
+            while ((gr->f = gr->path[gr->f]) != NO_PATH) {
+                fprintf(file, "%d ", gr->f + 1);
+            };
+            fprintf(file, "%d", gr->s + 1);
+        }
+    }
+
+    return 0;
 }

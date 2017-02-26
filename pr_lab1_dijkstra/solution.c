@@ -193,13 +193,14 @@ int fprint_dests(FILE *file, Graph gr) {
     int i = 0;
     for (i = 0; i < gr->n; i++) {
         if (gr->dest[i] == INFTY) {
-            fprintf(file, INFTY_STR);
+            fprintf(file, "%s ", INFTY_STR);
         } else if (gr->dest[i] > INT_MAX) {
-            fprintf(file, INT_MAX_STR);
+            fprintf(file, "%s ", INT_MAX_STR);
         } else {
             fprintf(file, "%u ", gr->dest[i]);
         }
     }
+
     return 0;
 }
 

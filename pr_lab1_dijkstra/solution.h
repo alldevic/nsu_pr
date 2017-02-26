@@ -34,12 +34,12 @@
 /**
  * @def String alias for INFTY (for write answer)
  */
-#define INFTY_STR "oo "
+#define INFTY_STR "oo"
 
 /**
  * @def String alias for INT_MAX (for write answer)
  */
-#define INT_MAX_STR "INT_MAX+ "
+#define INT_MAX_STR "INT_MAX+"
 
 /**
  * @def String alias for NO_PATH (for write answer)

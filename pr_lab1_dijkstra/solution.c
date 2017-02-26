@@ -9,7 +9,6 @@
 
 int main() {
     int i = 0, ov = 0;
-    int len = 0;
     char tmp[10] = "";
     Graph gr = malloc(sizeof(Graph));
     ERR(gr == NULL);
@@ -17,16 +16,17 @@ int main() {
     ERR(er > 0);
     /*ARG_ERR(er < 0, printAnswer(getStrArgErr((ArgError)er), 1));*/
 
-    if (er < 0)
+    if (er < 0) {
         return printAnswer(getStrArgErr((ArgError) er), 1);
+    }
 
     dijkstra(gr);
     printAnswer("", 1);
 
     for (i = 0; i < gr->n; i++) {
-        if (gr->dest[i] == INFTY)
+        if (gr->dest[i] == INFTY) {
             printAnswer("oo ", 0);
-        else if (gr->dest[i] > MAX_INT) {
+        } else if (gr->dest[i] > MAX_INT) {
             printAnswer("INT_MAX+ ", 0);
         } else {
             ov += (gr->dest[i] == MAX_INT) ? 1 : 0;
@@ -37,25 +37,32 @@ int main() {
     printAnswer("\n", 0);
 
 
-    if (gr->dest[gr->f] == NO_PATH)
+    if (gr->dest[gr->f] == NO_PATH) {
         printAnswer("no path", 0);
-    else if ((gr->dest[gr->f] > MAX_INT) && (ov > 1))
+    } else if ((gr->dest[gr->f] > MAX_INT) && (ov > 1)) {
         printAnswer("overflow", 0);
-    else {
-        len = abs(gr->s - gr->f);
-
-        i = 0;
-        while (i < len) {
+    } else {
+        if (gr->f == gr->s) {
             memset(tmp, 0, strlen(tmp));
             sprintf(tmp, "%d ", gr->f + 1);
             printAnswer(tmp, 0);
-            gr->f = gr->path[gr->f];
-            i++;
-        }
-        memset(tmp, 0, strlen(tmp));
-        sprintf(tmp, "%d ", gr->s + 1);
-        printAnswer(tmp, 0);
+        } else {
+/*            for (i = 0; i < gr->n; i++)
+                fprintf(stdout, "%d ", gr->path[i]);*/
+            memset(tmp, 0, strlen(tmp));
+            sprintf(tmp, "%d ", gr->f + 1);
+            printAnswer(tmp, 0);
 
+            while ((gr->f = gr->path[gr->f]) != NO_PATH) {
+                memset(tmp, 0, strlen(tmp));
+                sprintf(tmp, "%d ", gr->f + 1);
+                printAnswer(tmp, 0);
+            };
+            memset(tmp, 0, strlen(tmp));
+            sprintf(tmp, "%d", gr->s + 1);
+            printAnswer(tmp, 0);
+
+        }
     }
 
 
@@ -65,24 +72,28 @@ int main() {
 void dijkstra(Graph gr) {
     int i = 0, j = 0, u = 0, min;
     char *visited = (char *) malloc(gr->n * sizeof(char));
-    for (i = 0; i < gr->n; i++)
+    for (i = 0; i < gr->n; i++) {
         visited[i] = 0;
+    }
+
     visited[gr->s] = 1;
     for (i = 0; i < gr->n; i++) {
         min = MAX_INT;
-        for (j = 0; j < gr->n; j++)
+        for (j = 0; j < gr->n; j++) {
             if (!visited[j] && gr->dest[j] <= min) {
                 min = gr->dest[j];
                 u = j;
             }
+        }
         visited[u] = 1;
 
-        for (j = 0; j < gr->n; j++)
+        for (j = 0; j < gr->n; j++) {
             if (!visited[j] && (gr->edges[u][j] + gr->dest[u] < gr->dest[j]) &&
                 (gr->edges[u][j] <= MAX_INT) && (gr->dest[u] <= MAX_INT)) {
                 gr->dest[j] = gr->edges[u][j] + gr->dest[u];
                 gr->path[j] = u;
             }
+        }
     }
 }
 
@@ -111,9 +122,8 @@ int readData(Graph gr) {
     /*Read edges data*/
     ERR(initArrays(gr) != 0);
     ARG_ERR(gr->m == 0, 0);
-    i = 0;
-    while (!feof(file)) {
-        ERR(fscanf(file, "%d %d %d\n", &a, &b, &c) != 3);
+    for (i = 0; ((i < gr->m) && (!feof(file))); i++) {
+        ERR(fscanf(file, "%d %d %d", &a, &b, &c) != 3);
         ARG_ERR(((a < 1) || (a > gr->n)), BAD_V);
         ARG_ERR(((b < 1) || (b > gr->n)), BAD_V);
         ARG_ERR((c < 0) || (c > MAX_INT), BAD_LEN);
@@ -124,8 +134,6 @@ int readData(Graph gr) {
             gr->dest[a - 1] = (b - 1 == gr->s) ? (unsigned int) c : gr->dest[a - 1];
             gr->dest[b - 1] = (a - 1 == gr->s) ? (unsigned int) c : gr->dest[b - 1];
         }
-
-        i++;
     }
     ARG_ERR(i != (gr->m), BAD_NL);
 
@@ -142,16 +150,15 @@ int initArrays(Graph gr) {
     for (i = 0; i < gr->n; i++) {
         ERR((gr->edges[i] = (unsigned int *) malloc(gr->n * sizeof(int))) == NULL);
 
-        for (j = 0; j < gr->n; j++)
+        for (j = 0; j < gr->n; j++) {
             gr->edges[i][j] = INFTY;
+        }
 
         gr->dest[i] = INFTY;
-        gr->path[i] = 0;
+        gr->path[i] = NO_PATH;
     }
 
     gr->dest[gr->s] = 0;
-    gr->path[gr->s] = -1;
-
     return 0;
 }
 

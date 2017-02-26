@@ -47,12 +47,9 @@ int main() {
             sprintf(tmp, "%d ", gr->f + 1);
             printAnswer(tmp, 0);
         } else {
-/*            for (i = 0; i < gr->n; i++)
-                fprintf(stdout, "%d ", gr->path[i]);*/
             memset(tmp, 0, strlen(tmp));
             sprintf(tmp, "%d ", gr->f + 1);
             printAnswer(tmp, 0);
-
             while ((gr->f = gr->path[gr->f]) != NO_PATH) {
                 memset(tmp, 0, strlen(tmp));
                 sprintf(tmp, "%d ", gr->f + 1);
@@ -105,7 +102,7 @@ int readData(Graph gr) {
 
     /*Read 1st line*/
     ERR(fscanf(file, "%d", &(gr->n)) != 1);
-    ARG_ERR((gr->n < 0) || (gr->n >= MAX_VERTEX), BAD_NV);
+    ARG_ERR((gr->n < 0) || (gr->n > MAX_VERTEX), BAD_NV);
 
     /*Read 2nd line*/
     ERR(fscanf(file, "%d %d", &gr->s, &gr->f) != 2);

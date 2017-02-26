@@ -21,19 +21,17 @@ int main() {
 
     prim(gr);
     printAnswer("", 1);
-    if (gr->m < (gr->n - 1))
-    {
+    if ((!gr->n) ||
+        (gr->m < (gr->n - 1))
+            ) {
         printAnswer("no spanning tree", 0);
-    }
-    else
-    {
+    } else {
         for (i = 1; i < gr->n; i++) {
             memset(tmp, 0, strlen(tmp));
             sprintf(tmp, "%d %d\n", gr->minTree[i] + 1, i + 1);
             printAnswer(tmp, 0);
         }
     }
-
 
     return 0;
 }
@@ -67,7 +65,6 @@ int prim(Graph gr) {
                 key[v] = gr->edges[u][v];
             }
         }
-
     }
     return 0;
 }
@@ -91,7 +88,7 @@ int readData(Graph gr) {
     ARG_ERR(gr->m == 0, 0);
     i = 0;
     while (!feof(file)) {
-        ERR(fscanf(file, "%d %d %d\n", &a, &b, &c) != 3);
+        ARG_ERR(fscanf(file, "%d %d %d\n", &a, &b, &c) != 3, BAD_NL);
         ARG_ERR(((a < 1) || (a > gr->n)), BAD_V);
         ARG_ERR(((b < 1) || (b > gr->n)), BAD_V);
         ARG_ERR((c < 0) || (c > MAX_INT), BAD_LEN);

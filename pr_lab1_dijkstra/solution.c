@@ -1,11 +1,18 @@
+/**
+ * @mainpage Laboratory work #8. Dijkstra algorithm for finding shortest path
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
 #include "solution.h"
 
+/**
+ * @def Macros for catching global errors.
+ */
 #define ERR(x) if (x) {perror(__func__); return errno;};
 
-int main() {
+int main(void) {
     int er = 0;
     Graph gr = malloc(sizeof(Graph));
     ERR(gr == NULL);
@@ -82,6 +89,12 @@ int readData(Graph gr) {
     return er;
 }
 
+/**
+ * @function Function for get data from file to the adjacency matrix in graph
+ * @param file - opeened for reading file
+ * @param gr - graph for reading adjacency matrix
+ * @return error code
+ */
 int fread_edges(FILE *file, Graph gr) {
     int i = 0, src = 0, dest = 0, weight = 0;
     ARG_ERR(gr->m == 0, 0);
@@ -102,6 +115,12 @@ int fread_edges(FILE *file, Graph gr) {
     return 0;
 }
 
+/**
+ * @function Service function for allocating memory for dynamic arrays in graph and setting default
+ * values for them
+ * @param gr - graph for initialisation
+ * @return error code
+ */
 int initArrays(Graph gr) {
     int i = 0, j = 0;
     ERR((gr->edges = (unsigned int **) malloc(gr->n * sizeof(int *))) == NULL);
@@ -123,8 +142,13 @@ int initArrays(Graph gr) {
     return 0;
 }
 
-char *getStrArgErr(ArgError arg) {
-    switch (arg) {
+/**
+ * @function Service function returns text alias for <b>code/b>
+ * @param code - argument error code
+ * @return STR code or NULL if <b>code</v> not in ArgError enum
+ */
+char *getStrArgErr(ArgError code) {
+    switch (code) {
         case BAD_NV:
             return BAD_NV_STR;
         case BAD_V:
@@ -140,6 +164,12 @@ char *getStrArgErr(ArgError arg) {
     return NULL;
 }
 
+/**
+ * @function Print destinations information between start vertex and others.
+ * @param file - file opened for writing
+ * @param gr - graph with destinations information
+ * @return error code
+ */
 int fprint_dests(FILE *file, Graph gr) {
     int i = 0;
     for (i = 0; i < gr->n; i++) {
@@ -154,8 +184,15 @@ int fprint_dests(FILE *file, Graph gr) {
     return 0;
 }
 
+/**
+ * @function Print path information between start vertex and finish vertex.
+ * @param file - file opened for writing
+ * @param gr - graph with path information
+ * @return error code
+ */
 int fprint_path(FILE *file, Graph gr) {
     int overflow = 0, i = 0;
+    /* Count of INT_MAX edges */
     for (i = 0; i < gr->n; i++) {
         overflow += (gr->dest[i] == INT_MAX) ? 1 : 0;
     }

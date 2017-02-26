@@ -26,8 +26,6 @@ int initArrays(Graph gr);
 
 char *getStrArgErr(ArgError arg);
 
-int printAnswer(char *str, int fl);
-
 void dijkstra(Graph gr);
 
 #endif /*LAB1_SOLUTION_H*/

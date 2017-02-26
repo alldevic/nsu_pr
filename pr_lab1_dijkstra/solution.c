@@ -14,55 +14,50 @@ int main() {
     ERR(gr == NULL);
     int er = readData(gr);
     ERR(er > 0);
-    /*ARG_ERR(er < 0, printAnswer(getStrArgErr((ArgError)er), 1));*/
+
+    FILE *file = fopen(OUTPUT, "w");
+    ERR(file == NULL);
 
     if (er < 0) {
-        return printAnswer(getStrArgErr((ArgError) er), 1);
+        fprintf(file, getStrArgErr((ArgError) er));
+        fclose(file);
+        return 0;
     }
 
     dijkstra(gr);
-    printAnswer("", 1);
+
 
     for (i = 0; i < gr->n; i++) {
         if (gr->dest[i] == INFTY) {
-            printAnswer("oo ", 0);
+            ERR(fprintf(file, "oo ") != strlen("oo "));
         } else if (gr->dest[i] > MAX_INT) {
-            printAnswer("INT_MAX+ ", 0);
+            ERR(fprintf(file, "INT_MAX+ ") != strlen("INT_MAX+ "));
         } else {
+            fprintf(file, "%u ", gr->dest[i]);
             ov += (gr->dest[i] == MAX_INT) ? 1 : 0;
-            sprintf(tmp, "%u ", gr->dest[i]);
-            printAnswer(tmp, 0);
         }
     }
-    printAnswer("\n", 0);
+    fprintf(file, "\n");
 
 
     if (gr->dest[gr->f] == NO_PATH) {
-        printAnswer("no path", 0);
+        fprintf(file, "no path");
     } else if ((gr->dest[gr->f] > MAX_INT) && (ov > 1)) {
-        printAnswer("overflow", 0);
+        fprintf(file, "overflow");
     } else {
         if (gr->f == gr->s) {
-            memset(tmp, 0, strlen(tmp));
-            sprintf(tmp, "%d ", gr->f + 1);
-            printAnswer(tmp, 0);
+            fprintf(file, "%d ", gr->f + 1);
         } else {
-            memset(tmp, 0, strlen(tmp));
-            sprintf(tmp, "%d ", gr->f + 1);
-            printAnswer(tmp, 0);
+            fprintf(file, "%d ", gr->f + 1);
             while ((gr->f = gr->path[gr->f]) != NO_PATH) {
-                memset(tmp, 0, strlen(tmp));
-                sprintf(tmp, "%d ", gr->f + 1);
-                printAnswer(tmp, 0);
+                fprintf(file, "%d ", gr->f + 1);
             };
-            memset(tmp, 0, strlen(tmp));
-            sprintf(tmp, "%d", gr->s + 1);
-            printAnswer(tmp, 0);
+            fprintf(file, "%d ", gr->s + 1);
 
         }
     }
 
-
+    fclose(file);
     return 0;
 }
 
@@ -176,10 +171,4 @@ char *getStrArgErr(ArgError arg) {
     return NULL;
 }
 
-int printAnswer(char *str, int fl) {
-    FILE *file = fopen(OUTPUT, fl ? "w" : "at");
-    ERR(file == NULL);
-    ERR(fprintf(file, "%s", str) != strlen(str));
-    ERR(fclose(file) != 0);
-    return 0;
-}
+

@@ -98,7 +98,9 @@ int fread_edges(FILE *file, Graph gr) {
     int i = 0, src = 0, dest = 0, weight = 0;
     ARG_ERR(!gr->m, 0);
     for (i = 0; ((i < gr->m) && (!feof(file))); i++) {
-        ERR(fscanf(file, "%d %d %d", &src, &dest, &weight) != 3);
+        if (fscanf(file, "%d %d %d", &src, &dest, &weight) != 3){
+            break;
+        }
         ARG_ERR(((src < 1) || (src > gr->n)), BAD_V);
         ARG_ERR(((dest < 1) || (dest > gr->n)), BAD_V);
         ARG_ERR((weight < 0) || (weight > INT_MAX), BAD_LEN);

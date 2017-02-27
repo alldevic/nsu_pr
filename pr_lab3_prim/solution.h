@@ -79,7 +79,7 @@ typedef enum {
 typedef struct {
     int n;                 /** Count of vertex */
     int m;                 /** Count of edges */
-    int nnt_connectivity;
+    int not_connectivity;
     int *min_tree;
     unsigned int **edges;  /** Adjacency matrix for graph */
 } *Graph;

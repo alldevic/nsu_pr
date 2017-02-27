@@ -96,4 +96,8 @@ char *get_err_str(ArgError code);
 
 void fprint_min_tree(FILE *file, Graph gr);
 
+void dfs(Graph gr);
+
+void dfs1(Graph gr, int k, int *visited);
+
 #endif /*LAB3_SOLUTION_H*/

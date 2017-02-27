@@ -51,15 +51,12 @@ void prim(Graph gr) {
 
         mstSet[u] = 1;
         for (v = 0; v < gr->n; v++) {
-            if (gr->edges[u][v] < INFTY && !mstSet[v] && gr->edges[u][v] < key[v]) {
+            if (gr->edges[u][v] && !mstSet[v] && gr->edges[u][v] < key[v]) {
                 gr->min_tree[v] = u;
                 key[v] = gr->edges[u][v];
             }
         }
     }
-    /*for (v = 0; v < gr->n; v++) {
-        fprintf(stdout, "%d ", gr->min_tree[v]);
-    }*/
 }
 
 /**
@@ -74,7 +71,7 @@ int read_data(Graph gr) {
 
     /*Read 1st line*/
     ERR(fscanf(file, "%d", &(gr->n)) != 1);
-    ARG_ERR((gr->n < 0) || (gr->n >= MAX_VERTEX), BAD_NV);
+    ARG_ERR((gr->n < 0) || (gr->n > MAX_VERTEX), BAD_NV);
 
     /*Read 2nd line*/
     ERR(fscanf(file, "%d", &(gr->m)) != 1);
@@ -98,7 +95,7 @@ int fread_edges(FILE *file, Graph gr) {
     int i = 0, src = 0, dest = 0, weight = 0;
     ARG_ERR(!gr->m, 0);
     for (i = 0; ((i < gr->m) && (!feof(file))); i++) {
-        if (fscanf(file, "%d %d %d", &src, &dest, &weight) != 3){
+        if (fscanf(file, "%d %d %d", &src, &dest, &weight) != 3) {
             break;
         }
         ARG_ERR(((src < 1) || (src > gr->n)), BAD_V);
@@ -110,6 +107,7 @@ int fread_edges(FILE *file, Graph gr) {
         }
     }
     ARG_ERR(i != (gr->m), BAD_NL);
+    dfs(gr);
     return 0;
 }
 
@@ -128,14 +126,11 @@ int init_arrays(Graph gr) {
         ERR((gr->edges[i] = (unsigned int *) malloc(gr->n * sizeof(int))) == NULL);
 
         for (j = 0; j < gr->n; j++) {
-            gr->edges[i][j] = INFTY;
+            gr->edges[i][j] = 0;
         }
-        gr->min_tree[i] = 0;
+        gr->min_tree[i] = i-1;
     }
     gr->min_tree[0] = ROOT;
-/*    for (i = 0; i < gr->n; i++) {
-        fprintf(stdout, "%d ", gr->min_tree[i]);
-    }*/
     return 0;
 }
 
@@ -163,11 +158,35 @@ char *get_err_str(ArgError code) {
 
 void fprint_min_tree(FILE *file, Graph gr) {
     int i = 0;
-    if ((!gr->n) || (gr->m < (gr->n - 1))) {
+    if ((gr->n == 1)&&(gr->m == 0)){
+
+    } else if ((!gr->n) || (gr->m < (gr->n - 1)) || gr->not_connectivity) {
         fprintf(file, "no spanning tree");
     } else {
         for (i = 1; i < gr->n; i++) {
             fprintf(file, "%d %d\n", gr->min_tree[i] + 1, i + 1);
         }
+    }
+}
+
+void dfs1(Graph gr, int k, int *visited) {
+
+    visited[k] = 1;
+
+    int i = 0;
+    for (i = 0; i < gr->n; i++)
+    {
+        if (!visited[i] && gr->edges[i][k] != 0)
+            dfs1(gr, i, visited);
+    }
+
+}
+void dfs(Graph gr) {
+    int *visited = calloc((size_t) gr->n, sizeof(int));
+    dfs1(gr, 0, visited);
+    int i = 0;
+    gr->not_connectivity = 0;
+    for (i = 0; i < gr->n; i++) {
+        gr->not_connectivity += (visited[i]) ? 0 : 1;
     }
 }

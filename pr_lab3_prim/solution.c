@@ -1,55 +1,46 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
-#include <string.h>
 #include "solution.h"
 
 #define ERR(x) if (x) {perror(__func__); return errno;};
-#define ARG_ERR(statement, code) if (statement) {return code;}
 
 int main() {
 
     Graph gr = malloc(sizeof(Graph));
     ERR(gr == NULL);
-    int er = readData(gr), i = 0;
-    char tmp[10] = "";
+    int er = read_data(gr);
     ERR(er > 0);
-    /*ARG_ERR(er < 0, printAnswer(getStrArgErr((ArgError)er), 1));*/
-
-    if (er < 0)
-        return printAnswer(getStrArgErr((ArgError) er), 1);
-
-    prim(gr);
-    printAnswer("", 1);
-    if ((!gr->n) ||
-        (gr->m < (gr->n - 1))
-            ) {
-        printAnswer("no spanning tree", 0);
-    } else {
-        for (i = 1; i < gr->n; i++) {
-            memset(tmp, 0, strlen(tmp));
-            sprintf(tmp, "%d %d\n", gr->minTree[i] + 1, i + 1);
-            printAnswer(tmp, 0);
-        }
+    FILE *file = fopen(OUTPUT, "w");
+    ERR(file == NULL);
+    if (er < 0) {
+        fprintf(file, get_err_str((ArgError) er));
+        fclose(file);
+        return 0;
     }
-
+    prim(gr);
+    fprint_min_tree(file, gr);
+    fclose(file);
     return 0;
 }
 
 
-int prim(Graph gr) {
+void prim(Graph gr) {
     int key[gr->n], count = 0, i = 0, v = 0;
     char mstSet[gr->n];
 
     for (i = 0; i < gr->n; i++) {
-        key[i] = MAX_INT;
+        key[i] = INT_MAX;
         mstSet[i] = 0;
     }
 
     key[0] = 0;
-
+    /*for (v = 0; v < gr->n; v++) {
+        fprintf(stdout, "%d ", gr->min_tree[i]);
+    }
+    fprintf(stdout, "\n\n");*/
     for (count = 0; count < gr->n - 1; count++) {
-        int min = MAX_INT, u = 0;
+        int min = INT_MAX, u = 0;
 
         for (v = 0; v < gr->n; v++) {
             if (!mstSet[v] && key[v] < min) {
@@ -60,18 +51,24 @@ int prim(Graph gr) {
 
         mstSet[u] = 1;
         for (v = 0; v < gr->n; v++) {
-            if (gr->edges[u][v] && !mstSet[v] && gr->edges[u][v] < key[v]) {
-                gr->minTree[v] = u;
+            if (gr->edges[u][v] < INFTY && !mstSet[v] && gr->edges[u][v] < key[v]) {
+                gr->min_tree[v] = u;
                 key[v] = gr->edges[u][v];
             }
         }
     }
-    return 0;
+    /*for (v = 0; v < gr->n; v++) {
+        fprintf(stdout, "%d ", gr->min_tree[v]);
+    }*/
 }
 
-int readData(Graph gr) {
-    int i = 0, a = 0, b = 0, c = 0;
-
+/**
+ * @function Function for getting main information about graph from <b>FILE</b>
+ * @param gr - empty graph for setting data
+ * @return error code
+ */
+int read_data(Graph gr) {
+    int er; /* Error code for fread_edges */
     FILE *file = fopen(INPUT, "r");
     ERR(file == NULL);
 
@@ -84,31 +81,46 @@ int readData(Graph gr) {
     ARG_ERR((gr->m < 0) || (gr->m > (gr->n * (gr->n + 1) / 2)), BAD_NE);
 
     /*Read edges data*/
-    ERR(initArrays(gr) != 0);
-    ARG_ERR(gr->m == 0, 0);
-    i = 0;
-    while (!feof(file)) {
-        ARG_ERR(fscanf(file, "%d %d %d\n", &a, &b, &c) != 3, BAD_NL);
-        ARG_ERR(((a < 1) || (a > gr->n)), BAD_V);
-        ARG_ERR(((b < 1) || (b > gr->n)), BAD_V);
-        ARG_ERR((c < 0) || (c > MAX_INT), BAD_LEN);
-        if (a != b) {
-            gr->edges[a - 1][b - 1] = (unsigned int) c;
-            gr->edges[b - 1][a - 1] = (unsigned int) c;
-        }
+    ERR(init_arrays(gr));
+    er = fread_edges(file, gr);
+    ERR(er > 0);
+    fclose(file);
+    return er;
+}
 
-        i++;
+/**
+ * @function Function for get data from file to the adjacency matrix in graph
+ * @param file - opeened for reading file
+ * @param gr - graph for reading adjacency matrix
+ * @return error code
+ */
+int fread_edges(FILE *file, Graph gr) {
+    int i = 0, src = 0, dest = 0, weight = 0;
+    ARG_ERR(!gr->m, 0);
+    for (i = 0; ((i < gr->m) && (!feof(file))); i++) {
+        ERR(fscanf(file, "%d %d %d", &src, &dest, &weight) != 3);
+        ARG_ERR(((src < 1) || (src > gr->n)), BAD_V);
+        ARG_ERR(((dest < 1) || (dest > gr->n)), BAD_V);
+        ARG_ERR((weight < 0) || (weight > INT_MAX), BAD_LEN);
+        if (src != dest) {
+            gr->edges[src - 1][dest - 1] = (unsigned int) weight;
+            gr->edges[dest - 1][src - 1] = (unsigned int) weight;
+        }
     }
     ARG_ERR(i != (gr->m), BAD_NL);
-
-    ERR(fclose(file) != 0);
     return 0;
 }
 
-int initArrays(Graph gr) {
+/**
+ * @function Service function for allocating memory for dynamic arrays in graph and setting default
+ * values for them
+ * @param gr - graph for initialisation
+ * @return error code
+ */
+int init_arrays(Graph gr) {
     int i = 0, j = 0;
     ERR((gr->edges = (unsigned int **) malloc(gr->n * sizeof(int *))) == NULL);
-    ERR((gr->minTree = (int *) malloc(gr->n * sizeof(int))) == NULL);
+    ERR((gr->min_tree = (int *) malloc(gr->n * sizeof(int))) == NULL);
 
     for (i = 0; i < gr->n; i++) {
         ERR((gr->edges[i] = (unsigned int *) malloc(gr->n * sizeof(int))) == NULL);
@@ -116,34 +128,44 @@ int initArrays(Graph gr) {
         for (j = 0; j < gr->n; j++) {
             gr->edges[i][j] = INFTY;
         }
-        gr->minTree[i] = 0;
+        gr->min_tree[i] = 0;
     }
-    gr->minTree[1] = ROOT;
-
+    gr->min_tree[0] = ROOT;
+/*    for (i = 0; i < gr->n; i++) {
+        fprintf(stdout, "%d ", gr->min_tree[i]);
+    }*/
     return 0;
 }
 
-char *getStrArgErr(ArgError arg) {
-    switch (arg) {
+/**
+ * @function Service function returns text alias for <b>code/b>
+ * @param code - argument error code
+ * @return STR code or NULL if <b>code</v> not in ArgError enum
+ */
+char *get_err_str(ArgError code) {
+    switch (code) {
         case BAD_NV:
-            return "bad number of vertices";
+            return BAD_NV_STR;
         case BAD_V:
-            return "bad vertex";
+            return BAD_V_STR;
         case BAD_NE:
-            return "bad number of edges";
+            return BAD_NE_STR;
         case BAD_LEN:
-            return "bad length";
+            return BAD_LEN_STR;
         case BAD_NL:
-            return "bad number of lines";
+            return BAD_NL_STR;
     }
 
     return NULL;
 }
 
-int printAnswer(char *str, int fl) {
-    FILE *file = fopen(OUTPUT, fl ? "w" : "at");
-    ERR(file == NULL);
-    ERR(fprintf(file, "%s", str) != strlen(str));
-    ERR(fclose(file) != 0);
-    return 0;
+void fprint_min_tree(FILE *file, Graph gr) {
+    int i = 0;
+    if ((!gr->n) || (gr->m < (gr->n - 1))) {
+        fprintf(file, "no spanning tree");
+    } else {
+        for (i = 1; i < gr->n; i++) {
+            fprintf(file, "%d %d\n", gr->min_tree[i] + 1, i + 1);
+        }
+    }
 }

@@ -1,12 +1,23 @@
+/**
+ * @mainpage Laboratory work #10. Prim’s Minimum Spanning Tree
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
 #include "solution.h"
 
+/**
+ * @def Macros for catching global errors.
+ */
 #define ERR(x) if (x) {perror(__func__); return errno;};
 
-int main() {
-
+/**
+ * @function Entry point. At begin get data from <b>INPUT</b>, then run Prim's algorithm and print
+ * answer to <b>OUTPUT</b>
+ * @return error code
+ */
+int main(void) {
     Graph gr = malloc(sizeof(Graph));
     ERR(gr == NULL);
     int er = read_data(gr);
@@ -24,36 +35,35 @@ int main() {
     return 0;
 }
 
-
+/**
+ * @function Implementation of Prim's minimum spanning tree algorithm
+ * @param gr - graph for searching minimum spanning tree
+ */
 void prim(Graph gr) {
-    int key[gr->n], count = 0, i = 0, v = 0;
-    char mstSet[gr->n];
+    int weight[gr->n], i = 0, j = 0, min, u = 0;
+    char visited[gr->n];
 
     for (i = 0; i < gr->n; i++) {
-        key[i] = INT_MAX;
-        mstSet[i] = 0;
+        weight[i] = INT_MAX;
+        visited[i] = 0;
     }
+    weight[0] = 0;
+    for (i = 0; i < gr->n - 1; i++) {
+        min = INT_MAX;
+        u = 0;
 
-    key[0] = 0;
-    /*for (v = 0; v < gr->n; v++) {
-        fprintf(stdout, "%d ", gr->min_tree[i]);
-    }
-    fprintf(stdout, "\n\n");*/
-    for (count = 0; count < gr->n - 1; count++) {
-        int min = INT_MAX, u = 0;
-
-        for (v = 0; v < gr->n; v++) {
-            if (!mstSet[v] && key[v] < min) {
-                min = key[v];
-                u = v;
+        for (j = 0; j < gr->n; j++) {
+            if (!visited[j] && weight[j] < min) {
+                min = weight[j];
+                u = j;
             }
         }
 
-        mstSet[u] = 1;
-        for (v = 0; v < gr->n; v++) {
-            if (gr->edges[u][v] && !mstSet[v] && gr->edges[u][v] < key[v]) {
-                gr->min_tree[v] = u;
-                key[v] = gr->edges[u][v];
+        visited[u] = 1;
+        for (j = 0; j < gr->n; j++) {
+            if (gr->edges[u][j] && !visited[j] && gr->edges[u][j] < weight[j]) {
+                gr->min_tree[j] = u;
+                weight[j] = gr->edges[u][j];
             }
         }
     }
@@ -107,7 +117,15 @@ int fread_edges(FILE *file, Graph gr) {
         }
     }
     ARG_ERR(i != (gr->m), BAD_NL);
-    dfs(gr);
+
+    /* Check graph for connectivity */
+    int *visited = calloc((size_t) gr->n, sizeof(int));
+    dfs(gr, 0, visited);
+    gr->not_connectivity = 0;
+    for (i = 0; i < gr->n; i++) {
+        gr->not_connectivity += (visited[i]) ? 0 : 1;
+    }
+
     return 0;
 }
 
@@ -128,7 +146,7 @@ int init_arrays(Graph gr) {
         for (j = 0; j < gr->n; j++) {
             gr->edges[i][j] = 0;
         }
-        gr->min_tree[i] = i-1;
+        gr->min_tree[i] = i - 1;
     }
     gr->min_tree[0] = ROOT;
     return 0;
@@ -156,9 +174,15 @@ char *get_err_str(ArgError code) {
     return NULL;
 }
 
+/**
+ * @function Print edges of minimum spanning tree
+ * @param file - file opened for writing
+ * @param gr - graph with tree information
+ * @return error code
+ */
 void fprint_min_tree(FILE *file, Graph gr) {
     int i = 0;
-    if ((gr->n == 1)&&(gr->m == 0)){
+    if ((gr->n == 1) && (gr->m == 0)) {
 
     } else if ((!gr->n) || (gr->m < (gr->n - 1)) || gr->not_connectivity) {
         fprintf(file, "no spanning tree");
@@ -169,24 +193,19 @@ void fprint_min_tree(FILE *file, Graph gr) {
     }
 }
 
-void dfs1(Graph gr, int k, int *visited) {
-
+/**
+ * @function Service function for finding connectivity in graph. This is a depth-first search
+ * implementation
+ * @param gr - graph for finding connectivity
+ * @param k - current vertex
+ * @param visited - array with visited vertex
+ */
+void dfs(Graph gr, int k, int *visited) {
     visited[k] = 1;
 
     int i = 0;
-    for (i = 0; i < gr->n; i++)
-    {
-        if (!visited[i] && gr->edges[i][k] != 0)
-            dfs1(gr, i, visited);
-    }
-
-}
-void dfs(Graph gr) {
-    int *visited = calloc((size_t) gr->n, sizeof(int));
-    dfs1(gr, 0, visited);
-    int i = 0;
-    gr->not_connectivity = 0;
     for (i = 0; i < gr->n; i++) {
-        gr->not_connectivity += (visited[i]) ? 0 : 1;
+        if (!visited[i] && gr->edges[i][k] != 0)
+            dfs(gr, i, visited);
     }
 }

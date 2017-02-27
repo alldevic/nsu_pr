@@ -22,11 +22,8 @@
 #define INT_MAX 2147483647
 
 /**
- * @def The value of infinity for unreachable vertex
+ * @def The value of root of minimal tree
  */
-#define INFTY (2U*INT_MAX)+1
-
-
 #define ROOT -1
 
 /**
@@ -79,8 +76,8 @@ typedef enum {
 typedef struct {
     int n;                 /** Count of vertex */
     int m;                 /** Count of edges */
-    int not_connectivity;
-    int *min_tree;
+    int not_connectivity;  /** Flag of connectivity of graph*/
+    int *min_tree;         /** The minimum spanning tree */
     unsigned int **edges;  /** Adjacency matrix for graph */
 } *Graph;
 
@@ -96,8 +93,6 @@ char *get_err_str(ArgError code);
 
 void fprint_min_tree(FILE *file, Graph gr);
 
-void dfs(Graph gr);
-
-void dfs1(Graph gr, int k, int *visited);
+void dfs(Graph gr, int k, int *visited);
 
 #endif /*LAB3_SOLUTION_H*/

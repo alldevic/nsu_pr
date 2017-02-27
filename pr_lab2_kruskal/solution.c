@@ -1,146 +1,211 @@
+/**
+ * @mainpage Laboratory work #9. Kruskal’s Minimum Spanning Tree
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
-#include <string.h>
 #include "solution.h"
 
+/**
+ * @def Macros for catching global errors.
+ */
 #define ERR(x) if (x) {perror(__func__); return errno;};
-#define ARG_ERR(statement, code) if (statement) {return code;}
 
-int main() {
-    Graph *gr = malloc(sizeof(Graph));
+/**
+ * @function Entry point. At begin get data from <b>INPUT</b>, then run Prim's algorithm and print
+ * answer to <b>OUTPUT</b>
+ * @return error code
+ */
+int main(void) {
+    Graph gr = malloc(sizeof(Graph));
     ERR(gr == NULL);
-    int er = readData(gr), i = 0;
-    char tmp[10] = "";
+    int er = read_data(gr);
     ERR(er > 0);
-    /*ARG_ERR(er < 0, printAnswer(getStrArgErr((ArgError)er), 1));*/
-
-    if (er < 0)
-        return printAnswer(getStrArgErr((ArgError) er), 1);
-
-    kruskal(gr);
-    printAnswer("", 1);
-    for (i = 0; i < gr->n - 1; i++) {
-        memset(tmp, 0, strlen(tmp));
-        sprintf(tmp, "%d %d\n", gr->minTree[i].src, gr->minTree[i].dest);
-        printAnswer(tmp, 0);
+    FILE *file = fopen(OUTPUT, "w");
+    ERR(file == NULL);
+    if (er < 0) {
+        fprintf(file, get_err_str((ArgError) er));
+        fclose(file);
+        return 0;
     }
+    prim(gr);
+    fprint_min_tree(file, gr);
+    fclose(file);
     return 0;
 }
 
-int kruskal(Graph *gr) {
-    int j = 0, i = 0, v = 0;
-    qsort(gr->edges, (size_t) gr->m, sizeof(gr->edges[0]), myComp);
-    Subset *subsets = (Subset *) malloc(gr->m * sizeof(Subset));
+/**
+ * @function Implementation of Prim's minimum spanning tree algorithm
+ * @param gr - graph for searching minimum spanning tree
+ */
+void prim(Graph gr) {
+    int weight[gr->n], i = 0, j = 0, min, u = 0;
+    char visited[gr->n];
 
-    for (v = 0; v < gr->n; ++v) {
-        subsets[v].parent = v;
-        subsets[v].rank = 0;
+    for (i = 0; i < gr->n; i++) {
+        weight[i] = INT_MAX;
+        visited[i] = 0;
     }
+    weight[0] = 0;
+    for (i = 0; i < gr->n - 1; i++) {
+        min = INT_MAX;
+        u = 0;
 
-    while (j < gr->n - 1) {
-        Edge next_edge = gr->edges[i++];
+        for (j = 0; j < gr->n; j++) {
+            if (!visited[j] && weight[j] < min) {
+                min = weight[j];
+                u = j;
+            }
+        }
 
-        int x = find(subsets, next_edge.src);
-        int y = find(subsets, next_edge.dest);
-
-        if (x != y) {
-            gr->minTree[j++] = next_edge;
-            Union(subsets, x, y);
+        visited[u] = 1;
+        for (j = 0; j < gr->n; j++) {
+            if (gr->edges[u][j] && !visited[j] && gr->edges[u][j] < weight[j]) {
+                gr->min_tree[j] = u;
+                weight[j] = gr->edges[u][j];
+            }
         }
     }
-
-    return 0;
 }
 
-void Union(Subset *subsets, int x, int y) {
-    int xroot = find(subsets, x);
-    int yroot = find(subsets, y);
-
-    if (subsets[xroot].rank < subsets[yroot].rank)
-        subsets[xroot].parent = yroot;
-    else if (subsets[xroot].rank > subsets[yroot].rank)
-        subsets[yroot].parent = xroot;
-    else {
-        subsets[yroot].parent = xroot;
-        subsets[xroot].rank++;
-    }
-}
-
-int find(Subset *subsets, int x) {
-
-
-    if (subsets[x].parent != x)
-        subsets[x].parent = find(subsets, subsets[x].parent);
-
-    return subsets[x].parent;
-}
-
-int myComp(const void *a, const void *b) {
-    Edge *a1 = (Edge *) a;
-    Edge *b1 = (Edge *) b;
-    return a1->weight > b1->weight;
-}
-
-int readData(Graph *gr) {
-    int i = 0, a = 0, b = 0, c = 0;
-
+/**
+ * @function Function for getting main information about graph from <b>FILE</b>
+ * @param gr - empty graph for setting data
+ * @return error code
+ */
+int read_data(Graph gr) {
+    int er; /* Error code for fread_edges */
     FILE *file = fopen(INPUT, "r");
     ERR(file == NULL);
 
     /*Read 1st line*/
     ERR(fscanf(file, "%d", &(gr->n)) != 1);
-    ARG_ERR((gr->n < 0) || (gr->n >= MAX_VERTEX), BAD_NV);
+    ARG_ERR((gr->n < 0) || (gr->n > MAX_VERTEX), BAD_NV);
 
-    /*Read 3rd line*/
+    /*Read 2nd line*/
     ERR(fscanf(file, "%d", &(gr->m)) != 1);
     ARG_ERR((gr->m < 0) || (gr->m > (gr->n * (gr->n + 1) / 2)), BAD_NE);
 
     /*Read edges data*/
-    ERR((gr->edges = (Edge *) malloc(gr->n * sizeof(Edge))) == NULL);
-    ERR((gr->minTree = (Edge *) malloc(gr->n * sizeof(Edge))) == NULL);
-    ARG_ERR(gr->m == 0, 0);
-    i = 0;
-    while (!feof(file)) {
-        ERR(fscanf(file, "%d %d %d\n", &a, &b, &c) != 3);
-        ARG_ERR(((a < 1) || (a > gr->n)), BAD_V);
-        ARG_ERR(((b < 1) || (b > gr->n)), BAD_V);
-        ARG_ERR((c < 0) || (c > MAX_INT), BAD_LEN);
-        if (a != b) {
-            gr->edges[i].src = a;
-            gr->edges[i].dest = b;
-            gr->edges[i].weight = (unsigned int) c;
-        }
+    ERR(init_arrays(gr));
+    er = fread_edges(file, gr);
+    ERR(er > 0);
+    fclose(file);
+    return er;
+}
 
-        i++;
+/**
+ * @function Function for get data from file to the adjacency matrix in graph
+ * @param file - opeened for reading file
+ * @param gr - graph for reading adjacency matrix
+ * @return error code
+ */
+int fread_edges(FILE *file, Graph gr) {
+    int i = 0, src = 0, dest = 0, weight = 0;
+    ARG_ERR(!gr->m, 0);
+    for (i = 0; ((i < gr->m) && (!feof(file))); i++) {
+        if (fscanf(file, "%d %d %d", &src, &dest, &weight) != 3) {
+            break;
+        }
+        ARG_ERR(((src < 1) || (src > gr->n)), BAD_V);
+        ARG_ERR(((dest < 1) || (dest > gr->n)), BAD_V);
+        ARG_ERR((weight < 0) || (weight > INT_MAX), BAD_LEN);
+        if (src != dest) {
+            gr->edges[src - 1][dest - 1] = (unsigned int) weight;
+            gr->edges[dest - 1][src - 1] = (unsigned int) weight;
+        }
     }
     ARG_ERR(i != (gr->m), BAD_NL);
 
-    ERR(fclose(file) != 0);
+    /* Check graph for connectivity */
+    int *visited = calloc((size_t) gr->n, sizeof(int));
+    dfs(gr, 0, visited);
+    gr->not_connectivity = 0;
+    for (i = 0; i < gr->n; i++) {
+        gr->not_connectivity += (visited[i]) ? 0 : 1;
+    }
+
     return 0;
 }
 
-char *getStrArgErr(ArgError arg) {
-    switch (arg) {
+/**
+ * @function Service function for allocating memory for dynamic arrays in graph and setting default
+ * values for them
+ * @param gr - graph for initialisation
+ * @return error code
+ */
+int init_arrays(Graph gr) {
+    int i = 0, j = 0;
+    ERR((gr->edges = (unsigned int **) malloc(gr->n * sizeof(int *))) == NULL);
+    ERR((gr->min_tree = (int *) malloc(gr->n * sizeof(int))) == NULL);
+
+    for (i = 0; i < gr->n; i++) {
+        ERR((gr->edges[i] = (unsigned int *) malloc(gr->n * sizeof(int))) == NULL);
+
+        for (j = 0; j < gr->n; j++) {
+            gr->edges[i][j] = 0;
+        }
+        gr->min_tree[i] = i - 1;
+    }
+    gr->min_tree[0] = ROOT;
+    return 0;
+}
+
+/**
+ * @function Service function returns text alias for <b>code/b>
+ * @param code - argument error code
+ * @return STR code or NULL if <b>code</v> not in ArgError enum
+ */
+char *get_err_str(ArgError code) {
+    switch (code) {
         case BAD_NV:
-            return "bad number of vertices";
+            return BAD_NV_STR;
         case BAD_V:
-            return "bad vertex";
+            return BAD_V_STR;
         case BAD_NE:
-            return "bad number of edges";
+            return BAD_NE_STR;
         case BAD_LEN:
-            return "bad length";
+            return BAD_LEN_STR;
         case BAD_NL:
-            return "bad number of lines";
+            return BAD_NL_STR;
     }
 
     return NULL;
 }
 
-int printAnswer(char *str, int fl) {
-    FILE *file = fopen(OUTPUT, fl ? "w" : "at");
-    ERR(file == NULL);
-    ERR(fprintf(file, "%s", str) != strlen(str));
-    ERR(fclose(file) != 0);
-    return 0;
+/**
+ * @function Print edges of minimum spanning tree
+ * @param file - file opened for writing
+ * @param gr - graph with tree information
+ * @return error code
+ */
+void fprint_min_tree(FILE *file, Graph gr) {
+    int i = 0;
+    if ((gr->n == 1) && (gr->m == 0)) {
+
+    } else if ((!gr->n) || (gr->m < (gr->n - 1)) || gr->not_connectivity) {
+        fprintf(file, "no spanning tree");
+    } else {
+        for (i = 1; i < gr->n; i++) {
+            fprintf(file, "%d %d\n", gr->min_tree[i] + 1, i + 1);
+        }
+    }
+}
+
+/**
+ * @function Service function for finding connectivity in graph. This is a depth-first search
+ * implementation
+ * @param gr - graph for finding connectivity
+ * @param k - current vertex
+ * @param visited - array with visited vertex
+ */
+void dfs(Graph gr, int k, int *visited) {
+    visited[k] = 1;
+
+    int i = 0;
+    for (i = 0; i < gr->n; i++) {
+        if (!visited[i] && gr->edges[i][k] != 0)
+            dfs(gr, i, visited);
+    }
 }

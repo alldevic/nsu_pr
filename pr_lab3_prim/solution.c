@@ -29,7 +29,9 @@ int main(void) {
         fclose(file);
         return 0;
     }
-    prim(gr);
+    if (!gr->not_connectivity) {
+        prim(gr);
+    }
     fprint_min_tree(file, gr);
     fclose(file);
     return 0;

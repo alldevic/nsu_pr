@@ -22,11 +22,6 @@
 #define INT_MAX 2147483647
 
 /**
- * @def The value of root of minimal tree
- */
-#define ROOT -1
-
-/**
 * @enum Code errors for wrong arguments
  * BAD_NV - bad number of vertices
  * BAD_V - bad vertex
@@ -70,29 +65,42 @@ typedef enum {
  */
 #define BAD_NL_STR "bad number of lines"
 
-/**
- * @typedef Data structure for saving graph data
- */
+
 typedef struct {
-    int n;                 /** Count of vertex */
-    int m;                 /** Count of edges */
-    int not_connectivity;  /** Flag of connectivity of graph*/
-    int *min_tree;         /** The minimum spanning tree */
-    unsigned int **edges;  /** Adjacency matrix for graph */
-} *Graph;
+    int parent;
+    int rank;
+} Subset;
 
-void prim(Graph gr);
+int subset_find(Subset *subsets, int i);
 
-int read_data(Graph gr);
+void subset_union(Subset *subsets, int x, int y);
 
-int fread_edges(FILE *file, Graph gr);
 
-int init_arrays(Graph gr);
+typedef struct {
+    int src, dest, weight;
+} Edge;
+
+int edge_comp(const void *a, const void *b);
+
+typedef struct {
+    int n, m;
+    int not_connectivity;
+    Edge *min_tree;
+    Edge *edge;
+} Graph;
+
+void kruskal(Graph *gr);
+
+int read_data(Graph *gr);
+
+int fread_edges(FILE *file, Graph *gr);
+
+int init_arrays(Graph *gr);
 
 char *get_err_str(ArgError code);
 
-void fprint_min_tree(FILE *file, Graph gr);
+void fprint_min_tree(FILE *file, Graph *gr);
 
-void dfs(Graph gr, int k, int *visited);
+void dfs(Graph *gr, int k, int *visited);
 
 #endif /*LAB2_SOLUTION_H*/

@@ -18,7 +18,7 @@
  * @return error code
  */
 int main(void) {
-    Graph gr = malloc(sizeof(Graph));
+    Graph *gr = malloc(sizeof(Graph));
     ERR(gr == NULL);
     int er = read_data(gr);
     ERR(er > 0);
@@ -29,42 +29,34 @@ int main(void) {
         fclose(file);
         return 0;
     }
-    prim(gr);
+    if (gr->not_connectivity)
+        kruskal(gr);
     fprint_min_tree(file, gr);
     fclose(file);
     return 0;
 }
 
-/**
- * @function Implementation of Prim's minimum spanning tree algorithm
- * @param gr - graph for searching minimum spanning tree
- */
-void prim(Graph gr) {
-    int weight[gr->n], i = 0, j = 0, min, u = 0;
-    char visited[gr->n];
+void kruskal(Graph *gr) {
+    int e = 0; // An index variable, used for result[]
+    int i = 0; // An index variable, used for sorted edges
+    int x, y;
 
-    for (i = 0; i < gr->n; i++) {
-        weight[i] = INT_MAX;
-        visited[i] = 0;
+    qsort(gr->edge, (size_t) gr->m, sizeof(gr->edge[0]), edge_comp);
+    Subset *subsets = (Subset *) malloc(gr->n * sizeof(Subset));
+
+    for (i = 0; i < gr->n; ++i) {
+        subsets[i].parent = i;
+        subsets[i].rank = 0;
     }
-    weight[0] = 0;
-    for (i = 0; i < gr->n - 1; i++) {
-        min = INT_MAX;
-        u = 0;
 
-        for (j = 0; j < gr->n; j++) {
-            if (!visited[j] && weight[j] < min) {
-                min = weight[j];
-                u = j;
-            }
-        }
-
-        visited[u] = 1;
-        for (j = 0; j < gr->n; j++) {
-            if (gr->edges[u][j] && !visited[j] && gr->edges[u][j] < weight[j]) {
-                gr->min_tree[j] = u;
-                weight[j] = gr->edges[u][j];
-            }
+    i = 0;
+    while (e < gr->n - 1) {
+        Edge next_edge = gr->edge[i++];
+        x = subset_find(subsets, next_edge.src);
+        y = subset_find(subsets, next_edge.dest);
+        if (x != y) {
+            gr->min_tree[e++] = next_edge;
+            subset_union(subsets, x, y);
         }
     }
 }
@@ -74,7 +66,7 @@ void prim(Graph gr) {
  * @param gr - empty graph for setting data
  * @return error code
  */
-int read_data(Graph gr) {
+int read_data(Graph *gr) {
     int er; /* Error code for fread_edges */
     FILE *file = fopen(INPUT, "r");
     ERR(file == NULL);
@@ -101,7 +93,7 @@ int read_data(Graph gr) {
  * @param gr - graph for reading adjacency matrix
  * @return error code
  */
-int fread_edges(FILE *file, Graph gr) {
+int fread_edges(FILE *file, Graph *gr) {
     int i = 0, src = 0, dest = 0, weight = 0;
     ARG_ERR(!gr->m, 0);
     for (i = 0; ((i < gr->m) && (!feof(file))); i++) {
@@ -112,8 +104,9 @@ int fread_edges(FILE *file, Graph gr) {
         ARG_ERR(((dest < 1) || (dest > gr->n)), BAD_V);
         ARG_ERR((weight < 0) || (weight > INT_MAX), BAD_LEN);
         if (src != dest) {
-            gr->edges[src - 1][dest - 1] = (unsigned int) weight;
-            gr->edges[dest - 1][src - 1] = (unsigned int) weight;
+            gr->edge[i].src = src - 1;
+            gr->edge[i].dest = dest - 1;
+            gr->edge[i].weight = weight;
         }
     }
     ARG_ERR(i != (gr->m), BAD_NL);
@@ -125,7 +118,6 @@ int fread_edges(FILE *file, Graph gr) {
     for (i = 0; i < gr->n; i++) {
         gr->not_connectivity += (visited[i]) ? 0 : 1;
     }
-
     return 0;
 }
 
@@ -135,20 +127,18 @@ int fread_edges(FILE *file, Graph gr) {
  * @param gr - graph for initialisation
  * @return error code
  */
-int init_arrays(Graph gr) {
-    int i = 0, j = 0;
-    ERR((gr->edges = (unsigned int **) malloc(gr->n * sizeof(int *))) == NULL);
-    ERR((gr->min_tree = (int *) malloc(gr->n * sizeof(int))) == NULL);
-
+int init_arrays(Graph *gr) {
+    ERR((gr->edge = (Edge *) malloc(gr->m * sizeof(Edge))) == NULL);
+    ERR((gr->min_tree = (Edge *) malloc((gr->n) * sizeof(Edge))) == NULL);
+    int i = 0;
     for (i = 0; i < gr->n; i++) {
-        ERR((gr->edges[i] = (unsigned int *) malloc(gr->n * sizeof(int))) == NULL);
-
-        for (j = 0; j < gr->n; j++) {
-            gr->edges[i][j] = 0;
-        }
-        gr->min_tree[i] = i - 1;
+        gr->edge[i].src = 0;
+        gr->edge[i].dest = 0;
+        gr->edge[i].weight = 0;
+        gr->min_tree[i].src = i - 1;
+        gr->min_tree[i].dest = i;
     }
-    gr->min_tree[0] = ROOT;
+    gr->min_tree[0].dest = -1;
     return 0;
 }
 
@@ -180,15 +170,16 @@ char *get_err_str(ArgError code) {
  * @param gr - graph with tree information
  * @return error code
  */
-void fprint_min_tree(FILE *file, Graph gr) {
+void fprint_min_tree(FILE *file, Graph *gr) {
     int i = 0;
     if ((gr->n == 1) && (gr->m == 0)) {
 
-    } else if ((!gr->n) || (gr->m < (gr->n - 1)) || gr->not_connectivity) {
+    } else if ((!gr->n) || (gr->m < (gr->n - 1))) {
+    /*} else if ((!gr->n) || (gr->m < (gr->n - 1)) || gr->not_connectivity) {*/
         fprintf(file, "no spanning tree");
     } else {
         for (i = 1; i < gr->n; i++) {
-            fprintf(file, "%d %d\n", gr->min_tree[i] + 1, i + 1);
+            fprintf(file, "%d %d\n", gr->min_tree[i].src + 1, gr->min_tree[i].dest + 1);
         }
     }
 }
@@ -200,12 +191,39 @@ void fprint_min_tree(FILE *file, Graph gr) {
  * @param k - current vertex
  * @param visited - array with visited vertex
  */
-void dfs(Graph gr, int k, int *visited) {
+void dfs(Graph *gr, int k, int *visited) {
     visited[k] = 1;
 
     int i = 0;
     for (i = 0; i < gr->n; i++) {
-        if (!visited[i] && gr->edges[i][k] != 0)
+        if (!visited[i] && gr->min_tree[i].weight != 0)
             dfs(gr, i, visited);
     }
+}
+
+int subset_find(Subset *subsets, int i) {
+    if (subsets[i].parent != i) {
+        subsets[i].parent = subset_find(subsets, subsets[i].parent);
+    }
+    return subsets[i].parent;
+}
+
+void subset_union(Subset *subsets, int x, int y) {
+    int xroot = subset_find(subsets, x);
+    int yroot = subset_find(subsets, y);
+
+    if (subsets[xroot].rank < subsets[yroot].rank) {
+        subsets[xroot].parent = yroot;
+    } else if (subsets[xroot].rank > subsets[yroot].rank) {
+        subsets[yroot].parent = xroot;
+    } else {
+        subsets[yroot].parent = xroot;
+        subsets[xroot].rank++;
+    }
+}
+
+int edge_comp(const void *a, const void *b) {
+    Edge *a1 = (Edge *) a;
+    Edge *b1 = (Edge *) b;
+    return a1->weight > b1->weight;
 }

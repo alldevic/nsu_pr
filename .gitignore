@@ -502,4 +502,4 @@ __pycache__/
 *.lyx~
 *.lyx#
 
-cmake-build-debug/
+cmake-build-*/

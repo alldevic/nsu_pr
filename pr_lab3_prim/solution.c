@@ -89,7 +89,7 @@ int read_data(Graph gr) {
     ERR(fscanf(file, "%d", &(gr->m)) != 1);
     ARG_ERR((gr->m < 0) || (gr->m > (gr->n * (gr->n + 1) / 2)), BAD_NE);
 
-    gr->not_connectivity = 0;
+    gr->not_connectivity = 1;
 
     /*Read edges data*/
     ERR(init_arrays(gr));
@@ -123,6 +123,7 @@ int fread_edges(FILE *file, Graph gr) {
     ARG_ERR(i != (gr->m), BAD_NL);
 
     /* Check graph for connectivity */
+    gr->not_connectivity = 0;
     int *visited = calloc((size_t) gr->n, sizeof(int));
     dfs(gr, 0, visited);
     for (i = 0; i < gr->n; i++) {
@@ -185,7 +186,9 @@ char *get_err_str(ArgError code) {
  */
 void fprint_min_tree(FILE *file, Graph gr) {
     int i = 0;
-    if ((!gr->n) || (gr->m < (gr->n - 1)) || gr->not_connectivity) {
+    if ((gr->n == 1) && (gr->m == 0)) {
+
+    } else if ((!gr->n) || (gr->m < (gr->n - 1)) || gr->not_connectivity) {
         fprintf(file, "no spanning tree");
     } else {
         for (i = 1; i < gr->n; i++) {

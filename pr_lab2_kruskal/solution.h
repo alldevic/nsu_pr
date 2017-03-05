@@ -75,7 +75,6 @@ int subset_find(Subset *subsets, int i);
 
 void subset_union(Subset *subsets, int x, int y);
 
-
 typedef struct {
     int src, dest, weight;
 } Edge;
@@ -89,7 +88,7 @@ typedef struct {
     Edge *edge;
 } Graph;
 
-void kruskal(Graph *gr);
+int kruskal(Graph *gr);
 
 int read_data(Graph *gr);
 

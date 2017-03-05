@@ -13,8 +13,8 @@
 #define ERR(x) if (x) {perror(__func__); return errno;};
 
 /**
- * @function Entry point. At begin get data from <b>INPUT</b>, then run Prim's algorithm and print
- * answer to <b>OUTPUT</b>
+ * @function Entry point. At begin get data from <b>INPUT</b>, then run Kruskal’s algorithm and
+ * print answer to <b>OUTPUT</b>
  * @return error code
  */
 int main(void) {
@@ -29,20 +29,20 @@ int main(void) {
         fclose(file);
         return 0;
     }
-    kruskal(gr);
+    ERR(kruskal(gr));
     fprint_min_tree(file, gr);
     fclose(file);
     return 0;
 }
 
-void kruskal(Graph *gr) {
-    int e = 0; // An index variable, used for result[]
+int kruskal(Graph *gr) {
+    int e = 0; // An index variable, used for min_tree[]
     int i = 0; // An index variable, used for sorted edges
     int x, y;
 
     qsort(gr->edge, (size_t) gr->m, sizeof(gr->edge[0]), edge_comp);
     Subset *subsets = (Subset *) malloc(gr->n * sizeof(Subset));
-
+    ERR(subsets == NULL)
     for (i = 0; i < gr->n; ++i) {
         subsets[i].parent = i;
         subsets[i].rank = 0;
@@ -60,6 +60,7 @@ void kruskal(Graph *gr) {
     }
 
     gr->not_connectivity += (e == gr->n - 1) ? 0 : 1;
+    return 0;
 }
 
 /**
@@ -81,6 +82,10 @@ int read_data(Graph *gr) {
     ARG_ERR((gr->m < 0) || (gr->m > (gr->n * (gr->n + 1) / 2)), BAD_NE);
     gr->not_connectivity = 0;
 
+    /* Allocating memory for arrays*/
+    ERR((gr->edge = (Edge *) calloc((size_t) gr->m, sizeof(Edge))) == NULL);
+    ERR((gr->min_tree = (Edge *) calloc((size_t) gr->n, sizeof(Edge))) == NULL);
+
     /*Read edges data*/
     ERR(init_arrays(gr));
     er = fread_edges(file, gr);
@@ -90,8 +95,8 @@ int read_data(Graph *gr) {
 }
 
 /**
- * @function Function for get data from file to the adjacency matrix in graph
- * @param file - opeened for reading file
+ * @function Function for get data from file to the edges list in graph
+ * @param file - opened for reading file
  * @param gr - graph for reading adjacency matrix
  * @return error code
  */
@@ -100,9 +105,7 @@ int fread_edges(FILE *file, Graph *gr) {
 
     ARG_ERR(!gr->m, 0);
     for (i = 0; ((i < gr->m) && (!feof(file))); i++) {
-        if (fscanf(file, "%d %d %d", &src, &dest, &weight) != 3) {
-            break;
-        }
+        ARG_ERR((fscanf(file, "%d %d %d", &src, &dest, &weight) != 3), BAD_NL);
         ARG_ERR(((src < 1) || (src > gr->n)), BAD_V);
         ARG_ERR(((dest < 1) || (dest > gr->n)), BAD_V);
         ARG_ERR((weight < 0) || (weight > INT_MAX), BAD_LEN);
@@ -112,19 +115,6 @@ int fread_edges(FILE *file, Graph *gr) {
             gr->edge[i].weight = weight;
         }
     }
-    ARG_ERR(i != (gr->m), BAD_NL);
-    return 0;
-}
-
-/**
- * @function Service function for allocating memory for dynamic arrays in graph and setting default
- * values for them
- * @param gr - graph for initialisation
- * @return error code
- */
-int init_arrays(Graph *gr) {
-    ERR((gr->edge = (Edge *) calloc((size_t)gr->m, sizeof(Edge))) == NULL);
-    ERR((gr->min_tree = (Edge *) calloc( (size_t) gr->n , sizeof(Edge))) == NULL);
     return 0;
 }
 

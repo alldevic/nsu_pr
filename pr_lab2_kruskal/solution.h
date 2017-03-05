@@ -65,7 +65,9 @@ typedef enum {
  */
 #define BAD_NL_STR "bad number of lines"
 
-
+/**
+ * @typedef Disjoint-set data structure
+ */
 typedef struct {
     int parent;
     int rank;
@@ -75,17 +77,24 @@ int subset_find(Subset *subsets, int i);
 
 void subset_union(Subset *subsets, int x, int y);
 
+/**
+ * @typedef Edge of graph implementation
+ */
 typedef struct {
     int src, dest, weight;
 } Edge;
 
 int edge_comp(const void *a, const void *b);
 
+/**
+ * @typedef Data structure for saving graph data
+ */
 typedef struct {
-    int n, m;
-    int not_connectivity;
-    Edge *min_tree;
-    Edge *edge;
+    int n;                 /** Count of vertex */
+    int m;                 /** Count of edges */
+    int not_connectivity;  /** Flag of connectivity of graph*/
+    Edge *min_tree;        /** The minimum spanning tree */
+    Edge *edge;             /** Edges list of graph */
 } Graph;
 
 int kruskal(Graph *gr);
@@ -93,8 +102,6 @@ int kruskal(Graph *gr);
 int read_data(Graph *gr);
 
 int fread_edges(FILE *file, Graph *gr);
-
-int init_arrays(Graph *gr);
 
 char *get_err_str(ArgError code);
 

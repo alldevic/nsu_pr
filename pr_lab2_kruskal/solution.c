@@ -35,6 +35,11 @@ int main(void) {
     return 0;
 }
 
+/**
+ * @function Implementation of Kruskal's minimum spanning tree algorithm
+ * @param gr - graph for searching minimum spanning tree
+ * @return error code
+ */
 int kruskal(Graph *gr) {
     int e = 0; // An index variable, used for min_tree[]
     int i = 0; // An index variable, used for sorted edges
@@ -42,7 +47,7 @@ int kruskal(Graph *gr) {
 
     qsort(gr->edge, (size_t) gr->m, sizeof(gr->edge[0]), edge_comp);
     Subset *subsets = (Subset *) malloc(gr->n * sizeof(Subset));
-    ERR(subsets == NULL)
+    ERR(subsets == NULL);
     for (i = 0; i < gr->n; ++i) {
         subsets[i].parent = i;
         subsets[i].rank = 0;
@@ -87,7 +92,6 @@ int read_data(Graph *gr) {
     ERR((gr->min_tree = (Edge *) calloc((size_t) gr->n, sizeof(Edge))) == NULL);
 
     /*Read edges data*/
-    ERR(init_arrays(gr));
     er = fread_edges(file, gr);
     ERR(er > 0);
     fclose(file);
@@ -157,6 +161,12 @@ void fprint_min_tree(FILE *file, Graph *gr) {
     }
 }
 
+/**
+ * @function Implementation of find function of disjoint-set data structure
+ * @param subsets - array with disjoint-set
+ * @param i - element of set
+ * @return root of set <b>i</b>
+ */
 int subset_find(Subset *subsets, int i) {
     if (subsets[i].parent != i) {
         subsets[i].parent = subset_find(subsets, subsets[i].parent);
@@ -164,6 +174,12 @@ int subset_find(Subset *subsets, int i) {
     return subsets[i].parent;
 }
 
+/**
+ * @function Implementation of union operation for disjoint-set data structure
+ * @param subsets - array with sets
+ * @param x - the member of first class, root of new class
+ * @param y - the member of second class
+ */
 void subset_union(Subset *subsets, int x, int y) {
     int xroot = subset_find(subsets, x);
     int yroot = subset_find(subsets, y);
@@ -178,6 +194,12 @@ void subset_union(Subset *subsets, int x, int y) {
     }
 }
 
+/**
+ * @function Comparator of <b>Edges</b> for qsort function
+ * @param a - first edge
+ * @param b - second edge
+ * @return a > b or a<=b
+ */
 int edge_comp(const void *a, const void *b) {
     return ((Edge *) a)->weight > ((Edge *) b)->weight;
 }

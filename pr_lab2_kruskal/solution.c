@@ -29,9 +29,7 @@ int main(void) {
         fclose(file);
         return 0;
     }
-    if (!gr->not_connectivity) {
-        kruskal(gr);
-    }
+    kruskal(gr);
     fprint_min_tree(file, gr);
     fclose(file);
     return 0;
@@ -51,7 +49,7 @@ void kruskal(Graph *gr) {
     }
 
     i = 0;
-    while (e < gr->n - 1) {
+    while ((e < gr->n - 1) && (i < gr->m)) {
         Edge next_edge = gr->edge[i++];
         x = subset_find(subsets, next_edge.src);
         y = subset_find(subsets, next_edge.dest);
@@ -60,6 +58,8 @@ void kruskal(Graph *gr) {
             subset_union(subsets, x, y);
         }
     }
+
+    gr->not_connectivity += (e == gr->n - 1) ? 0 : 1;
 }
 
 /**
@@ -79,8 +79,7 @@ int read_data(Graph *gr) {
     /*Read 2nd line*/
     ERR(fscanf(file, "%d", &(gr->m)) != 1);
     ARG_ERR((gr->m < 0) || (gr->m > (gr->n * (gr->n + 1) / 2)), BAD_NE);
-
-    gr->not_connectivity = 1;
+    gr->not_connectivity = 0;
 
     /*Read edges data*/
     ERR(init_arrays(gr));
@@ -114,14 +113,6 @@ int fread_edges(FILE *file, Graph *gr) {
         }
     }
     ARG_ERR(i != (gr->m), BAD_NL);
-
-    /* Check graph for connectivity */
-    gr->not_connectivity = 0;
-    int *visited = calloc((size_t) gr->n, sizeof(int));
-    dfs(gr, 0, visited);
-    for (i = 0; i < gr->n; i++) {
-        gr->not_connectivity += (visited[i]) ? 0 : 1;
-    }
     return 0;
 }
 
@@ -132,17 +123,8 @@ int fread_edges(FILE *file, Graph *gr) {
  * @return error code
  */
 int init_arrays(Graph *gr) {
-    ERR((gr->edge = (Edge *) malloc(gr->m * sizeof(Edge))) == NULL);
-    ERR((gr->min_tree = (Edge *) malloc((gr->n) * sizeof(Edge))) == NULL);
-    int i = 0;
-    for (i = 0; i < gr->n; i++) {
-        gr->edge[i].src = 0;
-        gr->edge[i].dest = 0;
-        gr->edge[i].weight = 0;
-        gr->min_tree[i].src = i - 1;
-        gr->min_tree[i].dest = i;
-    }
-    gr->min_tree[0].dest = -1;
+    ERR((gr->edge = (Edge *) calloc((size_t)gr->m, sizeof(Edge))) == NULL);
+    ERR((gr->min_tree = (Edge *) calloc( (size_t) gr->n , sizeof(Edge))) == NULL);
     return 0;
 }
 
@@ -176,32 +158,11 @@ char *get_err_str(ArgError code) {
  */
 void fprint_min_tree(FILE *file, Graph *gr) {
     int i = 0;
-    if ((gr->n == 1) && (gr->m == 0)) {
-
-    } else if ((!gr->n) || (gr->m < (gr->n - 1)) || gr->not_connectivity) {
+    if ((!gr->n) || (gr->m < (gr->n - 1)) || gr->not_connectivity) {
         fprintf(file, "no spanning tree");
     } else {
         for (i = 0; i < gr->n - 1; i++) {
             fprintf(file, "%d %d\n", gr->min_tree[i].src + 1, gr->min_tree[i].dest + 1);
-        }
-    }
-}
-
-/**
- * @function Service function for finding connectivity in graph. This is a depth-first search
- * implementation
- * @param gr - graph for finding connectivity
- * @param k - current vertex
- * @param visited - array with visited vertex
- */
-void dfs(Graph *gr, int k, int *visited) {
-    visited[k] = 1;
-    int i = 0;
-    for (i = 0; i < gr->m; i++) {
-        if (visited[gr->edge[i].src] && !visited[gr->edge[i].dest]) {
-            dfs(gr, gr->edge[i].dest, visited);
-        } else if (visited[gr->edge[i].dest] && !visited[gr->edge[i].src]) {
-            dfs(gr, gr->edge[i].src, visited);
         }
     }
 }

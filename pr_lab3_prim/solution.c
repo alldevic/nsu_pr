@@ -109,16 +109,13 @@ int fread_edges(FILE *file, Graph gr) {
     int i = 0, src = 0, dest = 0, weight = 0;
     ARG_ERR(!gr->m, 0);
     for (i = 0; ((i < gr->m) && (!feof(file))); i++) {
-        if (fscanf(file, "%d %d %d", &src, &dest, &weight) != 3) {
-            break;
-        }
+        ARG_ERR(fscanf(file, "%d %d %d", &src, &dest, &weight) != 3, BAD_NL);
         ARG_ERR(((src < 1) || (src > gr->n)), BAD_V);
         ARG_ERR(((dest < 1) || (dest > gr->n)), BAD_V);
         ARG_ERR((weight < 0) || (weight > INT_MAX), BAD_LEN);
-        if (src != dest) {
-            gr->edges[src - 1][dest - 1] = (unsigned int) weight;
-            gr->edges[dest - 1][src - 1] = (unsigned int) weight;
-        }
+        gr->edges[src - 1][dest - 1] = (unsigned int) weight;
+        gr->edges[dest - 1][src - 1] = (unsigned int) weight;
+
     }
     ARG_ERR(i != (gr->m), BAD_NL);
 
@@ -127,7 +124,7 @@ int fread_edges(FILE *file, Graph gr) {
     int *visited = calloc((size_t) gr->n, sizeof(int));
     dfs(gr, 0, visited);
     for (i = 0; i < gr->n; i++) {
-        gr->not_connectivity += (visited[i]) ? 0 : 1;
+        gr->not_connectivity += !visited[i];
     }
 
     return 0;
@@ -145,14 +142,10 @@ int init_arrays(Graph gr) {
     ERR((gr->min_tree = (int *) malloc(gr->n * sizeof(int))) == NULL);
 
     for (i = 0; i < gr->n; i++) {
-        ERR((gr->edges[i] = (unsigned int *) malloc(gr->n * sizeof(int))) == NULL);
-
-        for (j = 0; j < gr->n; j++) {
-            gr->edges[i][j] = 0;
-        }
+        ERR((gr->edges[i] = (unsigned int *) calloc((size_t) gr->n, sizeof(int))) == NULL);
         gr->min_tree[i] = i - 1;
     }
-    gr->min_tree[0] = ROOT;
+
     return 0;
 }
 

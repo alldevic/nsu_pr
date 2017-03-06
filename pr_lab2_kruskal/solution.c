@@ -153,7 +153,7 @@ char *get_err_str(ArgError code) {
 void fprint_min_tree(FILE *file, Graph *gr) {
     int i = 0;
     if ((!gr->n) || (gr->m < (gr->n - 1)) || gr->not_connectivity) {
-        fprintf(file, "no spanning tree");
+        fprintf(file, IMPOSSIBLE_STR);
     } else {
         for (i = 0; i < gr->n - 1; i++) {
             fprintf(file, "%d %d\n", gr->min_tree[i].src + 1, gr->min_tree[i].dest + 1);

@@ -22,6 +22,11 @@
 #define INT_MAX 2147483647
 
 /**
+ * @def Can't build MST with curret input data
+ */
+#define IMPOSSIBLE_STR "no spanning tree"
+
+/**
 * @enum Code errors for wrong arguments
  * BAD_NV - bad number of vertices
  * BAD_V - bad vertex
@@ -92,7 +97,7 @@ int edge_comp(const void *a, const void *b);
 typedef struct {
     int n;                 /** Count of vertex */
     int m;                 /** Count of edges */
-    int not_connectivity;  /** Flag of connectivity of graph*/
+    int not_connectivity;  /** Flag of connectivity of graph */
     Edge *min_tree;        /** The minimum spanning tree */
     Edge *edge;             /** Edges list of graph */
 } Graph;
@@ -107,4 +112,4 @@ char *get_err_str(ArgError code);
 
 void fprint_min_tree(FILE *file, Graph *gr);
 
-#endif /*LAB2_SOLUTION_H*/
+#endif /* LAB2_SOLUTION_H */

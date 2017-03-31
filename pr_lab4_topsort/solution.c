@@ -1,5 +1,5 @@
 /**
- * @mainpage Laboratory work #11. 
+ * @mainpage Laboratory work #11. Topology sort
  */
 
 #include <stdio.h>
@@ -15,7 +15,7 @@
 int main(void) {
     Graph gr = malloc(sizeof(Graph));
     ERR(gr == NULL);
-    int er = read_data(gr);
+    int er = read_data(gr), i = 0;
     ERR(er > 0);
     FILE *file = fopen(OUTPUT, "w");
     ERR(file == NULL);
@@ -24,25 +24,62 @@ int main(void) {
         fclose(file);
         return 0;
     }
-    fprint_min_tree(file, gr);
+    int *visited = malloc(gr->n * sizeof(int));
+    for (i = 0; i <gr->n; i++)
+        visited[i] = WHITE;
+    top_sort(gr, 0, visited);
+    fprint_sorted(file, gr);
     fclose(file);
     return 0;
 }
 
+int intList_init(IntList *node, int data) {
+    *node = (IntList) malloc(sizeof(struct intList));
+    ERR(node == NULL);
+    (*node)->data = data;
+    (*node)->next = NULL;
+    return 0;
+}
+
+void intList_add(IntList *lst, IntList node) {
+    node->next = *lst;
+    *lst = node;
+}
+
+int top_sort(Graph gr, int k, int *visited) {
+    IntList sorted_tmp = NULL, tmp = NULL;
+
+    visited[k] = GRAY;
+    tmp = gr->data[k];
+    while(tmp && !gr->not_sorting)
+    {
+        if (visited[tmp->data] == GRAY)
+            gr->not_sorting = 1;
+        if (visited[tmp->data] == WHITE)
+            top_sort(gr, tmp->data, visited);
+        tmp = tmp->next;
+    }
+    visited[k] = BLACK;
+    ERR(intList_init(&sorted_tmp, k));
+    intList_add(&gr->sorted, sorted_tmp);
+    return 0;
+}
+
 int read_data(Graph gr) {
-    int er; /* Error code for fread_edges */
+    int er = 0; /* Error code for fread_edges */
+    gr->n = -1; gr->m = -1;
     FILE *file = fopen(INPUT, "r");
     ERR(file == NULL);
 
     /*Read 1st line*/
-    ERR(fscanf(file, "%d", &(gr->n)) != 1);
+    fscanf(file, "%d", &(gr->n));
     ARG_ERR((gr->n < 0) || (gr->n > MAX_VERTEX), BAD_NV);
 
     /*Read 2nd line*/
-    ERR(fscanf(file, "%d", &(gr->m)) != 1);
-    ARG_ERR((gr->m < 0) || (gr->m > (gr->n * (gr->n + 1) / 2)), BAD_NE);
+    fscanf(file, "%d", &(gr->m));
+    ARG_ERR((gr->m < 0) || (gr->m > (gr->n * (gr->n + 1) / 2)), BAD_NL);
 
-    gr->not_connectivity = 1;
+    gr->not_sorting = 0;
 
     /*Read edges data*/
     ERR(init_arrays(gr));
@@ -53,40 +90,24 @@ int read_data(Graph gr) {
 }
 
 int fread_edges(FILE *file, Graph gr) {
-    int i = 0, src = 0, dest = 0, weight = 0;
+    int i = 0, src = 0, dest = 0;
     ARG_ERR(!gr->m, 0);
     for (i = 0; ((i < gr->m) && (!feof(file))); i++) {
-        ARG_ERR(fscanf(file, "%d %d %d", &src, &dest, &weight) != 3, BAD_NL);
+        ARG_ERR(fscanf(file, "%d %d", &src, &dest) != 2, BAD_NL);
         ARG_ERR(((src < 1) || (src > gr->n)), BAD_V);
         ARG_ERR(((dest < 1) || (dest > gr->n)), BAD_V);
-        ARG_ERR((weight < 0) || (weight > INT_MAX), BAD_LEN);
-        gr->edges[src - 1][dest - 1] = (unsigned int) weight;
-        gr->edges[dest - 1][src - 1] = (unsigned int) weight;
-
+        IntList node = NULL;
+        ERR(intList_init(&node, dest - 1));
+        intList_add(&gr->data[src - 1], node);
     }
     ARG_ERR(i != (gr->m), BAD_NL);
-
-    /* Check graph for connectivity */
-    gr->not_connectivity = 0;
-    int *visited = calloc((size_t) gr->n, sizeof(int));
-    dfs(gr, 0, visited);
-    for (i = 0; i < gr->n; i++) {
-        gr->not_connectivity += !visited[i];
-    }
 
     return 0;
 }
 
 int init_arrays(Graph gr) {
-    int i = 0, j = 0;
-    ERR((gr->edges = (unsigned int **) malloc(gr->n * sizeof(int *))) == NULL);
-    ERR((gr->min_tree = (int *) malloc(gr->n * sizeof(int))) == NULL);
-
-    for (i = 0; i < gr->n; i++) {
-        ERR((gr->edges[i] = (unsigned int *) calloc((size_t) gr->n, sizeof(int))) == NULL);
-        gr->min_tree[i] = i - 1;
-    }
-
+    ERR((gr->data = (IntList *) calloc((size_t) gr->n, sizeof(IntList))) == NULL);
+    gr->sorted = NULL;
     return 0;
 }
 
@@ -105,25 +126,15 @@ char *get_err_str(ArgError code) {
     return NULL;
 }
 
-void fprint_min_tree(FILE *file, Graph gr) {
-    int i = 0;
-    if ((gr->n == 1) && (gr->m == 0)) {
-
-    } else if ((!gr->n) || (gr->m < (gr->n - 1)) || gr->not_connectivity) {
-        fprintf(file, "no spanning tree");
+void fprint_sorted(FILE *file, Graph gr) {
+    if (gr->not_sorting) {
+        fprintf(file, IMPOSSIBLE_STR);
     } else {
-        for (i = 1; i < gr->n; i++) {
-            fprintf(file, "%d %d\n", gr->min_tree[i] + 1, i + 1);
+        while(gr->sorted)
+        {
+            fprintf(file, "%d ", gr->sorted->data + 1);
+            gr->sorted = gr->sorted->next;
         }
-    }
-}
 
-void dfs(Graph gr, int k, int *visited) {
-    visited[k] = 1;
-
-    int i = 0;
-    for (i = 0; i < gr->n; i++) {
-        if (!visited[i] && gr->edges[i][k] != 0)
-            dfs(gr, i, visited);
     }
 }

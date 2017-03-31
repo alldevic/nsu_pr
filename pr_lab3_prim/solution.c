@@ -137,7 +137,7 @@ int fread_edges(FILE *file, Graph gr) {
  * @return error code
  */
 int init_arrays(Graph gr) {
-    int i = 0, j = 0;
+    int i = 0;
     ERR((gr->edges = (unsigned int **) malloc(gr->n * sizeof(int *))) == NULL);
     ERR((gr->min_tree = (int *) malloc(gr->n * sizeof(int))) == NULL);
 

@@ -55,7 +55,7 @@ typedef enum {
 typedef struct intList{
     int data;
     struct intList *next;
-} IntListNode, *IntList;
+} *IntList;
 
 /**
  * @typedef Data structure for saving graph data
@@ -64,6 +64,7 @@ typedef struct {
     int n;                 /** Count of vertex */
     int m;                 /** Count of edges */
     int not_sorting;       /** Flag of connectivity of graph */
+    int begin;
     IntList *data;
     IntList sorted;
 } *Graph;

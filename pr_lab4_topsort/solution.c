@@ -24,10 +24,15 @@ int main(void) {
         fclose(file);
         return 0;
     }
+
     int *visited = malloc(gr->n * sizeof(int));
-    for (i = 0; i <gr->n; i++)
+    for (i = 0; i < gr->n; i++)
         visited[i] = WHITE;
-    top_sort(gr, 0, visited);
+    top_sort(gr, gr->begin, visited);
+
+    for (i = 0; i < gr->n; i++)
+        if (visited[i] == WHITE)
+            top_sort(gr, i, visited);
     fprint_sorted(file, gr);
     fclose(file);
     return 0;
@@ -41,18 +46,20 @@ int intList_init(IntList *node, int data) {
     return 0;
 }
 
-void intList_add(IntList *lst, IntList node) {
+int intList_add_int(IntList *lst, int data) {
+    IntList node = NULL;
+    ERR(intList_init(&node, data));
     node->next = *lst;
     *lst = node;
+    return 0;
 }
 
 int top_sort(Graph gr, int k, int *visited) {
-    IntList sorted_tmp = NULL, tmp = NULL;
+    IntList tmp = NULL;
 
     visited[k] = GRAY;
     tmp = gr->data[k];
-    while(tmp && !gr->not_sorting)
-    {
+    while (tmp && !gr->not_sorting) {
         if (visited[tmp->data] == GRAY)
             gr->not_sorting = 1;
         if (visited[tmp->data] == WHITE)
@@ -60,23 +67,26 @@ int top_sort(Graph gr, int k, int *visited) {
         tmp = tmp->next;
     }
     visited[k] = BLACK;
-    ERR(intList_init(&sorted_tmp, k));
-    intList_add(&gr->sorted, sorted_tmp);
+    ERR(intList_add_int(&gr->sorted, k));
     return 0;
 }
 
 int read_data(Graph gr) {
     int er = 0; /* Error code for fread_edges */
-    gr->n = -1; gr->m = -1;
+    gr->n = -1;
+    gr->m = -1;
+    gr->begin = 0;
     FILE *file = fopen(INPUT, "r");
     ERR(file == NULL);
 
     /*Read 1st line*/
     fscanf(file, "%d", &(gr->n));
+    ARG_ERR(gr->n == -1, BAD_NL);
     ARG_ERR((gr->n < 0) || (gr->n > MAX_VERTEX), BAD_NV);
 
     /*Read 2nd line*/
     fscanf(file, "%d", &(gr->m));
+    ARG_ERR(gr->n == -1, BAD_NL);
     ARG_ERR((gr->m < 0) || (gr->m > (gr->n * (gr->n + 1) / 2)), BAD_NL);
 
     gr->not_sorting = 0;
@@ -96,12 +106,10 @@ int fread_edges(FILE *file, Graph gr) {
         ARG_ERR(fscanf(file, "%d %d", &src, &dest) != 2, BAD_NL);
         ARG_ERR(((src < 1) || (src > gr->n)), BAD_V);
         ARG_ERR(((dest < 1) || (dest > gr->n)), BAD_V);
-        IntList node = NULL;
-        ERR(intList_init(&node, dest - 1));
-        intList_add(&gr->data[src - 1], node);
+        gr->begin = (i == 0) ? src - 1 : gr->begin;
+        intList_add_int(&gr->data[src - 1], dest - 1);
     }
     ARG_ERR(i != (gr->m), BAD_NL);
-
     return 0;
 }
 
@@ -130,8 +138,7 @@ void fprint_sorted(FILE *file, Graph gr) {
     if (gr->not_sorting) {
         fprintf(file, IMPOSSIBLE_STR);
     } else {
-        while(gr->sorted)
-        {
+        while (gr->sorted) {
             fprintf(file, "%d ", gr->sorted->data + 1);
             gr->sorted = gr->sorted->next;
         }

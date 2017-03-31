@@ -503,3 +503,24 @@ __pycache__/
 *.lyx#
 
 cmake-build-*/
+
+#dd_lab*/
+#!dd_lab*/*.inc
+#!dd_lab*/*.tdf
+#!dd_lab*/*.scf
+#!dd_lab*/*.gdf
+#!dd_lab*/*.wdf
+#!dd_lab*/*.sym
+#!dd_lab*/*.rpt
+
+dd_lab*/*.acf
+dd_lab*/*.cnf
+dd_lab*/*.fit
+dd_lab*/*.hif
+dd_lab*/*.jam
+dd_lab*/*.jbc
+dd_lab*/*.mmf
+dd_lab*/*.ndb
+dd_lab*/*.pin
+dd_lab*/*.pof
+dd_lab*/*.snf

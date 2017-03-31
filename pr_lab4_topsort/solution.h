@@ -5,21 +5,14 @@
  * @def File with source data
  */
 #define INPUT "in.txt"
-
-/**
- * @def File for write answer
- */
 #define OUTPUT "out.txt"
+#define MAX_VERTEX 1000
+#define IMPOSSIBLE_STR "impossible to sort"
 
-/**
- * @def The max count vertex in graph
- */
-#define MAX_VERTEX 5000
 
-/**
- * @def The max weight edge in graph
- */
-#define INT_MAX 2147483647
+typedef enum {
+    WHITE, GRAY, BLACK
+} VertexColor;
 
 /**
 * @enum Code errors for wrong arguments
@@ -59,16 +52,23 @@ typedef enum {
  */
 #define BAD_NL_STR "bad number of lines"
 
+typedef struct intList{
+    int data;
+    struct intList *next;
+} IntListNode, *IntList;
+
 /**
  * @typedef Data structure for saving graph data
  */
 typedef struct {
     int n;                 /** Count of vertex */
     int m;                 /** Count of edges */
-    int not_connectivity;  /** Flag of connectivity of graph*/
-    int *min_tree;         /** The minimum spanning tree */
-    unsigned int **edges;  /** Adjacency matrix for graph */
+    int not_sorting;       /** Flag of connectivity of graph */
+    IntList *data;
+    IntList sorted;
 } *Graph;
+
+int top_sort(Graph gr, int k, int *visited);
 
 int read_data(Graph gr);
 
@@ -78,8 +78,6 @@ int init_arrays(Graph gr);
 
 char *get_err_str(ArgError code);
 
-void fprint_min_tree(FILE *file, Graph gr);
-
-void dfs(Graph gr, int k, int *visited);
+void fprint_sorted(FILE *file, Graph gr);
 
 #endif /*LAB4_SOLUTION_H*/

@@ -22,11 +22,6 @@
 #define INT_MAX 2147483647
 
 /**
- * @def The value of root of minimal tree
- */
-#define ROOT -1
-
-/**
 * @enum Code errors for wrong arguments
  * BAD_NV - bad number of vertices
  * BAD_V - bad vertex

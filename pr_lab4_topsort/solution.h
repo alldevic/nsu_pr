@@ -1,3 +1,5 @@
+//TODO: docs
+
 #ifndef LAB4_SOLUTION_H
 #define LAB4_SOLUTION_H
 
@@ -11,7 +13,7 @@
 
 
 typedef enum {
-    WHITE, GRAY, BLACK
+    WHITE = 0, GRAY, BLACK
 } VertexColor;
 
 /**
@@ -30,7 +32,7 @@ typedef enum {
  * @param statement - statement for throw
  * @param code - returns value if statement is true
  */
-#define ARG_ERR(statement, code) if (statement) {return code;}
+#define ARG_ERR(statement, code) {if (statement) {return code;}}
 
 /**
  * @def String alias for BAD_NV (for write answer)
@@ -52,7 +54,7 @@ typedef enum {
  */
 #define BAD_NL_STR "bad number of lines"
 
-typedef struct intList{
+typedef struct intList {
     int data;
     struct intList *next;
 } *IntList;
@@ -63,8 +65,7 @@ typedef struct intList{
 typedef struct {
     int n;                 /** Count of vertex */
     int m;                 /** Count of edges */
-    int not_sorting;       /** Flag of connectivity of graph */
-    int begin;
+    int is_sorting;       /** Flag of connectivity of graph */
     IntList *data;
     IntList sorted;
 } *Graph;
@@ -74,8 +75,6 @@ int top_sort(Graph gr, int k, int *visited);
 int read_data(Graph gr);
 
 int fread_edges(FILE *file, Graph gr);
-
-int init_arrays(Graph gr);
 
 char *get_err_str(ArgError code);
 

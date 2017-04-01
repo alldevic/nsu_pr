@@ -118,7 +118,7 @@ int fread_edges(FILE *file, Graph gr) {
         ARG_ERR(fscanf(file, "%d %d", &src, &dest) != 2, BAD_NL);
         ARG_ERR(((src < 1) || (src > gr->n)), BAD_V);
         ARG_ERR(((dest < 1) || (dest > gr->n)), BAD_V);
-        intList_add_int(&gr->data[src - 1], dest - 1);
+        ERR(intList_add_int(&gr->data[src - 1], dest - 1));
     }
 
     ARG_ERR(i != (gr->m), BAD_NL);

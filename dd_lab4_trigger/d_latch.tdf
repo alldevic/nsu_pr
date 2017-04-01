@@ -1,0 +1,11 @@
+SUBDESIGN d_latch
+(
+	D, C		: INPUT;
+	Q			: OUTPUT;
+)
+VARIABLE
+	temp		: NODE;
+BEGIN
+	Q = NOT ((NOT (D AND C)) AND temp);
+	temp = NOT ((NOT ((NOT (D AND C)) AND C)) AND Q);
+END;

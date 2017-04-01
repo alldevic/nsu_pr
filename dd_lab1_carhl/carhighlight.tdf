@@ -1,0 +1,10 @@
+SUBDESIGN CarHighlight
+(
+	d1, d2, d3, d4, u, d: INPUT;
+	highlight	: OUTPUT;
+)
+BEGIN
+
+highlight = !(d1#d2#d3#d4#u#d);
+END;
+

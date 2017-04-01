@@ -1,0 +1,1343 @@
+Project Information                     d:\nsuworkbook\dd_lab2_adder\adder.rpt
+
+MAX+plus II Compiler Report File
+Version 9.6 3/22/2000
+Compiled: 02/25/2017 11:14:53
+
+Copyright (C) 1988-2000 Altera Corporation
+Any megafunction design, and related net list (encrypted or decrypted),
+support information, device programming or simulation file, and any other
+associated documentation or information provided by Altera or a partner
+under Altera's Megafunction Partnership Program may be used only to
+program PLD devices (but not masked PLD devices) from Altera.  Any other
+use of such megafunction design, net list, support information, device
+programming or simulation file, or any other related documentation or
+information is prohibited for any other purpose, including, but not
+limited to modification, reverse engineering, de-compiling, or use with
+any other silicon devices, unless such use is explicitly licensed under
+a separate agreement with Altera or a megafunction partner.  Title to
+the intellectual property, including patents, copyrights, trademarks,
+trade secrets, or maskworks, embodied in any such megafunction design,
+net list, support information, device programming or simulation file, or
+any other related documentation or information provided by Altera or a
+megafunction partner, remains with Altera, the megafunction partner, or
+their respective licensors.  No other licenses, including any licenses
+needed under any third party's intellectual property, are provided herein.
+
+
+
+***** Project compilation was successful
+
+
+Untitled
+
+
+** DEVICE SUMMARY **
+
+Chip/                     Input   Output   Bidir         Shareable
+POF       Device          Pins    Pins     Pins     LCs  Expanders  % Utilized
+
+adder     EPM7128AELC84-5  16       10       0      69      29          53 %
+
+User Pins:                 16       10       0  
+
+
+
+Project Information                     d:\nsuworkbook\dd_lab2_adder\adder.rpt
+
+** PROJECT COMPILATION MESSAGES **
+
+Warning: Line 10, File d:\nsuworkbook\dd_lab2_adder\adder.tdf:
+   Symbolic name "ch_carring9" was declared but never used
+Warning: Line 9, File d:\nsuworkbook\dd_lab2_adder\adder.tdf:
+   Symbolic name "b_carring9" was declared but never used
+
+
+Device-Specific Information:            d:\nsuworkbook\dd_lab2_adder\adder.rpt
+adder
+
+***** Logic for device 'adder' compiled without errors.
+
+
+
+
+Device: EPM7128AELC84-5
+
+Device Options:
+    Turbo Bit                                    = ON
+    Security Bit                                 = OFF
+    Enable JTAG Support                        = ON
+    User Code                                  = ffffffff
+    MultiVolt I/O                              = OFF
+
+                                                                              
+                                                                              
+                                                                              
+                                       V                                      
+                                       C                          V           
+                                       C                 G  G  G  C  G  G  G  
+                           G           I  G  G  G  G  G  N  N  N  C  N  N  N  
+               b  b  b  b  N  a  a  a  N  N  N  N  N  N  D  D  D  I  D  D  D  
+               1  4  3  5  D  5  4  3  T  D  D  D  D  D  *  *  *  O  *  *  *  
+             -----------------------------------------------------------------_ 
+           /  11 10  9  8  7  6  5  4  3  2  1 84 83 82 81 80 79 78 77 76 75   | 
+       b2 | 12                                                              74 | GND* 
+    VCCIO | 13                                                              73 | GND* 
+     #TDI | 14                                                              72 | GND 
+       b6 | 15                                                              71 | #TDO 
+       b8 | 16                                                              70 | GND* 
+       a2 | 17                                                              69 | GND* 
+       a7 | 18                                                              68 | GND* 
+      GND | 19                                                              67 | GND* 
+       a1 | 20                                                              66 | VCCIO 
+       b7 | 21                                                              65 | GND* 
+     GND* | 22                       EPM7128AELC84-5                        64 | GND* 
+     #TMS | 23                                                              63 | GND* 
+     GND* | 24                                                              62 | #TCK 
+     GND* | 25                                                              61 | GND* 
+    VCCIO | 26                                                              60 | GND* 
+     GND* | 27                                                              59 | GND 
+     GND* | 28                                                              58 | GND* 
+       a6 | 29                                                              57 | GND* 
+     GND* | 30                                                              56 | GND* 
+       a8 | 31                                                              55 | res1 
+      GND | 32                                                              54 | res2 
+          |_  33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53  _| 
+            ------------------------------------------------------------------ 
+               G  G  G  G  G  V  r  c  r  G  V  r  r  r  G  c  r  G  G  G  V  
+               N  N  N  N  N  C  e  a  e  N  C  e  e  e  N  h  e  N  N  N  C  
+               D  D  D  D  D  C  s  r  s  D  C  s  s  s  D  e  s  D  D  D  C  
+               *  *  *  *  *  I  8  r  5     I  6  4  3     c  7  *  *  *  I  
+                              O     y        N              k              O  
+                                    _        T                                
+                                    o                                         
+                                    u                                         
+                                    t                                         
+
+
+N.C. = No Connect. This pin has no internal connection to the device.
+VCCINT = Dedicated power pin, which MUST be connected to VCC (3.3 volts).
+VCCIO = Dedicated power pin, which MUST be connected to VCC (3.3 volts).
+GND = Dedicated ground pin or unused dedicated input, which MUST be connected to GND.
+GND* = These I/O pins can either be left unconnected or connected to GND. Connecting these pins to GND will improve the device's immunity to noise.
+RESERVED = Unused I/O pin, which MUST be left unconnected.
+
+^ = Dedicated configuration pin.
++ = Reserved configuration pin, which is tri-stated during user mode.
+* = Reserved configuration pin, which drives out in user mode.
+PDn = Power Down pin. 
+@ = Special-purpose pin. 
+# = JTAG Boundary-Scan Testing/In-System Programming or Configuration Pin. The JTAG inputs TMS and TDI should be tied to VCC and TCK should be tied to GND when not in use.
+& = JTAG pin used for I/O. When used as user I/O, JTAG pins must be kept stable before and during configuration.  JTAG pin stability prevents accidental loading of JTAG instructions.
+
+
+Device-Specific Information:            d:\nsuworkbook\dd_lab2_adder\adder.rpt
+adder
+
+** RESOURCE USAGE **
+
+                                                Shareable     External
+Logic Array Block     Logic Cells   I/O Pins    Expanders   Interconnect
+
+A:     LC1 - LC16     0/16(  0%)   8/ 8(100%)   0/16(  0%)   0/36(  0%) 
+B:    LC17 - LC32     0/16(  0%)   7/ 8( 87%)   0/16(  0%)   0/36(  0%) 
+C:    LC33 - LC48     0/16(  0%)   3/ 8( 37%)   0/16(  0%)   0/36(  0%) 
+D:    LC49 - LC64     9/16( 56%)   3/ 8( 37%)  13/16( 81%)  22/36( 61%) 
+E:    LC65 - LC80    12/16( 75%)   5/ 8( 62%)  16/16(100%)  30/36( 83%) 
+F:    LC81 - LC96    16/16(100%)   3/ 8( 37%)  16/16(100%)  10/36( 27%) 
+G:   LC97 - LC112    16/16(100%)   1/ 8( 12%)  15/16( 93%)  25/36( 69%) 
+H:  LC113 - LC128    16/16(100%)   0/ 8(  0%)  10/16( 62%)  28/36( 77%) 
+
+
+Total dedicated input pins used:                 0/4      (  0%)
+Total I/O pins used:                            30/64     ( 46%)
+Total logic cells used:                         69/128    ( 53%)
+Total shareable expanders used:                 29/128    ( 22%)
+Total Turbo logic cells used:                   69/128    ( 53%)
+Total shareable expanders not available (n/a):  41/128    ( 32%)
+Average fan-in:                                  6.81
+Total fan-in:                                   470
+
+Total input pins required:                      16
+Total fast input logic cells required:           0
+Total output pins required:                     10
+Total bidirectional pins required:               0
+Total reserved pins required                     4
+Total logic cells required:                     69
+Total flipflops required:                        0
+Total product terms required:                  300
+Total logic cells lending parallel expanders:    0
+Total shareable expanders in database:          26
+
+Synthesized logic cells:                        59/ 128   ( 46%)
+
+
+
+Device-Specific Information:            d:\nsuworkbook\dd_lab2_adder\adder.rpt
+adder
+
+** INPUTS **
+
+                                         Shareable
+                                         Expanders     Fan-In    Fan-Out
+ Pin     LC  LAB  Primitive    Code   Total Shared n/a INP  FBK  OUT  FBK  Name
+  20   (21)  (B)      INPUT                0      0   0    0    0    3   24  a1
+  17   (25)  (B)      INPUT                0      0   0    0    0    3   24  a2
+   4   (16)  (A)      INPUT                0      0   0    0    0    2   27  a3
+   5   (14)  (A)      INPUT                0      0   0    0    0    1   16  a4
+   6   (13)  (A)      INPUT                0      0   0    0    0    1   15  a5
+  29   (38)  (C)      INPUT                0      0   0    0    0    2    7  a6
+  18   (24)  (B)      INPUT                0      0   0    0    0    3    8  a7
+  31   (35)  (C)      INPUT                0      0   0    0    0    2    5  a8
+  11    (5)  (A)      INPUT                0      0   0    0    0    3   38  b1
+  12    (3)  (A)      INPUT                0      0   0    0    0    3   35  b2
+   9    (8)  (A)      INPUT                0      0   0    0    0    2   32  b3
+  10    (6)  (A)      INPUT                0      0   0    0    0    1   28  b4
+   8   (11)  (A)      INPUT                0      0   0    0    0    1   14  b5
+  15   (29)  (B)      INPUT                0      0   0    0    0    2   11  b6
+  21   (19)  (B)      INPUT                0      0   0    0    0    3    9  b7
+  16   (27)  (B)      INPUT                0      0   0    0    0    2    6  b8
+
+
+Code:
+
+s = Synthesized pin or logic cell
+t = Turbo logic cell
++ = Synchronous flipflop
+/ = Slow slew-rate output
+! = NOT gate push-back
+r = Fitter-inserted logic cell
+h = Register powers up high
+
+
+Device-Specific Information:            d:\nsuworkbook\dd_lab2_adder\adder.rpt
+adder
+
+** OUTPUTS **
+
+                                         Shareable
+                                         Expanders     Fan-In    Fan-Out
+ Pin     LC  LAB  Primitive    Code   Total Shared n/a INP  FBK  OUT  FBK  Name
+  40     51    D     OUTPUT      t         1      0   1    4    1    0    0  carry_out
+  48     72    E     OUTPUT      t         0      0   0    0    7    0    0  check
+  55     85    F     OUTPUT      t         0      0   0    2    0    0    0  res1
+  54     83    F     OUTPUT      t         0      0   0    4    0    0    0  res2
+  46     69    E     OUTPUT      t         4      1   1    6    0    0    0  res3
+  45     67    E     OUTPUT      t         4      0   0    6    1    0    0  res4
+  41     49    D     OUTPUT      t         2      0   0    2    3    0    0  res5
+  44     65    E     OUTPUT      t         0      0   0    2    1    0    0  res6
+  49     73    E     OUTPUT      t         3      2   1    4    1    0    0  res7
+  39     53    D     OUTPUT      t         1      0   1    4    1    0    0  res8
+
+
+Code:
+
+s = Synthesized pin or logic cell
+t = Turbo logic cell
++ = Synchronous flipflop
+/ = Slow slew-rate output
+! = NOT gate push-back
+r = Fitter-inserted logic cell
+h = Register powers up high
+
+
+Device-Specific Information:            d:\nsuworkbook\dd_lab2_adder\adder.rpt
+adder
+
+** BURIED LOGIC **
+
+                                         Shareable
+                                         Expanders     Fan-In    Fan-Out
+ Pin     LC  LAB  Primitive    Code   Total Shared n/a INP  FBK  OUT  FBK  Name
+   -    116    H       SOFT    s t         0      0   0    4    0    0    2  b_carring5~1
+   -    122    H       SOFT    s t         0      0   0    5    0    0    4  b_carring6~1
+ (77)   123    H       SOFT    s t         0      0   0    4    0    0    5  b_check4~1
+ (80)   126    H       SOFT    s t         0      0   0    6    0    0    2  b_check6~1
+   -    121    H       SOFT    s t         0      0   0    7    0    0    7  b_check7~1
+ (64)    99    G       SOFT    s t         3      2   1    8    0    0    4  carring5~1
+   -     82    F       SOFT    s t         5      3   1   10    0    2    4  carring6~1
+   -     68    E       SOFT    s t         0      0   0    2    0    0    3  ch_carring2~1
+   -     81    F       SOFT    s t         0      0   0    4    0    0    7  ch_carring3~1
+   -     98    G       SOFT    s t         1      0   1    6    4    0    3  ch_carring4~1
+   -    108    G       SOFT    s t         1      0   1    6    1    0    1  ch_carring4~2
+ (69)   107    G       SOFT    s t         1      0   1    6    1    0    1  ch_carring4~3
+ (67)   104    G       SOFT    s t         0      0   0    4    1    0    1  ch_carring4~4
+   -     71    E       SOFT    s t         4      0   1    7    5    0    6  ch_carring7~1
+   -    111    G       SOFT    s t         0      0   0    2    1    0    3  ch_out2~1
+   -    100    G       SOFT    s t         1      0   1    4    1    0    3  ch_out3~1
+   -     54    D       SOFT    s t         2      0   0    5    5    0    4  ch_out5~1
+   -     50    D       SOFT    s t         1      0   1    0    6    0    1  ch_out5~2
+   -     63    D       SOFT    s t         1      0   1    4    6    0    1  ch_out5~3
+   -     74    E       SOFT    s t         0      0   0    0    4    0    3  ch_out6~1
+ (74)   117    H       SOFT    s t         0      0   0    0    3    0    5  ch_out7~1
+ (73)   115    H       SOFT    s t         3      0   0    8    8    0    4  ch_out8~1
+ (81)   128    H       SOFT    s t         1      0   1    3    5    0    1  ch_out8~2
+   -    127    H       SOFT    s t         1      0   1    3    4    0    1  ch_out8~3
+   -    124    H       SOFT    s t         1      0   1    3    4    0    1  ch_out8~4
+ (79)   125    H       SOFT    s t         1      0   1    8    5    0    1  ch_out8~5
+   -     55    D       SOFT    s t         1      0   1    4    1    0    1  ~97~1
+ (51)    77    E       SOFT    s t         3      2   1    4    1    0    7  ~113~1
+ (50)    75    E       SOFT    s t         0      0   0    4    1    2    1  ~115~1
+   -    119    H       SOFT    s t         0      0   0    0    2    0    2  ~124~1
+   -     76    E       SOFT    s t         0      0   0    2    1    0    2  ~129~1
+   -     87    F       SOFT    s t         1      0   1    8    0    1    0  ~145~1~2
+ (62)    96    F       SOFT    s t         1      0   1    8    0    1    0  ~145~1~3
+   -     95    F       SOFT    s t         1      0   1    6    0    1    0  ~145~1~4
+ (37)    56    D       SOFT    s t         4      0   1    6    5    0    2  ~157~1
+ (76)   120    H       SOFT    s t         1      0   0    3    7    0    2  ~158~1
+ (57)    88    F       SOFT    s t         1      0   1   10    0    0    1  ~158~2
+ (61)    94    F       SOFT    s t         1      0   1   10    0    0    1  ~158~3
+   -    106    G       SOFT    s t         1      0   1    9    0    0    1  ~158~4
+   -     92    F       SOFT    s t         1      0   1    9    0    0    1  ~158~5
+ (63)    97    G       SOFT    s t         1      0   1    8    0    0    1  ~158~6
+   -    113    H       SOFT    s t         1      0   1    8    0    0    1  ~158~7
+   -    114    H       SOFT    s t         1      0   1    7    0    0    1  ~158~8
+   -     84    F       SOFT    s t         1      0   1    6    0    1    0  ~161~1~2
+   -     66    E       SOFT    s t         0      0   0    1    4    0    5  ~161~1
+ (56)    86    F       SOFT    s t         1      0   1    7    0    0    1  ~161~2
+   -     89    F       SOFT    s t         1      0   1    7    0    0    1  ~161~3
+   -     90    F       SOFT    s t         1      0   1    7    0    0    1  ~161~4
+ (75)   118    H       SOFT    s t         0      0   0    5    0    0    1  ~161~5
+ (36)    57    D       SOFT    s t         0      0   0    0    2    0    3  ~172~1
+ (58)    91    F       SOFT    s t         1      0   1    5    0    0    4  ~186~1
+ (60)    93    F       SOFT    s t         0      0   0    3    0    0    4  ~202~1
+ (71)   112    G       SOFT    s t         1      0   1    3    5    1    0  ~250~2
+   -    110    G       SOFT    s t         1      0   1    4    5    1    0  ~250~3
+ (65)   101    G       SOFT    s t         1      0   1    6    7    1    0  ~250~4
+   -    102    G       SOFT    s t         1      0   1    6    5    1    0  ~250~5
+   -    103    G       SOFT    s t         1      0   1    4    4    1    0  ~250~6
+ (68)   105    G       SOFT    s t         1      0   1    5    4    1    0  ~250~7
+ (70)   109    G       SOFT    s t         0      0   0    5    4    1    0  ~250~8
+
+
+Code:
+
+s = Synthesized pin or logic cell
+t = Turbo logic cell
++ = Synchronous flipflop
+/ = Slow slew-rate output
+! = NOT gate push-back
+r = Fitter-inserted logic cell
+h = Register powers up high
+
+
+Device-Specific Information:            d:\nsuworkbook\dd_lab2_adder\adder.rpt
+adder
+
+** LOGIC CELL INTERCONNECTIONS **
+
+Logic Array Block 'D':
+
+                           Logic cells placed in LAB 'D'
+        +----------------- LC51 carry_out
+        | +--------------- LC54 ch_out5~1
+        | | +------------- LC50 ch_out5~2
+        | | | +----------- LC63 ch_out5~3
+        | | | | +--------- LC49 res5
+        | | | | | +------- LC53 res8
+        | | | | | | +----- LC55 ~97~1
+        | | | | | | | +--- LC56 ~157~1
+        | | | | | | | | +- LC57 ~172~1
+        | | | | | | | | | 
+        | | | | | | | | |   Other LABs fed by signals
+        | | | | | | | | |   that feed LAB 'D'
+LC      | | | | | | | | | | A B C D E F G H |     Logic cells that feed LAB 'D':
+LC50 -> - * - - - - - - - | - - - * - - - - | <-- ch_out5~2
+LC63 -> - * - - - - - - - | - - - * - - - - | <-- ch_out5~3
+LC57 -> - - * * - - - * - | - - - * - - - - | <-- ~172~1
+
+Pin
+6    -> - * - - * - - * - | - - - * - * * * | <-- a5
+18   -> * - - - - * * - - | - - - * * - * - | <-- a7
+31   -> * - - - - * * - - | - - - * - - * - | <-- a8
+11   -> - * - * - - - * - | - - - * * * * * | <-- b1
+12   -> - * - * - - - * - | - - - * * * * * | <-- b2
+9    -> - * - * - - - * - | - - - * * * * * | <-- b3
+10   -> - * - * - - - * - | - - - * * * * * | <-- b4
+8    -> - - - - * - - * - | - - - * * * - * | <-- b5
+21   -> * - - - - * * - - | - - - * * - - * | <-- b7
+16   -> * - - - - * * - - | - - - * - - - * | <-- b8
+LC116-> - - * * - - - - - | - - - * - - - - | <-- b_carring5~1
+LC123-> - * * * - - - * * | - - - * - - - - | <-- b_check4~1
+LC99 -> - * * * - - - * - | - - - * - - - - | <-- carring5~1
+LC98 -> - - * * - - - * - | - - - * - - - - | <-- ch_carring4~1
+LC75 -> * - - - - * * - - | - - - * - - - - | <-- ~115~1
+LC87 -> - - - - * - - - - | - - - * - - - - | <-- ~145~1~2
+LC96 -> - - - - * - - - - | - - - * - - - - | <-- ~145~1~3
+LC95 -> - - - - * - - - - | - - - * - - - - | <-- ~145~1~4
+LC66 -> - * * * - - - * * | - - - * - - - - | <-- ~161~1
+
+
+* = The logic cell or pin is an input to the logic cell (or LAB) through the PIA.
+- = The logic cell or pin is not an input to the logic cell (or LAB).
+
+
+Device-Specific Information:            d:\nsuworkbook\dd_lab2_adder\adder.rpt
+adder
+
+** LOGIC CELL INTERCONNECTIONS **
+
+Logic Array Block 'E':
+
+                                 Logic cells placed in LAB 'E'
+        +----------------------- LC68 ch_carring2~1
+        | +--------------------- LC71 ch_carring7~1
+        | | +------------------- LC72 check
+        | | | +----------------- LC74 ch_out6~1
+        | | | | +--------------- LC69 res3
+        | | | | | +------------- LC67 res4
+        | | | | | | +----------- LC65 res6
+        | | | | | | | +--------- LC73 res7
+        | | | | | | | | +------- LC77 ~113~1
+        | | | | | | | | | +----- LC75 ~115~1
+        | | | | | | | | | | +--- LC76 ~129~1
+        | | | | | | | | | | | +- LC66 ~161~1
+        | | | | | | | | | | | | 
+        | | | | | | | | | | | |   Other LABs fed by signals
+        | | | | | | | | | | | |   that feed LAB 'E'
+LC      | | | | | | | | | | | | | A B C D E F G H |     Logic cells that feed LAB 'E':
+LC76 -> - * - * - - - - - - - - | - - - - * - - - | <-- ~129~1
+
+Pin
+20   -> * - - - * - - - - - - - | - - - - * * * - | <-- a1
+17   -> - - - - * * - - - - - - | - - - - * * * - | <-- a2
+4    -> - - - - * * - - - - - - | - - - - * * * * | <-- a3
+5    -> - - - - - * - - - - - * | - - - - * * * * | <-- a4
+29   -> - * - - - - * * * * * - | - - - - * - * - | <-- a6
+18   -> - - - - - - - * * * - - | - - - * * - * - | <-- a7
+11   -> * * - - * - - - - - - - | - - - * * * * * | <-- b1
+12   -> - * - - * * - - - - - - | - - - * * * * * | <-- b2
+9    -> - * - - * * - - - - - - | - - - * * * * * | <-- b3
+10   -> - * - - - * - - - - - - | - - - * * * * * | <-- b4
+8    -> - * - - - - - - - - - - | - - - * * * - * | <-- b5
+15   -> - * - - - - * * * * * - | - - - - * - - * | <-- b6
+21   -> - - - - - - - * * * - - | - - - * * - - * | <-- b7
+LC126-> - * - * - - - - - - - - | - - - - * - - - | <-- b_check6~1
+LC82 -> - * - - - - * * * * * - | - - - - * - - - | <-- carring6~1
+LC56 -> - * - * - - - - - - - - | - - - - * - - - | <-- ~157~1
+LC120-> - * - * - - - - - - - - | - - - - * - - - | <-- ~158~1
+LC84 -> - - - - - * - - - - - - | - - - - * - - - | <-- ~161~1~2
+LC86 -> - - - - - - - - - - - * | - - - - * - - - | <-- ~161~2
+LC89 -> - - - - - - - - - - - * | - - - - * - - - | <-- ~161~3
+LC90 -> - - - - - - - - - - - * | - - - - * - - - | <-- ~161~4
+LC118-> - - - - - - - - - - - * | - - - - * - - - | <-- ~161~5
+LC112-> - - * - - - - - - - - - | - - - - * - - - | <-- ~250~2
+LC110-> - - * - - - - - - - - - | - - - - * - - - | <-- ~250~3
+LC101-> - - * - - - - - - - - - | - - - - * - - - | <-- ~250~4
+LC102-> - - * - - - - - - - - - | - - - - * - - - | <-- ~250~5
+LC103-> - - * - - - - - - - - - | - - - - * - - - | <-- ~250~6
+LC105-> - - * - - - - - - - - - | - - - - * - - - | <-- ~250~7
+LC109-> - - * - - - - - - - - - | - - - - * - - - | <-- ~250~8
+
+
+* = The logic cell or pin is an input to the logic cell (or LAB) through the PIA.
+- = The logic cell or pin is not an input to the logic cell (or LAB).
+
+
+Device-Specific Information:            d:\nsuworkbook\dd_lab2_adder\adder.rpt
+adder
+
+** LOGIC CELL INTERCONNECTIONS **
+
+Logic Array Block 'F':
+
+                                         Logic cells placed in LAB 'F'
+        +------------------------------- LC82 carring6~1
+        | +----------------------------- LC81 ch_carring3~1
+        | | +--------------------------- LC85 res1
+        | | | +------------------------- LC83 res2
+        | | | | +----------------------- LC87 ~145~1~2
+        | | | | | +--------------------- LC96 ~145~1~3
+        | | | | | | +------------------- LC95 ~145~1~4
+        | | | | | | | +----------------- LC88 ~158~2
+        | | | | | | | | +--------------- LC94 ~158~3
+        | | | | | | | | | +------------- LC92 ~158~5
+        | | | | | | | | | | +----------- LC84 ~161~1~2
+        | | | | | | | | | | | +--------- LC86 ~161~2
+        | | | | | | | | | | | | +------- LC89 ~161~3
+        | | | | | | | | | | | | | +----- LC90 ~161~4
+        | | | | | | | | | | | | | | +--- LC91 ~186~1
+        | | | | | | | | | | | | | | | +- LC93 ~202~1
+        | | | | | | | | | | | | | | | | 
+        | | | | | | | | | | | | | | | |   Other LABs fed by signals
+        | | | | | | | | | | | | | | | |   that feed LAB 'F'
+LC      | | | | | | | | | | | | | | | | | A B C D E F G H |     Logic cells that feed LAB 'F':
+
+Pin
+20   -> * * * * * * - * * - * * * * * * | - - - - * * * - | <-- a1
+17   -> * * - * * * * * * * * * * * * * | - - - - * * * - | <-- a2
+4    -> * - - - * * * * * * * * * * * - | - - - - * * * * | <-- a3
+5    -> * - - - * * * * * * - - - - - - | - - - - * * * * | <-- a4
+6    -> * - - - - - - * * * - - - - - - | - - - * - * * * | <-- a5
+11   -> * * * * * * - * * * * * * * * * | - - - * * * * * | <-- b1
+12   -> * * - * * * * * * * * * * * * - | - - - * * * * * | <-- b2
+9    -> * - - - * * * * * * * * * * - - | - - - * * * * * | <-- b3
+10   -> * - - - * * * * * * - * * * - - | - - - * * * * * | <-- b4
+8    -> * - - - - - - * * * - - - - - - | - - - * * * - * | <-- b5
+
+
+* = The logic cell or pin is an input to the logic cell (or LAB) through the PIA.
+- = The logic cell or pin is not an input to the logic cell (or LAB).
+
+
+Device-Specific Information:            d:\nsuworkbook\dd_lab2_adder\adder.rpt
+adder
+
+** LOGIC CELL INTERCONNECTIONS **
+
+Logic Array Block 'G':
+
+                                         Logic cells placed in LAB 'G'
+        +------------------------------- LC99 carring5~1
+        | +----------------------------- LC98 ch_carring4~1
+        | | +--------------------------- LC108 ch_carring4~2
+        | | | +------------------------- LC107 ch_carring4~3
+        | | | | +----------------------- LC104 ch_carring4~4
+        | | | | | +--------------------- LC111 ch_out2~1
+        | | | | | | +------------------- LC100 ch_out3~1
+        | | | | | | | +----------------- LC106 ~158~4
+        | | | | | | | | +--------------- LC97 ~158~6
+        | | | | | | | | | +------------- LC112 ~250~2
+        | | | | | | | | | | +----------- LC110 ~250~3
+        | | | | | | | | | | | +--------- LC101 ~250~4
+        | | | | | | | | | | | | +------- LC102 ~250~5
+        | | | | | | | | | | | | | +----- LC103 ~250~6
+        | | | | | | | | | | | | | | +--- LC105 ~250~7
+        | | | | | | | | | | | | | | | +- LC109 ~250~8
+        | | | | | | | | | | | | | | | | 
+        | | | | | | | | | | | | | | | |   Other LABs fed by signals
+        | | | | | | | | | | | | | | | |   that feed LAB 'G'
+LC      | | | | | | | | | | | | | | | | | A B C D E F G H |     Logic cells that feed LAB 'G':
+LC108-> - * - - - - - - - - - - - - - - | - - - - - - * - | <-- ch_carring4~2
+LC107-> - * - - - - - - - - - - - - - - | - - - - - - * - | <-- ch_carring4~3
+LC104-> - * - - - - - - - - - - - - - - | - - - - - - * - | <-- ch_carring4~4
+LC111-> - - - - - - - - - * * * - - - - | - - - - - - * - | <-- ch_out2~1
+LC100-> - - - - - - - - - - - - * - * * | - - - - - - * - | <-- ch_out3~1
+
+Pin
+20   -> * * * * - * * * * * * * - - - - | - - - - * * * - | <-- a1
+17   -> * * * * - - * * * * * * - - - - | - - - - * * * - | <-- a2
+4    -> * * * * * - - * * * * * * - * * | - - - - * * * * | <-- a3
+5    -> * - - - - - - * * - - - * - * * | - - - - * * * * | <-- a4
+6    -> - - - - - - - * * - - - * * * * | - - - * - * * * | <-- a5
+29   -> - - - - - - - - - - - - * * - * | - - - - * - * - | <-- a6
+18   -> - - - - - - - - - - - * * * * * | - - - * * - * - | <-- a7
+31   -> - - - - - - - - - - - * * * * - | - - - * - - * - | <-- a8
+11   -> * * * * * * * * - - * * - - - - | - - - * * * * * | <-- b1
+12   -> * * * * * - * * * - - - - - - - | - - - * * * * * | <-- b2
+9    -> * * * * * - - * * - - - - - - - | - - - * * * * * | <-- b3
+10   -> * - - - - - - * * - - - - - - - | - - - * * * * * | <-- b4
+LC68 -> - - - - - - - - - * * * - - - - | - - - - - - * - | <-- ch_carring2~1
+LC81 -> - * * * * - - - - * * * - - - - | - - - - - - * - | <-- ch_carring3~1
+LC54 -> - - - - - - - - - - - - * * * * | - - - - - - * - | <-- ch_out5~1
+LC74 -> - - - - - - - - - - - - * * - * | - - - - - - * - | <-- ch_out6~1
+LC117-> - - - - - - - - - - - * * * * * | - - - - - - * - | <-- ch_out7~1
+LC115-> - - - - - - - - - - - * * * * - | - - - - - - * - | <-- ch_out8~1
+LC91 -> - - - - - - * - - * * * - - - - | - - - - - - * - | <-- ~186~1
+LC93 -> - - - - - * - - - * * * - - - - | - - - - - - * - | <-- ~202~1
+
+
+* = The logic cell or pin is an input to the logic cell (or LAB) through the PIA.
+- = The logic cell or pin is not an input to the logic cell (or LAB).
+
+
+Device-Specific Information:            d:\nsuworkbook\dd_lab2_adder\adder.rpt
+adder
+
+** LOGIC CELL INTERCONNECTIONS **
+
+Logic Array Block 'H':
+
+                                         Logic cells placed in LAB 'H'
+        +------------------------------- LC116 b_carring5~1
+        | +----------------------------- LC122 b_carring6~1
+        | | +--------------------------- LC123 b_check4~1
+        | | | +------------------------- LC126 b_check6~1
+        | | | | +----------------------- LC121 b_check7~1
+        | | | | | +--------------------- LC117 ch_out7~1
+        | | | | | | +------------------- LC115 ch_out8~1
+        | | | | | | | +----------------- LC128 ch_out8~2
+        | | | | | | | | +--------------- LC127 ch_out8~3
+        | | | | | | | | | +------------- LC124 ch_out8~4
+        | | | | | | | | | | +----------- LC125 ch_out8~5
+        | | | | | | | | | | | +--------- LC119 ~124~1
+        | | | | | | | | | | | | +------- LC120 ~158~1
+        | | | | | | | | | | | | | +----- LC113 ~158~7
+        | | | | | | | | | | | | | | +--- LC114 ~158~8
+        | | | | | | | | | | | | | | | +- LC118 ~161~5
+        | | | | | | | | | | | | | | | | 
+        | | | | | | | | | | | | | | | |   Other LABs fed by signals
+        | | | | | | | | | | | | | | | |   that feed LAB 'H'
+LC      | | | | | | | | | | | | | | | | | A B C D E F G H |     Logic cells that feed LAB 'H':
+LC122-> - - - - - - - * * * * - - - - - | - - - - - - - * | <-- b_carring6~1
+LC121-> - - - - - * * * * * * * - - - - | - - - - - - - * | <-- b_check7~1
+LC128-> - - - - - - * - - - - - - - - - | - - - - - - - * | <-- ch_out8~2
+LC127-> - - - - - - * - - - - - - - - - | - - - - - - - * | <-- ch_out8~3
+LC124-> - - - - - - * - - - - - - - - - | - - - - - - - * | <-- ch_out8~4
+LC125-> - - - - - - * - - - - - - - - - | - - - - - - - * | <-- ch_out8~5
+LC119-> - - - - - - - * - - * - - - - - | - - - - - - - * | <-- ~124~1
+LC113-> - - - - - - - - - - - - * - - - | - - - - - - - * | <-- ~158~7
+LC114-> - - - - - - - - - - - - * - - - | - - - - - - - * | <-- ~158~8
+
+Pin
+4    -> - - - - - - - - - - - - - * - * | - - - - * * * * | <-- a3
+5    -> - - - - - - - - - - - - - * * - | - - - - * * * * | <-- a4
+6    -> - - - - - - - - - - - - * * * - | - - - * - * * * | <-- a5
+11   -> * * * * * - * - - - * - - * * * | - - - * * * * * | <-- b1
+12   -> * * * * * - * - - - * - - * * * | - - - * * * * * | <-- b2
+9    -> * * * * * - * - - - * - - * * * | - - - * * * * * | <-- b3
+10   -> * * * * * - * - - - * - * * * * | - - - * * * * * | <-- b4
+8    -> - * - * * - * - - - * - * * * - | - - - * * * - * | <-- b5
+15   -> - - - * * - * * * * * - - - - - | - - - - * - - * | <-- b6
+21   -> - - - - * - * * * * * - - - - - | - - - * * - - * | <-- b7
+16   -> - - - - - - * * * * * - - - - - | - - - * - - - * | <-- b8
+LC71 -> - - - - - * * * * * * - - - - - | - - - - - - - * | <-- ch_carring7~1
+LC55 -> - - - - - - * - - - - - - - - - | - - - - - - - * | <-- ~97~1
+LC77 -> - - - - - * * * * * * * - - - - | - - - - - - - * | <-- ~113~1
+LC88 -> - - - - - - - - - - - - * - - - | - - - - - - - * | <-- ~158~2
+LC94 -> - - - - - - - - - - - - * - - - | - - - - - - - * | <-- ~158~3
+LC106-> - - - - - - - - - - - - * - - - | - - - - - - - * | <-- ~158~4
+LC92 -> - - - - - - - - - - - - * - - - | - - - - - - - * | <-- ~158~5
+LC97 -> - - - - - - - - - - - - * - - - | - - - - - - - * | <-- ~158~6
+
+
+* = The logic cell or pin is an input to the logic cell (or LAB) through the PIA.
+- = The logic cell or pin is not an input to the logic cell (or LAB).
+
+
+Device-Specific Information:            d:\nsuworkbook\dd_lab2_adder\adder.rpt
+adder
+
+** EQUATIONS **
+
+a1       : INPUT;
+a2       : INPUT;
+a3       : INPUT;
+a4       : INPUT;
+a5       : INPUT;
+a6       : INPUT;
+a7       : INPUT;
+a8       : INPUT;
+b1       : INPUT;
+b2       : INPUT;
+b3       : INPUT;
+b4       : INPUT;
+b5       : INPUT;
+b6       : INPUT;
+b7       : INPUT;
+b8       : INPUT;
+
+-- Node name is 'b_carring5~1' from file "adder.tdf" line 20, column 31
+-- Equation name is 'b_carring5~1', location is LC116, type is buried.
+-- synthesized logic cell 
+_LC116   = LCELL( _EQ001 $  GND);
+  _EQ001 = !b1 & !b2 & !b3 & !b4;
+
+-- Node name is 'b_carring6~1' from file "adder.tdf" line 20, column 31
+-- Equation name is 'b_carring6~1', location is LC122, type is buried.
+-- synthesized logic cell 
+_LC122   = LCELL( _EQ002 $  GND);
+  _EQ002 = !b1 & !b2 & !b3 & !b4 & !b5;
+
+-- Node name is 'b_check4~1' from file "adder.tdf" line 19, column 27
+-- Equation name is 'b_check4~1', location is LC123, type is buried.
+-- synthesized logic cell 
+_LC123   = LCELL( _EQ003 $ !b4);
+  _EQ003 = !b1 & !b2 & !b3;
+
+-- Node name is 'b_check6~1' from file "adder.tdf" line 19, column 27
+-- Equation name is 'b_check6~1', location is LC126, type is buried.
+-- synthesized logic cell 
+_LC126   = LCELL( _EQ004 $ !b6);
+  _EQ004 = !b1 & !b2 & !b3 & !b4 & !b5;
+
+-- Node name is 'b_check7~1' from file "adder.tdf" line 19, column 27
+-- Equation name is 'b_check7~1', location is LC121, type is buried.
+-- synthesized logic cell 
+_LC121   = LCELL( _EQ005 $ !b7);
+  _EQ005 = !b1 & !b2 & !b3 & !b4 & !b5 & !b6;
+
+-- Node name is 'carring5~1' from file "adder.tdf" line 17, column 50
+-- Equation name is 'carring5~1', location is LC099, type is buried.
+-- synthesized logic cell 
+_LC099   = LCELL( _EQ006 $  GND);
+  _EQ006 =  a1 &  b1 &  b2 &  _X001 &  _X002
+         #  a1 &  a2 &  b1 &  _X001 &  _X002
+         #  a2 &  b2 &  _X001 &  _X002
+         #  a3 &  b3 &  _X002
+         #  a4 &  b4;
+  _X001  = EXP(!a3 & !b3);
+  _X002  = EXP(!a4 & !b4);
+
+-- Node name is 'carring6~1' from file "adder.tdf" line 17, column 50
+-- Equation name is 'carring6~1', location is LC082, type is buried.
+-- synthesized logic cell 
+_LC082   = LCELL( _EQ007 $  GND);
+  _EQ007 =  a1 &  b1 &  _X001 &  _X002 &  _X003 &  _X004
+         #  a2 &  b2 &  _X001 &  _X002 &  _X003
+         #  a3 &  b3 &  _X002 &  _X003
+         #  a4 &  b4 &  _X003
+         #  a5 &  b5;
+  _X001  = EXP(!a3 & !b3);
+  _X002  = EXP(!a4 & !b4);
+  _X003  = EXP(!a5 & !b5);
+  _X004  = EXP(!a2 & !b2);
+
+-- Node name is 'carry_out' 
+-- Equation name is 'carry_out', location is LC051, type is output.
+ carry_out = LCELL( _EQ008 $  _LC075);
+  _EQ008 =  a7 &  b7 &  b8 & !_LC075
+         #  a7 &  a8 &  b7 & !_LC075
+         #  a8 &  b8 & !_LC075
+         # !a8 & !b8 &  _LC075;
+
+-- Node name is 'ch_carring2~1' from file "adder.tdf" line 23, column 64
+-- Equation name is 'ch_carring2~1', location is LC068, type is buried.
+-- synthesized logic cell 
+_LC068   = LCELL( _EQ009 $  GND);
+  _EQ009 = !a1 &  b1;
+
+-- Node name is 'ch_carring3~1' from file "adder.tdf" line 23, column 64
+-- Equation name is 'ch_carring3~1', location is LC081, type is buried.
+-- synthesized logic cell 
+_LC081   = LCELL( _EQ010 $ !a2);
+  _EQ010 =  a1 & !a2 &  b1 &  b2
+         # !a1 &  a2 &  b1 & !b2
+         # !a2 & !b1 & !b2;
+
+-- Node name is 'ch_carring4~1' from file "adder.tdf" line 23, column 64
+-- Equation name is 'ch_carring4~1', location is LC098, type is buried.
+-- synthesized logic cell 
+_LC098   = LCELL( _EQ011 $  _EQ012);
+  _EQ011 =  a1 &  a3 &  b1 &  b2 & !_LC081 & !_LC104 & !_LC107 & !_LC108
+         #  a1 & !a3 &  b1 &  b2 &  b3 & !_LC104 & !_LC107 & !_LC108
+         #  a1 &  a2 & !a3 &  b1 &  b3 & !_LC104 & !_LC107 & !_LC108
+         # !a1 & !a2 &  a3 &  b1 &  b3 & !_LC104 & !_LC107 & !_LC108;
+  _EQ012 = !_LC104 & !_LC107 & !_LC108;
+
+-- Node name is 'ch_carring4~2' from file "adder.tdf" line 23, column 64
+-- Equation name is 'ch_carring4~2', location is LC108, type is buried.
+-- synthesized logic cell 
+_LC108   = LCELL( _EQ013 $  GND);
+  _EQ013 = !a1 &  a3 &  b1 & !b2 &  b3
+         # !a2 &  a3 &  b1 & !b2 &  b3
+         # !a2 &  a3 & !b1 &  b2 &  b3
+         # !a2 & !a3 &  b1 & !b2 & !_LC081
+         # !a1 & !a2 & !a3 &  b1 & !_LC081;
+
+-- Node name is 'ch_carring4~3' from file "adder.tdf" line 23, column 64
+-- Equation name is 'ch_carring4~3', location is LC107, type is buried.
+-- synthesized logic cell 
+_LC107   = LCELL( _EQ014 $  GND);
+  _EQ014 = !a1 & !a3 &  b1 & !b2 & !_LC081
+         # !a2 & !a3 & !b1 &  b2 & !_LC081
+         #  a1 &  a2 &  a3 & !_LC081
+         #  a2 &  a3 &  b2 & !_LC081
+         #  a2 & !a3 &  b2 &  b3;
+
+-- Node name is 'ch_carring4~4' from file "adder.tdf" line 23, column 64
+-- Equation name is 'ch_carring4~4', location is LC104, type is buried.
+-- synthesized logic cell 
+_LC104   = LCELL( _EQ015 $  GND);
+  _EQ015 =  a3 & !b1 & !b2 & !_LC081
+         # !a3 & !b1 & !b2 & !b3
+         #  b1 &  b3 & !_LC081
+         #  b2 &  b3 & !_LC081;
+
+-- Node name is 'ch_carring7~1' from file "adder.tdf" line 23, column 64
+-- Equation name is 'ch_carring7~1', location is LC071, type is buried.
+-- synthesized logic cell 
+_LC071   = LCELL( _EQ016 $  GND);
+  _EQ016 =  a6 & !b1 & !b2 & !b3 & !b4 & !b5 &  b6 &  _LC082
+         # !a6 & !b1 & !b2 & !b3 & !b4 & !b5 &  b6 & !_LC082
+         #  a6 & !b6 & !_LC082 &  _X005
+         # !a6 & !b6 &  _LC082 &  _X005
+         #  _X006 &  _X007;
+  _X005  = EXP(!b1 & !b2 & !b3 & !b4 & !b5);
+  _X006  = EXP(!_LC056 & !_LC120);
+  _X007  = EXP(!_LC076 & !_LC126);
+
+-- Node name is 'check' 
+-- Equation name is 'check', location is LC072, type is output.
+ check   = LCELL( _EQ017 $  VCC);
+  _EQ017 = !_LC101 & !_LC102 & !_LC103 & !_LC105 & !_LC109 & !_LC110 & 
+             !_LC112;
+
+-- Node name is 'ch_out2~1' from file "adder.tdf" line 22, column 39
+-- Equation name is 'ch_out2~1', location is LC111, type is buried.
+-- synthesized logic cell 
+_LC111   = LCELL( _EQ018 $  _LC093);
+  _EQ018 = !a1 &  b1;
+
+-- Node name is 'ch_out3~1' from file "adder.tdf" line 22, column 39
+-- Equation name is 'ch_out3~1', location is LC100, type is buried.
+-- synthesized logic cell 
+_LC100   = LCELL( _EQ019 $  _LC091);
+  _EQ019 = !a2 &  b1 & !b2
+         # !a1 & !a2 &  b1
+         # !a1 &  b1 & !b2
+         # !a2 & !b1 &  b2;
+
+-- Node name is 'ch_out5~1' from file "adder.tdf" line 22, column 39
+-- Equation name is 'ch_out5~1', location is LC054, type is buried.
+-- synthesized logic cell 
+_LC054   = LCELL( _EQ020 $ !a5);
+  _EQ020 = !_LC050 & !_LC063 &  _X008 &  _X009;
+  _X008  = EXP(!b1 & !b2 & !b3 & !b4 & !_LC066 &  _LC099 & !_LC123);
+  _X009  = EXP(!b1 & !b2 & !b3 & !b4 & !_LC066 &  _LC099 & !_LC123);
+
+-- Node name is 'ch_out5~2' from file "adder.tdf" line 22, column 39
+-- Equation name is 'ch_out5~2', location is LC050, type is buried.
+-- synthesized logic cell 
+_LC050   = LCELL( _EQ021 $  GND);
+  _EQ021 =  _LC057 &  _LC098 &  _LC099 & !_LC116
+         #  _LC066 &  _LC099 & !_LC116 &  _LC123
+         # !_LC066 & !_LC098 & !_LC099 & !_LC116
+         # !_LC098 & !_LC099 & !_LC116 & !_LC123
+         # !_LC066 & !_LC099 & !_LC116 & !_LC123;
+
+-- Node name is 'ch_out5~3' from file "adder.tdf" line 22, column 39
+-- Equation name is 'ch_out5~3', location is LC063, type is buried.
+-- synthesized logic cell 
+_LC063   = LCELL( _EQ022 $  GND);
+  _EQ022 = !_LC066 & !_LC099 & !_LC116 & !_LC123
+         # !b1 & !b2 & !b3 & !b4 &  _LC057 &  _LC098 & !_LC099
+         # !b1 & !b2 & !b3 & !b4 &  _LC066 & !_LC099 &  _LC123
+         # !b1 & !b2 & !b3 & !b4 & !_LC066 & !_LC098 &  _LC099
+         # !b1 & !b2 & !b3 & !b4 & !_LC098 &  _LC099 & !_LC123;
+
+-- Node name is 'ch_out6~1' from file "adder.tdf" line 22, column 39
+-- Equation name is 'ch_out6~1', location is LC074, type is buried.
+-- synthesized logic cell 
+_LC074   = LCELL( _EQ023 $  _LC076);
+  _EQ023 = !_LC056 & !_LC120 &  _LC126
+         #  _LC056 & !_LC126
+         #  _LC120 & !_LC126;
+
+-- Node name is 'ch_out7~1' from file "adder.tdf" line 22, column 39
+-- Equation name is 'ch_out7~1', location is LC117, type is buried.
+-- synthesized logic cell 
+_LC117   = LCELL( _EQ024 $  _LC077);
+  _EQ024 = !_LC071 &  _LC121
+         #  _LC071 & !_LC121;
+
+-- Node name is 'ch_out8~1' from file "adder.tdf" line 22, column 39
+-- Equation name is 'ch_out8~1', location is LC115, type is buried.
+-- synthesized logic cell 
+_LC115   = LCELL( _EQ025 $ !_LC055);
+  _EQ025 = !_LC124 & !_LC125 & !_LC127 & !_LC128 &  _X010 &  _X011 &  _X012;
+  _X010  = EXP(!b1 & !b2 & !b3 & !b4 & !b5 & !b6 & !b7 &  b8 & !_LC071 & !_LC077);
+  _X011  = EXP(!b1 & !b2 & !b3 & !b4 & !b5 & !b6 & !b7 &  b8 & !_LC071 & !_LC121);
+  _X012  = EXP(!b1 & !b2 & !b3 & !b4 & !b5 & !b6 & !b7 &  b8 & !_LC077 & !_LC121);
+
+-- Node name is 'ch_out8~2' from file "adder.tdf" line 22, column 39
+-- Equation name is 'ch_out8~2', location is LC128, type is buried.
+-- synthesized logic cell 
+_LC128   = LCELL( _EQ026 $  GND);
+  _EQ026 =  b7 &  b8 &  _LC071 &  _LC119
+         #  b6 &  b8 &  _LC071 &  _LC119
+         #  b7 &  b8 &  _LC077 &  _LC121
+         #  b6 &  b8 &  _LC077 &  _LC121
+         #  b8 &  _LC071 &  _LC119 & !_LC122;
+
+-- Node name is 'ch_out8~3' from file "adder.tdf" line 22, column 39
+-- Equation name is 'ch_out8~3', location is LC127, type is buried.
+-- synthesized logic cell 
+_LC127   = LCELL( _EQ027 $  GND);
+  _EQ027 =  b8 &  _LC077 &  _LC121 & !_LC122
+         #  b7 & !b8 & !_LC071 & !_LC077
+         #  b6 & !b8 & !_LC071 & !_LC077
+         #  b7 & !b8 & !_LC071 & !_LC121
+         #  b6 & !b8 & !_LC071 & !_LC121;
+
+-- Node name is 'ch_out8~4' from file "adder.tdf" line 22, column 39
+-- Equation name is 'ch_out8~4', location is LC124, type is buried.
+-- synthesized logic cell 
+_LC124   = LCELL( _EQ028 $  GND);
+  _EQ028 =  b7 & !b8 & !_LC077 & !_LC121
+         #  b6 & !b8 & !_LC077 & !_LC121
+         #  b7 & !b8 & !_LC077 & !_LC121
+         #  b6 & !b8 & !_LC077 & !_LC121
+         # !b8 & !_LC071 & !_LC077 & !_LC122;
+
+-- Node name is 'ch_out8~5' from file "adder.tdf" line 22, column 39
+-- Equation name is 'ch_out8~5', location is LC125, type is buried.
+-- synthesized logic cell 
+_LC125   = LCELL( _EQ029 $  GND);
+  _EQ029 = !b8 & !_LC071 & !_LC121 & !_LC122
+         # !b8 & !_LC077 & !_LC121 & !_LC122
+         # !b8 & !_LC077 & !_LC121 & !_LC122
+         # !b1 & !b2 & !b3 & !b4 & !b5 & !b6 & !b7 & !b8 &  _LC071 &  _LC119
+         # !b1 & !b2 & !b3 & !b4 & !b5 & !b6 & !b7 & !b8 &  _LC077 &  _LC121;
+
+-- Node name is 'res1' 
+-- Equation name is 'res1', location is LC085, type is output.
+ res1    = LCELL( b1 $  a1);
+
+-- Node name is 'res2' 
+-- Equation name is 'res2', location is LC083, type is output.
+ res2    = LCELL( _EQ030 $  a2);
+  _EQ030 =  a1 &  b1 & !b2
+         # !a1 &  b2
+         # !b1 &  b2;
+
+-- Node name is 'res3' 
+-- Equation name is 'res3', location is LC069, type is output.
+ res3    = LCELL( _EQ031 $  a3);
+  _EQ031 =  a1 &  b1 & !b3 &  _X004
+         #  a2 &  b2 & !b3
+         # !a2 &  b3 &  _X013
+         # !b2 &  b3 &  _X014;
+  _X004  = EXP(!a2 & !b2);
+  _X013  = EXP( a1 &  b1 &  b2);
+  _X014  = EXP( a1 &  b1);
+
+-- Node name is 'res4' 
+-- Equation name is 'res4', location is LC067, type is output.
+ res4    = LCELL( _EQ032 $  _EQ033);
+  _EQ032 =  _X015 &  _X016;
+  _X015  = EXP(!a4 &  b4);
+  _X016  = EXP( a4 & !b4);
+  _EQ033 = !_LC084 &  _X017 &  _X018;
+  _X017  = EXP( a2 &  a3 &  b2);
+  _X018  = EXP( a3 &  b3);
+
+-- Node name is 'res5' 
+-- Equation name is 'res5', location is LC049, type is output.
+ res5    = LCELL( _EQ034 $  _EQ035);
+  _EQ034 =  _X019 &  _X020;
+  _X019  = EXP(!a5 &  b5);
+  _X020  = EXP( a5 & !b5);
+  _EQ035 = !_LC087 & !_LC095 & !_LC096;
+
+-- Node name is 'res6' 
+-- Equation name is 'res6', location is LC065, type is output.
+ res6    = LCELL( _EQ036 $  _LC082);
+  _EQ036 =  a6 & !b6
+         # !a6 &  b6;
+
+-- Node name is 'res7' 
+-- Equation name is 'res7', location is LC073, type is output.
+ res7    = LCELL( _EQ037 $  a7);
+  _EQ037 =  b6 & !b7 &  _LC082
+         #  a6 & !b7 &  _X021
+         #  b7 & !_LC082 &  _X022
+         # !a6 & !b6 &  b7;
+  _X021  = EXP(!b6 & !_LC082);
+  _X022  = EXP( a6 &  b6);
+
+-- Node name is 'res8' 
+-- Equation name is 'res8', location is LC053, type is output.
+ res8    = LCELL( _EQ038 $  a8);
+  _EQ038 =  a7 &  b7 & !b8
+         # !a7 &  b8 & !_LC075
+         # !b7 &  b8 & !_LC075
+         # !b8 &  _LC075;
+
+-- Node name is '~97~1' from file "adder.tdf" line 16, column 28
+-- Equation name is '~97~1', location is LC055, type is buried.
+-- synthesized logic cell 
+_LC055   = LCELL( _EQ039 $  a8);
+  _EQ039 =  a7 &  b7 & !b8
+         # !a7 &  b8 & !_LC075
+         # !b7 &  b8 & !_LC075
+         # !b8 &  _LC075;
+
+-- Node name is '~113~1' from file "adder.tdf" line 16, column 28
+-- Equation name is '~113~1', location is LC077, type is buried.
+-- synthesized logic cell 
+_LC077   = LCELL( _EQ040 $  a7);
+  _EQ040 =  b6 & !b7 &  _LC082
+         #  a6 & !b7 &  _X021
+         #  b7 & !_LC082 &  _X022
+         # !a6 & !b6 &  b7;
+  _X021  = EXP(!b6 & !_LC082);
+  _X022  = EXP( a6 &  b6);
+
+-- Node name is '~115~1' from file "adder.tdf" line 17, column 30
+-- Equation name is '~115~1', location is LC075, type is buried.
+-- synthesized logic cell 
+_LC075   = LCELL( _EQ041 $  VCC);
+  _EQ041 = !a6 & !_LC082
+         # !b6 & !_LC082
+         # !a6 & !b6
+         # !a7 & !b7;
+
+-- Node name is '~124~1' from file "adder.tdf" line 23, column 48
+-- Equation name is '~124~1', location is LC119, type is buried.
+-- synthesized logic cell 
+_LC119   = LCELL( _EQ042 $  VCC);
+  _EQ042 = !_LC077 & !_LC121;
+
+-- Node name is '~129~1' from file "adder.tdf" line 16, column 28
+-- Equation name is '~129~1', location is LC076, type is buried.
+-- synthesized logic cell 
+_LC076   = LCELL( _EQ043 $  a6);
+  _EQ043 =  b6 & !_LC082
+         # !b6 &  _LC082;
+
+-- Node name is '~145~1~2' from file "adder.tdf" line 16, column 28
+-- Equation name is '~145~1~2', location is LC087, type is buried.
+-- synthesized logic cell 
+_LC087   = LCELL( _EQ044 $  GND);
+  _EQ044 =  a1 &  b1 &  b2 &  b3 &  b4
+         #  a1 &  a4 &  b1 &  b2 &  b3
+         #  a1 &  a3 &  b1 &  b2 &  b4
+         #  a1 &  a3 &  a4 &  b1 &  b2
+         #  a1 &  a2 &  b1 &  b3 &  b4;
+
+-- Node name is '~145~1~3' from file "adder.tdf" line 16, column 28
+-- Equation name is '~145~1~3', location is LC096, type is buried.
+-- synthesized logic cell 
+_LC096   = LCELL( _EQ045 $  GND);
+  _EQ045 =  a1 &  a2 &  a4 &  b1 &  b3
+         #  a1 &  a2 &  a3 &  b1 &  b4
+         #  a1 &  a2 &  a3 &  a4 &  b1
+         #  a2 &  b2 &  b3 &  b4
+         #  a2 &  a4 &  b2 &  b3;
+
+-- Node name is '~145~1~4' from file "adder.tdf" line 16, column 28
+-- Equation name is '~145~1~4', location is LC095, type is buried.
+-- synthesized logic cell 
+_LC095   = LCELL( _EQ046 $  GND);
+  _EQ046 =  a2 &  a3 &  b2 &  b4
+         #  a2 &  a3 &  a4 &  b2
+         #  a3 &  b3 &  b4
+         #  a3 &  a4 &  b3
+         #  a4 &  b4;
+
+-- Node name is '~157~1' from file "adder.tdf" line 23, column 36
+-- Equation name is '~157~1', location is LC056, type is buried.
+-- synthesized logic cell 
+_LC056   = LCELL( _EQ047 $  VCC);
+  _EQ047 =  a5 & !b1 & !b2 & !b3 & !b4 & !b5 &  _LC099
+         # !a5 & !b1 & !b2 & !b3 & !b4 & !b5 & !_LC099
+         #  a5 &  b5 & !_LC099 &  _X023
+         # !a5 &  b5 &  _LC099 &  _X023
+         #  _X024 &  _X025;
+  _X023  = EXP(!b1 & !b2 & !b3 & !b4);
+  _X024  = EXP( _LC057 &  _LC098);
+  _X025  = EXP( _LC066 &  _LC123);
+
+-- Node name is '~158~1' from file "adder.tdf" line 23, column 75
+-- Equation name is '~158~1', location is LC120, type is buried.
+-- synthesized logic cell 
+_LC120   = LCELL( _EQ048 $ !a5);
+  _EQ048 = !_LC088 & !_LC092 & !_LC094 & !_LC097 & !_LC106 & !_LC113 & 
+             !_LC114 &  _X026;
+  _X026  = EXP( a5 &  b4 &  b5);
+
+-- Node name is '~158~2' from file "adder.tdf" line 23, column 75
+-- Equation name is '~158~2', location is LC088, type is buried.
+-- synthesized logic cell 
+_LC088   = LCELL( _EQ049 $  GND);
+  _EQ049 =  a1 & !a5 &  b1 &  b2 &  b3 &  b4 & !b5
+         #  a1 &  a4 & !a5 &  b1 &  b2 &  b3 & !b5
+         #  a1 &  a3 & !a5 &  b1 &  b2 &  b4 & !b5
+         #  a1 &  a3 &  a4 & !a5 &  b1 &  b2 & !b5
+         #  a1 &  a2 & !a5 &  b1 &  b3 &  b4 & !b5;
+
+-- Node name is '~158~3' from file "adder.tdf" line 23, column 75
+-- Equation name is '~158~3', location is LC094, type is buried.
+-- synthesized logic cell 
+_LC094   = LCELL( _EQ050 $  GND);
+  _EQ050 =  a1 &  a2 &  a4 & !a5 &  b1 &  b3 & !b5
+         #  a1 &  a2 &  a3 & !a5 &  b1 &  b4 & !b5
+         #  a1 &  a2 &  a3 &  a4 & !a5 &  b1 & !b5
+         #  a1 &  a3 &  a4 &  a5 &  b1 &  b2
+         #  a1 &  a2 &  a4 &  a5 &  b1 &  b3;
+
+-- Node name is '~158~4' from file "adder.tdf" line 23, column 75
+-- Equation name is '~158~4', location is LC106, type is buried.
+-- synthesized logic cell 
+_LC106   = LCELL( _EQ051 $  GND);
+  _EQ051 =  a1 &  a4 &  a5 &  b1 &  b2 &  b3
+         #  a1 &  a2 &  a3 &  a5 &  b1 &  b4
+         #  a1 &  a3 &  a5 &  b1 &  b2 &  b4
+         #  a1 &  a2 &  a5 &  b1 &  b3 &  b4
+         #  a1 &  a5 &  b1 &  b2 &  b3 &  b4;
+
+-- Node name is '~158~5' from file "adder.tdf" line 23, column 75
+-- Equation name is '~158~5', location is LC092, type is buried.
+-- synthesized logic cell 
+_LC092   = LCELL( _EQ052 $  GND);
+  _EQ052 =  a2 & !a5 &  b2 &  b3 &  b4 & !b5
+         #  a2 &  a4 & !a5 &  b2 &  b3 & !b5
+         #  a2 &  a3 & !a5 &  b2 &  b4 & !b5
+         #  a2 &  a3 &  a4 & !a5 &  b2 & !b5
+         # !a5 & !b1 & !b2 & !b3 & !b4 &  b5;
+
+-- Node name is '~158~6' from file "adder.tdf" line 23, column 75
+-- Equation name is '~158~6', location is LC097, type is buried.
+-- synthesized logic cell 
+_LC097   = LCELL( _EQ053 $  GND);
+  _EQ053 =  a1 &  a2 &  a3 &  a4 &  a5
+         #  a2 &  a3 &  a4 &  a5 &  b2
+         #  a2 &  a4 &  a5 &  b2 &  b3
+         #  a2 &  a3 &  a5 &  b2 &  b4
+         #  a2 &  a5 &  b2 &  b3 &  b4;
+
+-- Node name is '~158~7' from file "adder.tdf" line 23, column 75
+-- Equation name is '~158~7', location is LC113, type is buried.
+-- synthesized logic cell 
+_LC113   = LCELL( _EQ054 $  GND);
+  _EQ054 =  a3 & !a5 &  b3 &  b4 & !b5
+         #  a3 &  a4 & !a5 &  b3 & !b5
+         #  a5 & !b1 & !b2 & !b3 & !b4
+         #  a3 &  a4 &  a5 &  b3
+         #  a3 &  a5 &  b3 &  b4;
+
+-- Node name is '~158~8' from file "adder.tdf" line 23, column 75
+-- Equation name is '~158~8', location is LC114, type is buried.
+-- synthesized logic cell 
+_LC114   = LCELL( _EQ055 $  GND);
+  _EQ055 =  a4 & !a5 &  b4 & !b5
+         #  a4 &  a5 &  b4
+         #  a5 &  b1 &  b5
+         #  a5 &  b2 &  b5
+         #  a5 &  b3 &  b5;
+
+-- Node name is '~161~1~2' from file "adder.tdf" line 16, column 28
+-- Equation name is '~161~1~2', location is LC084, type is buried.
+-- synthesized logic cell 
+_LC084   = LCELL( _EQ056 $  GND);
+  _EQ056 =  a1 &  b1 &  b2 &  b3
+         #  a1 &  a3 &  b1 &  b2
+         #  a1 &  a2 &  b1 &  b3
+         #  a1 &  a2 &  a3 &  b1
+         #  a2 &  b2 &  b3;
+
+-- Node name is '~161~1' from file "adder.tdf" line 16, column 28
+-- Equation name is '~161~1', location is LC066, type is buried.
+-- synthesized logic cell 
+_LC066   = LCELL( _EQ057 $ !a4);
+  _EQ057 = !_LC086 & !_LC089 & !_LC090 & !_LC118;
+
+-- Node name is '~161~2' from file "adder.tdf" line 16, column 28
+-- Equation name is '~161~2', location is LC086, type is buried.
+-- synthesized logic cell 
+_LC086   = LCELL( _EQ058 $  GND);
+  _EQ058 =  a1 &  a2 &  a3 &  b1 & !b4
+         #  a1 &  a3 &  b1 &  b2 & !b4
+         #  a1 &  a2 &  b1 &  b3 & !b4
+         #  a1 &  b1 &  b2 &  b3 & !b4
+         #  a2 &  a3 &  b2 & !b4;
+
+-- Node name is '~161~3' from file "adder.tdf" line 16, column 28
+-- Equation name is '~161~3', location is LC089, type is buried.
+-- synthesized logic cell 
+_LC089   = LCELL( _EQ059 $  GND);
+  _EQ059 =  a2 &  b2 &  b3 & !b4
+         # !a2 & !a3 & !b2 &  b4
+         # !a1 & !a2 & !a3 &  b4
+         # !a2 & !a3 & !b1 &  b4
+         # !a1 & !a3 & !b2 &  b4;
+
+-- Node name is '~161~4' from file "adder.tdf" line 16, column 28
+-- Equation name is '~161~4', location is LC090, type is buried.
+-- synthesized logic cell 
+_LC090   = LCELL( _EQ060 $  GND);
+  _EQ060 = !a3 & !b1 & !b2 &  b4
+         # !a2 & !b2 & !b3 &  b4
+         # !a1 & !a2 & !b3 &  b4
+         # !a2 & !b1 & !b3 &  b4
+         # !a1 & !b2 & !b3 &  b4;
+
+-- Node name is '~161~5' from file "adder.tdf" line 16, column 28
+-- Equation name is '~161~5', location is LC118, type is buried.
+-- synthesized logic cell 
+_LC118   = LCELL( _EQ061 $  GND);
+  _EQ061 = !b1 & !b2 & !b3 &  b4
+         #  a3 &  b3 & !b4
+         # !a3 & !b3 &  b4;
+
+-- Node name is '~172~1' from file "adder.tdf" line 23, column 48
+-- Equation name is '~172~1', location is LC057, type is buried.
+-- synthesized logic cell 
+_LC057   = LCELL( _EQ062 $  VCC);
+  _EQ062 = !_LC066 & !_LC123;
+
+-- Node name is '~186~1' from file "adder.tdf" line 22, column 23
+-- Equation name is '~186~1', location is LC091, type is buried.
+-- synthesized logic cell 
+_LC091   = LCELL( _EQ063 $  a3);
+  _EQ063 = !a2 &  b1 & !b2
+         # !a1 & !a2 &  b1
+         # !a1 &  b1 & !b2
+         # !a2 & !b1 &  b2;
+
+-- Node name is '~202~1' from file "adder.tdf" line 22, column 23
+-- Equation name is '~202~1', location is LC093, type is buried.
+-- synthesized logic cell 
+_LC093   = LCELL( _EQ064 $  a2);
+  _EQ064 = !a1 &  b1;
+
+-- Node name is '~250~2' from file "adder.tdf" line 28, column 9
+-- Equation name is '~250~2', location is LC112, type is buried.
+-- synthesized logic cell 
+_LC112   = LCELL( _EQ065 $  GND);
+  _EQ065 =  a2 & !a3 &  _LC081 &  _LC091 &  _LC111
+         #  a2 &  a3 & !_LC081 &  _LC091 &  _LC111
+         #  a2 &  a3 &  _LC081 & !_LC091 &  _LC111
+         #  a1 &  a2 & !_LC068 &  _LC093
+         # !a2 & !a3 &  _LC081 &  _LC091 & !_LC111;
+
+-- Node name is '~250~3' from file "adder.tdf" line 28, column 9
+-- Equation name is '~250~3', location is LC110, type is buried.
+-- synthesized logic cell 
+_LC110   = LCELL( _EQ066 $  GND);
+  _EQ066 = !a2 &  a3 & !_LC081 &  _LC091 & !_LC111
+         # !a2 &  a3 &  _LC081 & !_LC091 & !_LC111
+         #  a2 & !a3 & !_LC081 & !_LC091 &  _LC111
+         # !a1 & !a2 &  b1 &  _LC093
+         # !a1 &  a2 & !_LC068 &  _LC093;
+
+-- Node name is '~250~4' from file "adder.tdf" line 28, column 9
+-- Equation name is '~250~4', location is LC101, type is buried.
+-- synthesized logic cell 
+_LC101   = LCELL( _EQ067 $  GND);
+  _EQ067 = !a1 &  a2 &  b1 & !_LC093
+         #  a1 & !a2 & !_LC068 & !_LC093
+         # !a2 & !a3 & !_LC081 & !_LC091 & !_LC111
+         # !a1 & !a2 & !_LC068 & !_LC093
+         #  a7 &  a8 &  _LC115 &  _LC117;
+
+-- Node name is '~250~5' from file "adder.tdf" line 28, column 9
+-- Equation name is '~250~5', location is LC102, type is buried.
+-- synthesized logic cell 
+_LC102   = LCELL( _EQ068 $  GND);
+  _EQ068 =  a6 &  a7 &  _LC074 &  _LC117
+         #  a5 &  a6 &  _LC054 &  _LC074
+         #  a4 &  a5 &  _LC054
+         #  a3 &  a4 &  _LC100
+         # !a7 &  a8 &  _LC115 & !_LC117;
+
+-- Node name is '~250~6' from file "adder.tdf" line 28, column 9
+-- Equation name is '~250~6', location is LC103, type is buried.
+-- synthesized logic cell 
+_LC103   = LCELL( _EQ069 $  GND);
+  _EQ069 =  a7 & !a8 & !_LC115 &  _LC117
+         # !a6 &  a7 & !_LC074 &  _LC117
+         #  a6 & !a7 &  _LC074 & !_LC117
+         # !a5 &  a6 & !_LC054 &  _LC074
+         #  a5 & !a6 &  _LC054 & !_LC074;
+
+-- Node name is '~250~7' from file "adder.tdf" line 28, column 9
+-- Equation name is '~250~7', location is LC105, type is buried.
+-- synthesized logic cell 
+_LC105   = LCELL( _EQ070 $  GND);
+  _EQ070 = !a4 &  a5 &  _LC054
+         #  a4 & !a5 & !_LC054
+         # !a3 &  a4 & !_LC100
+         #  a3 & !a4 &  _LC100
+         # !a7 & !a8 & !_LC115 & !_LC117;
+
+-- Node name is '~250~8' from file "adder.tdf" line 28, column 9
+-- Equation name is '~250~8', location is LC109, type is buried.
+-- synthesized logic cell 
+_LC109   = LCELL( _EQ071 $  GND);
+  _EQ071 = !a6 & !a7 & !_LC074 & !_LC117
+         # !a5 & !a6 & !_LC054 & !_LC074
+         # !a4 & !a5 & !_LC054
+         # !a3 & !a4 & !_LC100;
+
+
+
+--     Shareable expanders that are duplicated in multiple LABs:
+--    _X001 occurs in LABs F, G
+--    _X002 occurs in LABs F, G
+--    _X004 occurs in LABs E, F
+
+
+
+
+Project Information                     d:\nsuworkbook\dd_lab2_adder\adder.rpt
+
+** COMPILATION SETTINGS & TIMES **
+
+Processing Menu Commands
+------------------------
+
+Design Doctor                             = off
+
+Logic Synthesis:
+
+   Synthesis Type Used                    = Standard
+
+   Default Synthesis Style                = NORMAL
+
+      Logic option settings in 'NORMAL' style for 'MAX7000AE' family
+
+      DECOMPOSE_GATES                     = on
+      DUPLICATE_LOGIC_EXTRACTION          = on
+      MINIMIZATION                        = full
+      MULTI_LEVEL_FACTORING               = on
+      NOT_GATE_PUSH_BACK                  = on
+      PARALLEL_EXPANDERS                  = off
+      REDUCE_LOGIC                        = on
+      REFACTORIZATION                     = on
+      REGISTER_OPTIMIZATION               = on
+      RESYNTHESIZE_NETWORK                = on
+      SLOW_SLEW_RATE                      = off
+      SOFT_BUFFER_INSERTION               = on
+      SUBFACTOR_EXTRACTION                = on
+      TURBO_BIT                           = on
+      XOR_SYNTHESIS                       = on
+      IGNORE_SOFT_BUFFERS                 = off
+      USE_LPM_FOR_AHDL_OPERATORS          = off
+
+   Other logic synthesis settings:
+
+      Automatic Global Clock              = on
+      Automatic Global Clear              = on
+      Automatic Global Preset             = on
+      Automatic Global Output Enable      = on
+      Automatic Fast I/O                  = off
+      Automatic Register Packing          = off
+      Automatic Open-Drain Pins           = on
+      Automatic Implement in EAB          = off
+      One-Hot State Machine Encoding      = off
+      Optimize                            = 5
+
+Default Timing Specifications: None
+
+Cut All Bidir Feedback Timing Paths       = on
+Cut All Clear & Preset Timing Paths       = on
+
+Ignore Timing Assignments                 = off
+
+Functional SNF Extractor                  = off
+
+Linked SNF Extractor                      = off
+Timing SNF Extractor                      = on
+Optimize Timing SNF                       = off
+Generate AHDL TDO File                    = off
+Fitter Settings                           = NORMAL
+Smart Recompile                           = off
+Total Recompile                           = off
+
+Interfaces Menu Commands
+------------------------
+
+EDIF Netlist Writer                       = off
+Verilog Netlist Writer                    = off
+VHDL Netlist Writer                       = off
+
+Compilation Times
+-----------------
+
+   Compiler Netlist Extractor             00:00:00
+   Database Builder                       00:00:00
+   Logic Synthesizer                      00:00:00
+   Partitioner                            00:00:00
+   Fitter                                 00:00:00
+   Timing SNF Extractor                   00:00:00
+   Assembler                              00:00:01
+   --------------------------             --------
+   Total Time                             00:00:01
+
+
+Memory Allocated
+-----------------
+
+Peak memory allocated during compilation  = 7,383K

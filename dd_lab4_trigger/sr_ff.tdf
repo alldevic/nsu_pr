@@ -1,0 +1,13 @@
+INCLUDE "d_ff.inc";
+SUBDESIGN sr_ff
+(
+	S, R, C		: INPUT;
+	Q			: OUTPUT;
+)
+VARIABLE
+	df			: d_ff;
+BEGIN
+	df.(D, C) = (S OR (NOT R AND df.Q), C);
+	Q = df.Q;
+END;
+

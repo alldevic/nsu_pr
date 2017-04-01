@@ -1,0 +1,18 @@
+INCLUDE "comp4.inc";
+INCLUDE "comp2.inc";
+SUBDESIGN comp8
+(
+	a[7..0], b[7..0]		: INPUT;
+	G, L, G2, L2			: OUTPUT;
+)
+VARIABLE
+	cmp4[1..0]				: comp4;
+	cmp2					: comp2;
+BEGIN
+	cmp4[0].(a[], b[]) = (a[3..0], b[3..0]);
+	cmp4[1].(a[], b[]) = (a[7..4], b[7..4]);
+	cmp2.(a[1..0], b[1..0]) = (cmp4[1..0].G, cmp4[1..0].L);
+	
+	(G, L) = cmp2.(G, L);
+	(G2, L2) = ((a[] > b[]), (a[] < b[]));
+END;

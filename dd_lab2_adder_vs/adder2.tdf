@@ -1,0 +1,21 @@
+INCLUDE "adder1.inc";
+SUBDESIGN adder2
+(
+	a[1..0], b[1..0], carry_in		: INPUT;
+	presum[2..0], save_bit			: INPUT;
+	c[1..0], carry_out				: OUTPUT;
+	check_out						: OUTPUT;
+)
+VARIABLE
+	add[1..0]						: adder1;
+BEGIN
+	add[0].carry_in = carry_in;
+	(add[].a, add[].b) = (a[], b[]);
+	add[1].carry_in = add[0].carry_out;
+	
+	c[] = add[].c;
+	carry_out = add[1].carry_out;
+		
+	check_out = ((carry_out, c[]) == presum[]) or save_bit;
+END;
+

@@ -36,6 +36,26 @@ int main(void) {
     return 0;
 }
 
+int edgeList_init(EdgeList *node, Edge data) {
+    *node = (EdgeList) malloc(sizeof(struct edgeList));
+    ERR(node == NULL);
+
+    (*node)->data = data;
+    (*node)->next = NULL;
+
+    return 0;
+}
+
+int edgeList_add_edge(EdgeList *lst, Edge data) {
+    EdgeList node = NULL;
+    ERR(edgeList_init(&node, data));
+
+    node->next = *lst;
+    *lst = node;
+
+    return 0;
+}
+
 /**
  * @function Implementation of Prim's minimum spanning tree algorithm
  * @param gr - graph for searching minimum spanning tree
@@ -86,9 +106,8 @@ int fread_edges(FILE *file, Graph gr) {
         ARG_ERR(((src < 1) || (src > gr->n)), BAD_V);
         ARG_ERR(((dest < 1) || (dest > gr->n)), BAD_V);
         ARG_ERR((weight < 0) || (weight > INT_MAX), BAD_LEN);
-        gr->edges[src - 1][dest - 1] = (unsigned int) weight;
-        gr->edges[dest - 1][src - 1] = (unsigned int) weight;
-
+        ERR(edgeList_add_edge(&gr->data[src - 1], (Edge){dest - 1,weight}));
+        ERR(edgeList_add_edge(&gr->data[dest - 1], (Edge){src - 1,weight}));
     }
     ARG_ERR(i != (gr->m), BAD_NL);
 
@@ -137,7 +156,6 @@ char *get_err_str(ArgError code) {
  * @return error code
  */
 void fprint_min_tree(FILE *file, Graph gr) {
-    int i = 0;
     if ((gr->n == 1) && (gr->m == 0)) {
 
     } else if ((!gr->n) || (gr->m < (gr->n - 1)) || !gr->is_connectivity) {

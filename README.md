@@ -1,2 +1,2 @@
-# NSUworkbook
-Notes and labs from lectures, seminars, courses, etc
+# nsu_pr
+Programming laboratory works at NSU

@@ -1,0 +1,13 @@
+INCLUDE "d_ff.inc";
+SUBDESIGN jk_ff
+(
+	J, K, C		: INPUT;
+	Q			: OUTPUT;
+)
+VARIABLE
+	df			: d_ff;
+BEGIN
+	df.(D, C) = ((J AND NOT df.Q) OR (NOT K AND df.Q) ,C);
+	Q = df.Q;
+END;
+	

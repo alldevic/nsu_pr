@@ -1,0 +1,13 @@
+INCLUDE "d_latch.inc";
+SUBDESIGN d_ff
+(
+	D, C		: INPUT;
+	Q			: OUTPUT;
+)
+VARIABLE
+	dl[0..1]	: d_latch;
+BEGIN
+	dl0.(D, C) = (D, NOT C);
+	dl1.(D, C) = (dl0.Q, C);
+	Q = dl1.Q;
+END;

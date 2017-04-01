@@ -1,0 +1,34 @@
+SUBDESIGN adder
+(
+	a[7..0], b[7..0]		: INPUT;
+	res[7..0], carry_out	: OUTPUT;
+	check					: OUTPUT;
+)
+VARIABLE
+	carring[9..1] 					: NODE;
+	b_carring[9..1], b_check[8..1]	: NODE;
+	ch_carring[9..1], ch_out[8..1]	: NODE;
+BEGIN
+	carring[1] = GND;
+	b_carring[1] = VCC;
+	ch_carring[1] = GND;
+	FOR i IN 8 TO 1 GENERATE
+		res[i] = a[i] XOR b[i] XOR carring[i];
+		carring[i+1] = (carring[i] AND (a[i] OR b[i])) OR (a[i] AND b[i]);
+
+		b_check[i] = (NOT b[i]) XOR b_carring[i];
+		b_carring[i+1] = (NOT b[i]) AND b_carring[i];
+
+		ch_out[i] = (res[i] XOR b_check[i]) XOR ch_carring[i];
+		ch_carring[i+1] = (ch_carring[i] AND (res[i] OR b_check[i])) OR (res[i] AND b_check[i]);
+	END GENERATE;
+	carry_out = carring[9];
+
+	FOR i IN 7 TO 1 GENERATE
+		check = (ch_out[i+1] XNOR a[i+1]) AND (ch_out[i] XNOR a[i]);
+	END GENERATE;
+
+END;
+
+
+

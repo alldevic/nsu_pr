@@ -1,0 +1,10 @@
+SUBDESIGN adder1
+(
+	a, b, carry_in	: INPUT;
+	c, carry_out	: OUTPUT;
+)
+
+BEGIN
+	c = a XOR b XOR carry_in;
+	carry_out = (a AND carry_in) OR (a AND b) OR (b AND carry_in);
+END;

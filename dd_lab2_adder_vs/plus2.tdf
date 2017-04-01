@@ -1,0 +1,19 @@
+SUBDESIGN plus2
+(
+	a[1..0], b[1..0], carry_in		: INPUT;
+	presum[2..0]					: INPUT;
+	save_bit						: INPUT;
+	c[1..0], carry_out				: OUTPUT;
+	check_out						: OUTPUT;
+)
+VARIABLE
+	tmp_carry[1..0], tmp_sum[2..0]	: NODE;
+BEGIN
+	tmp_carry[] = (GND, carry_in);
+	tmp_sum[] = (GND, a[]) + (GND, b[]) + (GND, tmp_carry[]);
+
+	carry_out = tmp_sum[2];
+	c[] = tmp_sum[1..0];
+
+	check_out = (tmp_sum[] == presum[]) or save_bit;
+END;

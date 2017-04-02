@@ -1,6 +1,9 @@
 #ifndef LAB3_ADJ_SOLUTION_H
 #define LAB3_ADJ_SOLUTION_H
 
+#define MIN(a,b) (((a)<(b))?(a):(b))
+#define MAX(a,b) (((a)>(b))?(a):(b))
+
 /**
  * @def File with source data
  */
@@ -19,8 +22,9 @@
 /**
  * @def The max weight edge in graph
  */
-#define INT_MAX 2147483647
+#define INT_MAX 2147483647u
 
+#define NO_TREE "no spanning tree"
 /**
 * @enum Code errors for wrong arguments
  * BAD_NV - bad number of vertices
@@ -39,6 +43,9 @@ typedef enum {
  * @param code - returns value if statement is true
  */
 #define ARG_ERR(statement, code) if (statement) {return code;}
+
+#define TRUE 1
+#define FALSE 0
 
 /**
  * @def String alias for BAD_NV (for write answer)
@@ -67,7 +74,7 @@ typedef enum {
 
 typedef struct {
     int vertex;
-    int weight;
+    unsigned int weight;
 } Edge;
 
 typedef struct edgeList {
@@ -82,8 +89,9 @@ typedef struct {
     int n;                 /** Count of vertex */
     int m;                 /** Count of edges */
     int is_connectivity;   /** Flag of connectivity of graph */
+    unsigned int *weight;
     EdgeList *data;
-    EdgeList min_tree;
+    EdgeList mst;
 } *Graph;
 
 

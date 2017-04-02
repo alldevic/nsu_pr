@@ -29,8 +29,9 @@ int main(void) {
         fclose(file);
         return 0;
     }
-
-    prim(gr);
+    if (gr->is_connectivity) {
+        prim(gr);
+    }
     fprint_min_tree(file, gr);
     fclose(file);
     return 0;
@@ -61,7 +62,36 @@ int edgeList_add_edge(EdgeList *lst, Edge data) {
  * @param gr - graph for searching minimum spanning tree
  */
 void prim(Graph gr) {
+    int *visited = calloc((size_t) gr->n, sizeof(int));
+    int i = 0, j = 0, u = 0, v;
+    unsigned int w, min;
 
+    EdgeList tmp = NULL;
+    for (i = 0; i < gr->n; i++) {
+        gr->weight[i] = (!gr->weight[i]) ? INT_MAX  : gr->weight[i];
+    }
+
+    for (i = 0; i < gr->n; i++) {
+        min = INT_MAX, u = 0;
+
+        for (j = 0; j < gr->n; j++) {
+            if (!visited[j] && gr->weight[j] < min) {
+                min = gr->weight[j], u = j;
+            }
+        }
+
+        visited[u] = TRUE;
+
+        for (tmp = gr->data[u]; tmp; tmp = tmp->next) {
+            v = tmp->data.vertex, w = tmp->data.weight;
+
+            if (!visited[v] && w < gr->weight[v]) {
+                edgeList_add_edge(&gr->mst, (Edge) {v, (unsigned int) u});
+                gr->weight[j] = w, gr->is_connectivity++;
+            }
+        }
+    }
+    gr->is_connectivity = (gr->is_connectivity >= gr->n) ? TRUE : FALSE;
 }
 
 /**
@@ -82,8 +112,8 @@ int read_data(Graph gr) {
     ERR(fscanf(file, "%d", &(gr->m)) != 1);
     ARG_ERR((gr->m < 0) || (gr->m > (gr->n * (gr->n + 1) / 2)), BAD_NE);
 
-    gr->is_connectivity = 1;
-
+    gr->is_connectivity = (gr->m >= gr->n - 1) ? TRUE : FALSE;
+    gr->is_connectivity = (gr->n) ? gr->is_connectivity : FALSE;
     /*Read edges data*/
     ERR(init_arrays(gr));
     er = fread_edges(file, gr);
@@ -99,15 +129,21 @@ int read_data(Graph gr) {
  * @return error code
  */
 int fread_edges(FILE *file, Graph gr) {
-    int i = 0, src = 0, dest = 0, weight = 0;
+    int i = 0, src = 0, dest = 0;
+    unsigned int weight = 0;
     ARG_ERR(!gr->m, 0);
     for (i = 0; ((i < gr->m) && (!feof(file))); i++) {
         ARG_ERR(fscanf(file, "%d %d %d", &src, &dest, &weight) != 3, BAD_NL);
         ARG_ERR(((src < 1) || (src > gr->n)), BAD_V);
         ARG_ERR(((dest < 1) || (dest > gr->n)), BAD_V);
         ARG_ERR((weight < 0) || (weight > INT_MAX), BAD_LEN);
-        ERR(edgeList_add_edge(&gr->data[src - 1], (Edge){dest - 1,weight}));
-        ERR(edgeList_add_edge(&gr->data[dest - 1], (Edge){src - 1,weight}));
+        if (src != dest) {
+            src--, dest--;
+            ERR(edgeList_add_edge(&gr->data[src], (Edge) {dest, weight}));
+            ERR(edgeList_add_edge(&gr->data[dest], (Edge) {src, weight}));
+            gr->weight[dest] = (gr->weight[dest] < weight) ? weight : gr->weight[dest];
+            gr->weight[src] = (gr->weight[src] < weight) ? weight : gr->weight[src];
+        }
     }
     ARG_ERR(i != (gr->m), BAD_NL);
 
@@ -122,7 +158,9 @@ int fread_edges(FILE *file, Graph gr) {
  */
 int init_arrays(Graph gr) {
     ERR((gr->data = (EdgeList *) calloc((size_t) gr->n, sizeof(EdgeList))) == NULL);
-    gr->min_tree = NULL;
+    ERR((gr->weight = (unsigned int *) calloc((size_t) gr->n, sizeof(int))) == NULL);
+
+    gr->mst = NULL;
 
     return 0;
 }
@@ -156,14 +194,11 @@ char *get_err_str(ArgError code) {
  * @return error code
  */
 void fprint_min_tree(FILE *file, Graph gr) {
-    if ((gr->n == 1) && (gr->m == 0)) {
-
-    } else if ((!gr->n) || (gr->m < (gr->n - 1)) || !gr->is_connectivity) {
-        fprintf(file, "no spanning tree");
+    if (!gr->is_connectivity) {
+        fprintf(file, NO_TREE);
     } else {
-        while (gr->min_tree) {
-            fprintf(file, "%d %d\n", gr->min_tree->data.vertex + 1, gr->min_tree->data.weight +1);
-            gr->min_tree = gr->min_tree->next;
+        for (; gr->mst; gr->mst = gr->mst->next) {
+            fprintf(file, "%d %d\n", gr->mst->data.vertex + 1, gr->mst->data.weight + 1);
         }
     }
 }

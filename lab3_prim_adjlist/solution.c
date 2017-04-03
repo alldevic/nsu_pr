@@ -67,12 +67,12 @@ void prim(Graph gr) {
     unsigned int w, min;
 
     EdgeList tmp = NULL;
-    for (i = 0; i < gr->n; i++) {
-        gr->weight[i] = (!gr->weight[i]) ? INT_MAX  : gr->weight[i];
+    for (i = 1; i < gr->n; i++) {
+        gr->weight[i] = (!gr->weight[i]) ? INT_MAX + 1 : gr->weight[i];
     }
 
     for (i = 0; i < gr->n; i++) {
-        min = INT_MAX, u = 0;
+        min = INT_MAX + 1, u = 0;
 
         for (j = 0; j < gr->n; j++) {
             if (!visited[j] && gr->weight[j] < min) {
@@ -198,7 +198,7 @@ void fprint_min_tree(FILE *file, Graph gr) {
         fprintf(file, NO_TREE);
     } else {
         for (; gr->mst; gr->mst = gr->mst->next) {
-            fprintf(file, "%d %d\n", gr->mst->data.vertex + 1, gr->mst->data.weight + 1);
+            fprintf(file, "%d %d\n", gr->mst->data.weight + 1, gr->mst->data.vertex + 1);
         }
     }
 }

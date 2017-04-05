@@ -34,6 +34,7 @@ int main(void) {
     }
     fprint_min_tree(file, gr);
     fclose(file);
+
     return 0;
 }
 
@@ -42,36 +43,31 @@ int main(void) {
  * @param gr - graph for searching minimum spanning tree
  */
 void prim(Graph gr) {
-    int i = 0, j = 0, u = 0;
+    int i = 0, j = 0, u = 0, visited[gr->n];
     unsigned int weight[gr->n], min;
-    char visited[gr->n];
 
     for (i = 0; i < gr->n; i++) {
-        weight[i] = INT_MAX + 1;
-        visited[i] = 0;
+        weight[i] = INFTY, visited[i] = 0;
     }
     weight[0] = 0;
 
     for (i = 0; i < gr->n - 1; i++) {
-        min = INT_MAX + 1;
-        u = 0;
+        min = INFTY, u = 0;
 
         for (j = 0; j < gr->n; j++) {
             if (!visited[j] && weight[j] < min) {
-                min = weight[j];
-                u = j;
+                min = weight[j], u = j;
             }
         }
 
         visited[u] = 1;
         for (j = 0; j < gr->n; j++) {
             if (gr->edges[u][j] && !visited[j] && gr->edges[u][j] < weight[j]) {
-                gr->min_tree[j] = u;
-                weight[j] = gr->edges[u][j];
+                gr->min_tree[j] = u, weight[j] = gr->edges[u][j];
             }
         }
-
     }
+
     for (i = 0; i < gr->n; i++) {
         gr->not_connectivity += (weight[i] == INFTY);
     }
@@ -95,13 +91,14 @@ int read_data(Graph gr) {
     ERR(fscanf(file, "%d", &(gr->m)) != 1);
     ARG_ERR((gr->m < 0) || (gr->m > (gr->n * (gr->n + 1) / 2)), BAD_NE);
 
-    gr->not_connectivity = 0;
+    ARG_ERR((gr->not_connectivity = (!gr->n) || (gr->m < (gr->n - 1))), 0);
 
     /*Read edges data*/
     ERR(init_arrays(gr));
     er = fread_edges(file, gr);
     ERR(er > 0);
     fclose(file);
+
     return er;
 }
 
@@ -184,11 +181,9 @@ char *get_err_str(ArgError code) {
  */
 void fprint_min_tree(FILE *file, Graph gr) {
     int i = 0;
-    if ((gr->n == 1) && (gr->m == 0)) {
-
-    } else if ((!gr->n) || (gr->m < (gr->n - 1)) || gr->not_connectivity) {
+    if (gr->not_connectivity) {
         fprintf(file, "no spanning tree");
-    } else {
+    } else if ((gr->n != 1) && (gr->m)) {
         for (i = 1; i < gr->n; i++) {
             fprintf(file, "%d %d\n", gr->min_tree[i] + 1, i + 1);
         }

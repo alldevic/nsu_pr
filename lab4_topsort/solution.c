@@ -1,5 +1,3 @@
-//TODO: docs
-
 /**
  * @mainpage Laboratory work #11. Topology sort
  */
@@ -10,10 +8,15 @@
 #include "solution.h"
 
 /**
- * @def Macros for catching global errors.
+ * @def Macros for catching global errors
  */
 #define ERR(x) {if (x) {perror(__func__); return errno;}};
 
+/**
+ * @function Entry point. At begin get data from <b>INPUT</b>, then init visited array and
+ * run topology sort. Then write answer to <b>OUTPUT</b>
+ * @return error code
+ */
 int main(void) {
     Graph gr = malloc(sizeof(Graph));
     ERR(gr == NULL);
@@ -44,47 +47,35 @@ int main(void) {
     return 0;
 }
 
-int intList_init(IntList *node, int data) {
-    *node = (IntList) malloc(sizeof(struct intList));
-    ERR(node == NULL);
-
-    (*node)->data = data;
-    (*node)->next = NULL;
-
-    return 0;
-}
-
-int intList_add_int(IntList *lst, int data) {
-    IntList node = NULL;
-    ERR(intList_init(&node, data));
-
-    node->next = *lst;
-    *lst = node;
-
-    return 0;
-}
-
+/**
+ * @function Implementation of recursive Tarjan topological sort algorithm
+ * @param gr - graph for sorting
+ * @param k - start vertex
+ * @param visited - array with color of every vertex
+ * @return error code
+ */
 int top_sort(Graph gr, int k, int *visited) {
     visited[k] = GRAY;
-
-    IntList tmp = gr->data[k];
-    while (tmp && gr->is_sorting) {
-        gr->is_sorting = (visited[tmp->data] == GRAY) ? 0 : gr->is_sorting;
+    IntList tmp = NULL;
+    for (tmp = gr->data[k]; tmp && gr->is_sorting; tmp = tmp->next) {
+        gr->is_sorting = (visited[tmp->data] == GRAY) ? FALSE : gr->is_sorting;
 
         if (visited[tmp->data] == WHITE) {
             ERR(top_sort(gr, tmp->data, visited));
         }
-
-        tmp = tmp->next;
     }
 
     visited[k] = BLACK;
-    ERR(intList_add_int(&gr->sorted, k));
+    ERR(intList_add(&gr->sorted, k));
 
     return 0;
 }
 
-
+/**
+ * @function Function for getting main information about graph from <b>FILE</b>
+ * @param gr - empty graph for setting data
+ * @return error code
+ */
 int read_data(Graph gr) {
     FILE *file = fopen(INPUT, "r");
     ERR(file == NULL);
@@ -98,7 +89,7 @@ int read_data(Graph gr) {
     ARG_ERR((gr->m < 0) || (gr->m > (gr->n * (gr->n + 1) / 2)), BAD_NE);
 
     /* Init service variables */
-    gr->is_sorting = 1;
+    gr->is_sorting = TRUE;
     ERR((gr->data = (IntList *) calloc((size_t) gr->n, sizeof(IntList))) == NULL);
     gr->sorted = NULL;
 
@@ -110,6 +101,12 @@ int read_data(Graph gr) {
     return er;
 }
 
+/**
+ * @function Function for get data from file to the adjacency matrix in graph
+ * @param file - opened for reading file
+ * @param gr - graph for reading adjacency matrix
+ * @return error code
+ */
 int fread_edges(FILE *file, Graph gr) {
     int i = 0, src = 0, dest = 0;
     ARG_ERR(!gr->m, 0);
@@ -118,7 +115,7 @@ int fread_edges(FILE *file, Graph gr) {
         ARG_ERR(fscanf(file, "%d %d", &src, &dest) != 2, BAD_NL);
         ARG_ERR(((src < 1) || (src > gr->n)), BAD_V);
         ARG_ERR(((dest < 1) || (dest > gr->n)), BAD_V);
-        ERR(intList_add_int(&gr->data[src - 1], dest - 1));
+        ERR(intList_add(&gr->data[src - 1], dest - 1));
     }
 
     ARG_ERR(i != (gr->m), BAD_NL);
@@ -126,6 +123,11 @@ int fread_edges(FILE *file, Graph gr) {
     return 0;
 }
 
+/**
+ * @function Service function returns text alias for <b>code/b>
+ * @param code - argument error code
+ * @return STR code or NULL if <b>code</v> not in ArgError enum
+ */
 char *get_err_str(ArgError code) {
     switch (code) {
         case BAD_NV:
@@ -141,16 +143,38 @@ char *get_err_str(ArgError code) {
     return NULL;
 }
 
+/**
+ * @function Print sorted vertex of graph
+ * @param file - file opened for writing
+ * @param gr - graph with tree information
+ * @return error code
+ */
 void fprint_sorted(FILE *file, Graph gr) {
     if (!gr->is_sorting) {
         fprintf(file, IMPOSSIBLE_STR);
         return;
     }
 
-    while (gr->sorted) {
+    for (; gr->sorted; gr->sorted = gr->sorted->next) {
         fprintf(file, "%d ", gr->sorted->data + 1);
-        gr->sorted = gr->sorted->next;
     }
 
     return;
+}
+
+/**
+ * @function Add a new element to list from data
+ * @param lst - - destination list
+ * @param data - int to add
+ * @return error code
+ */
+int intList_add(IntList *lst, int data) {
+    IntList node = (IntList) malloc(sizeof(struct intList));
+    ERR(node == NULL);
+
+    node->data = data;
+    node->next = *lst;
+    *lst = node;
+
+    return 0;
 }

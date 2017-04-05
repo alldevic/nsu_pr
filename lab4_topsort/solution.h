@@ -1,5 +1,3 @@
-//TODO: docs
-
 #ifndef LAB4_SOLUTION_H
 #define LAB4_SOLUTION_H
 
@@ -7,11 +5,35 @@
  * @def File with source data
  */
 #define INPUT "in.txt"
+
+/**
+ * @def File for write answer
+ */
 #define OUTPUT "out.txt"
+
+/**
+ * @def The max count vertex in graph
+ */
 #define MAX_VERTEX 1000
+
+/**
+ * @def Boolean TRUE value
+ */
+#define TRUE 1
+
+/**
+ * @def Boolean FALSE value
+ */
+#define FALSE 0
+
+/**
+ * @def Graph is not sorting string
+ */
 #define IMPOSSIBLE_STR "impossible to sort"
 
-
+/**
+ * @enum Colors of vertex
+ */
 typedef enum {
     WHITE = 0, GRAY, BLACK
 } VertexColor;
@@ -54,6 +76,9 @@ typedef enum {
  */
 #define BAD_NL_STR "bad number of lines"
 
+/**
+ * @typedef List data structure
+ */
 typedef struct intList {
     int data;
     struct intList *next;
@@ -63,11 +88,11 @@ typedef struct intList {
  * @typedef Data structure for saving graph data
  */
 typedef struct {
-    int n;                 /** Count of vertex */
-    int m;                 /** Count of edges */
-    int is_sorting;       /** Flag of connectivity of graph */
-    IntList *data;
-    IntList sorted;
+    int n;              /** Count of vertex                 */
+    int m;              /** Count of edges                  */
+    int is_sorting;     /** Flag of connectivity of graph   */
+    IntList *data;      /** Adjacency list of graph         */
+    IntList sorted;     /** Topology sorted vertex          */
 } *Graph;
 
 int top_sort(Graph gr, int k, int *visited);
@@ -79,5 +104,7 @@ int fread_edges(FILE *file, Graph gr);
 char *get_err_str(ArgError code);
 
 void fprint_sorted(FILE *file, Graph gr);
+
+int intList_add(IntList *lst, int data);
 
 #endif /*LAB4_SOLUTION_H*/

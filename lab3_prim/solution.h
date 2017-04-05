@@ -42,7 +42,7 @@
 #define NO_TREE "no spanning tree"
 
 /**
-* @enum Code errors for wrong arguments
+ * @enum Code errors for wrong arguments
  * BAD_NV - bad number of vertices
  * BAD_V - bad vertex
  * BAD_NE - bad number of edges
@@ -89,11 +89,11 @@ typedef enum {
  * @typedef Data structure for saving graph data
  */
 typedef struct {
-    int n;                 /** Count of vertex */
-    int m;                 /** Count of edges */
-    int not_connectivity;  /** Flag of connectivity of graph*/
-    int *min_tree;         /** The minimum spanning tree */
-    unsigned int **edges;  /** Adjacency matrix for graph */
+    int n;                 /** Count of vertex                 */
+    int m;                 /** Count of edges                  */
+    int not_connectivity;  /** Flag of connectivity of graph   */
+    int *min_tree;         /** The minimum spanning tree       */
+    unsigned int **edges;  /** Adjacency matrix for graph      */
 } *Graph;
 
 void prim(Graph gr);
@@ -108,4 +108,4 @@ char *get_err_str(ArgError code);
 
 void fprint_min_tree(FILE *file, Graph gr);
 
-#endif /*LAB3_SOLUTION_H*/
+#endif /* LAB3_SOLUTION_H */

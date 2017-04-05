@@ -8,7 +8,7 @@
 #include "solution.h"
 
 /**
- * @def Macros for catching global errors.
+ * @def Macros for catching global errors
  */
 #define ERR(x) if (x) {perror(__func__); return errno;};
 
@@ -83,17 +83,17 @@ int read_data(Graph gr) {
     FILE *file = fopen(INPUT, "r");
     ERR(file == NULL);
 
-    /*Read 1st line*/
+    /* Read 1st line */
     ERR(fscanf(file, "%d", &(gr->n)) != 1);
     ARG_ERR((gr->n < 0) || (gr->n > MAX_VERTEX), BAD_NV);
 
-    /*Read 2nd line*/
+    /* Read 2nd line */
     ERR(fscanf(file, "%d", &(gr->m)) != 1);
     ARG_ERR((gr->m < 0) || (gr->m > (gr->n * (gr->n + 1) / 2)), BAD_NE);
 
     ARG_ERR((gr->not_connectivity = (!gr->n) || (gr->m < (gr->n - 1))), 0);
 
-    /*Read edges data*/
+    /* Read edges data */
     ERR(init_arrays(gr));
     er = fread_edges(file, gr);
     ERR(er > 0);

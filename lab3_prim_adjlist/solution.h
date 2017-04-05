@@ -19,8 +19,10 @@
 /**
  * @def The max weight edge in graph
  */
+#define TRUE 1
+#define FALSE 0
 #define INT_MAX 2147483647u
-#define INFTY 2147483647u + 1
+#define INFTY 2147483648u
 #define NO_TREE "no spanning tree"
 /**
 * @enum Code errors for wrong arguments
@@ -94,8 +96,6 @@ void prim(Graph gr);
 int read_data(Graph gr);
 
 int fread_edges(FILE *file, Graph gr);
-
-int init_arrays(Graph gr);
 
 char *get_err_str(ArgError code);
 

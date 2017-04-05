@@ -38,21 +38,13 @@ int main(void) {
     return 0;
 }
 
-int edgeList_init(EdgeList *node, Edge data) {
-    *node = (EdgeList) malloc(sizeof(struct edgeList));
+int edgeList_add_edge(EdgeList *lst, Edge data) {
+    EdgeList node = (EdgeList) malloc(sizeof(struct edgeList));
     ERR(node == NULL);
 
-    (*node)->data = data;
-    (*node)->next = NULL;
-
-    return 0;
-}
-
-int edgeList_add_edge(EdgeList *lst, Edge data) {
-    EdgeList node = NULL;
-    ERR(edgeList_init(&node, data));
-
+    node->data = data;
     node->next = *lst;
+
     *lst = node;
     return 0;
 }
@@ -67,7 +59,7 @@ void prim(Graph gr) {
     EdgeList tmp;
 
     for (i = 0; i < gr->n; i++) {
-        weight[i] = INFTY, visited[i] = 0;
+        gr->mst[i] = i - 1, weight[i] = INFTY, visited[i] = FALSE;
     }
     weight[0] = 0;
 
@@ -80,17 +72,15 @@ void prim(Graph gr) {
             }
         }
 
-        visited[u] = 1;
+        visited[u] = TRUE;
 
         for (tmp = gr->data[u]; tmp; tmp = tmp->next) {
             v = tmp->data.vertex, w = tmp->data.weight;
 
             if (!visited[v] && w < weight[v]) {
-                gr->mst[v] = u;
-                weight[v] = w;
+                gr->mst[v] = u, weight[v] = w;
             }
         }
-
     }
 
     for (i = 0; i < gr->n; i++) {
@@ -119,7 +109,8 @@ int read_data(Graph gr) {
     ARG_ERR((gr->not_connectivity = (!gr->n) || (gr->m < (gr->n - 1))), 0);
 
     /*Read edges data*/
-    ERR(init_arrays(gr));
+    ERR((gr->data = (EdgeList *) calloc((size_t) gr->n, sizeof(EdgeList))) == NULL);
+    ERR((gr->mst = (int *) malloc(gr->n * sizeof(int))) == NULL);
     er = fread_edges(file, gr);
     ERR(er > 0);
     fclose(file);
@@ -134,7 +125,7 @@ int read_data(Graph gr) {
  * @return error code
  */
 int fread_edges(FILE *file, Graph gr) {
-    int i = 0, src = 0, dest = 0, k = 0;
+    int i = 0, src = 0, dest = 0;
     unsigned int weight = 0;
     ARG_ERR(!gr->m, 0);
     for (i = 0; ((i < gr->m) && (!feof(file))); i++) {
@@ -144,34 +135,11 @@ int fread_edges(FILE *file, Graph gr) {
         ARG_ERR((weight < 0) || (weight > INT_MAX), BAD_LEN);
         if (src != dest) {
             src--, dest--;
-
             ERR(edgeList_add_edge(&gr->data[src], (Edge) {dest, weight}));
-            ERR(edgeList_add_edge(&gr->data[dest], (Edge) {src, weight}));k++;
+            ERR(edgeList_add_edge(&gr->data[dest], (Edge) {src, weight}));
         }
-
     }
-
-    if (k < gr->n - 1)
-        gr->not_connectivity = 1;
     ARG_ERR(i != (gr->m), BAD_NL);
-
-    return 0;
-}
-
-/**
- * @function Service function for allocating memory for dynamic arrays in graph and setting default
- * values for them
- * @param gr - graph for initialisation
- * @return error code
- */
-int init_arrays(Graph gr) {
-    int i = 0;
-    ERR((gr->data = (EdgeList *) calloc((size_t) gr->n, sizeof(EdgeList))) == NULL);
-    ERR((gr->mst = (int *) malloc(gr->n * sizeof(int))) == NULL);
-
-    for (i = 0; i < gr->n; i++) {
-        gr->mst[i] = i - 1;
-    }
 
     return 0;
 }

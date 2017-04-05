@@ -104,7 +104,7 @@ int read_data(Graph gr) {
 
 /**
  * @function Function for get data from file to the adjacency matrix in graph
- * @param file - opeened for reading file
+ * @param file - opened for reading file
  * @param gr - graph for reading adjacency matrix
  * @return error code
  */

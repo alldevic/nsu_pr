@@ -19,13 +19,30 @@
 /**
  * @def The max weight edge in graph
  */
-#define TRUE 1
-#define FALSE 0
 #define INT_MAX 2147483647u
-#define INFTY 2147483648u
-#define NO_TREE "no spanning tree"
+
 /**
-* @enum Code errors for wrong arguments
+ * @def Unreachable length of edge
+ */
+#define INFTY INT_MAX + 1
+
+/**
+ * @def Boolean TRUE value
+ */
+#define TRUE 1
+
+/**
+ * @def Boolean FALSE value
+ */
+#define FALSE 0
+
+/**
+ * @def Spanning tree does not exist
+ */
+#define NO_TREE "no spanning tree"
+
+/**
+ * @enum Code errors for wrong arguments
  * BAD_NV - bad number of vertices
  * BAD_V - bad vertex
  * BAD_NE - bad number of edges
@@ -41,8 +58,7 @@ typedef enum {
  * @param statement - statement for throw
  * @param code - returns value if statement is true
  */
-#define ARG_ERR(statement, code) if (statement) {return code;}
-
+#define ARG_ERR(statement, code) {if (statement) {return code;}}
 
 /**
  * @def String alias for BAD_NV (for write answer)
@@ -69,25 +85,33 @@ typedef enum {
  */
 #define BAD_NL_STR "bad number of lines"
 
+/**
+ * @typedef Edge data struct
+ */
 typedef struct {
-    int vertex;
-    unsigned int weight;
+    int vertex;             /** Destination of edge */
+    unsigned int weight;    /** Weight of edge      */
 } Edge;
 
+/**
+ * @typedef List data struct
+ */
 typedef struct edgeList {
     Edge data;
     struct edgeList *next;
 } *EdgeList;
 
+int edgeList_add(EdgeList *lst, Edge data);
+
 /**
  * @typedef Data structure for saving graph data
  */
 typedef struct {
-    int n;                 /** Count of vertex */
-    int m;                 /** Count of edges */
-    int not_connectivity;   /** Flag of connectivity of graph */
-    EdgeList *data;
-    int *mst;
+    int n;                  /** Count of vertex                 */
+    int m;                  /** Count of edges                  */
+    int not_connectivity;   /** Flag of connectivity of graph   */
+    EdgeList *data;         /** Adjacency list of graph         */
+    int *mst;               /** Minimum spanning tree           */
 } *Graph;
 
 

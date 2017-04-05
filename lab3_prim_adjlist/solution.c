@@ -8,9 +8,9 @@
 #include "solution.h"
 
 /**
- * @def Macros for catching global errors.
+ * @def Macros for catching global errors
  */
-#define ERR(x) if (x) {perror(__func__); return errno;};
+#define ERR(x) {if (x) {perror(__func__); return errno;};}
 
 /**
  * @function Entry point. At begin get data from <b>INPUT</b>, then run Prim's algorithm and print
@@ -35,17 +35,6 @@ int main(void) {
     fprint_min_tree(file, gr);
     fclose(file);
 
-    return 0;
-}
-
-int edgeList_add_edge(EdgeList *lst, Edge data) {
-    EdgeList node = (EdgeList) malloc(sizeof(struct edgeList));
-    ERR(node == NULL);
-
-    node->data = data;
-    node->next = *lst;
-
-    *lst = node;
     return 0;
 }
 
@@ -98,17 +87,17 @@ int read_data(Graph gr) {
     FILE *file = fopen(INPUT, "r");
     ERR(file == NULL);
 
-    /*Read 1st line*/
+    /* Read 1st line */
     ERR(fscanf(file, "%d", &(gr->n)) != 1);
     ARG_ERR((gr->n < 0) || (gr->n > MAX_VERTEX), BAD_NV);
 
-    /*Read 2nd line*/
+    /* Read 2nd line */
     ERR(fscanf(file, "%d", &(gr->m)) != 1);
     ARG_ERR((gr->m < 0) || (gr->m > (gr->n * (gr->n + 1) / 2)), BAD_NE);
 
     ARG_ERR((gr->not_connectivity = (!gr->n) || (gr->m < (gr->n - 1))), 0);
 
-    /*Read edges data*/
+    /* Read edges data */
     ERR((gr->data = (EdgeList *) calloc((size_t) gr->n, sizeof(EdgeList))) == NULL);
     ERR((gr->mst = (int *) malloc(gr->n * sizeof(int))) == NULL);
     er = fread_edges(file, gr);
@@ -120,7 +109,7 @@ int read_data(Graph gr) {
 
 /**
  * @function Function for get data from file to the adjacency matrix in graph
- * @param file - opeened for reading file
+ * @param file - opened for reading file
  * @param gr - graph for reading adjacency matrix
  * @return error code
  */
@@ -135,8 +124,8 @@ int fread_edges(FILE *file, Graph gr) {
         ARG_ERR((weight < 0) || (weight > INT_MAX), BAD_LEN);
         if (src != dest) {
             src--, dest--;
-            ERR(edgeList_add_edge(&gr->data[src], (Edge) {dest, weight}));
-            ERR(edgeList_add_edge(&gr->data[dest], (Edge) {src, weight}));
+            ERR(edgeList_add(&gr->data[src], (Edge) {dest, weight}));
+            ERR(edgeList_add(&gr->data[dest], (Edge) {src, weight}));
         }
     }
     ARG_ERR(i != (gr->m), BAD_NL);
@@ -183,3 +172,19 @@ void fprint_min_tree(FILE *file, Graph gr) {
     }
 }
 
+/**
+ * @function Add a new element to list from data
+ * @param lst - - destination list
+ * @param data - edge to add
+ * @return error code
+ */
+int edgeList_add(EdgeList *lst, Edge data) {
+    EdgeList node = (EdgeList) malloc(sizeof(struct edgeList));
+    ERR(node == NULL);
+
+    node->data = data;
+    node->next = *lst;
+
+    *lst = node;
+    return 0;
+}

@@ -51,6 +51,7 @@ void prim(Graph gr) {
         visited[i] = 0;
     }
     weight[0] = 0;
+
     for (i = 0; i < gr->n - 1; i++) {
         min = INT_MAX + 1;
         u = 0;
@@ -125,7 +126,6 @@ int fread_edges(FILE *file, Graph gr) {
         }
 
     }
-
 
     if (k < gr->n - 1)
         gr->not_connectivity = 1;

@@ -20,7 +20,12 @@
  * @def The max weight edge in graph
  */
 #define INT_MAX 2147483647u
+
+/**
+ * @def Unreachable length of edge
+ */
 #define INFTY INT_MAX + 1
+
 /**
 * @enum Code errors for wrong arguments
  * BAD_NV - bad number of vertices

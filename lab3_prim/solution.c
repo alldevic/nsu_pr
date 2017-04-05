@@ -47,7 +47,7 @@ void prim(Graph gr) {
     unsigned int weight[gr->n], min;
 
     for (i = 0; i < gr->n; i++) {
-        weight[i] = INFTY, visited[i] = 0;
+        weight[i] = INFTY, visited[i] = FALSE;
     }
     weight[0] = 0;
 
@@ -60,7 +60,7 @@ void prim(Graph gr) {
             }
         }
 
-        visited[u] = 1;
+        visited[u] = TRUE;
         for (j = 0; j < gr->n; j++) {
             if (gr->edges[u][j] && !visited[j] && gr->edges[u][j] < weight[j]) {
                 gr->min_tree[j] = u, weight[j] = gr->edges[u][j];
@@ -182,7 +182,7 @@ char *get_err_str(ArgError code) {
 void fprint_min_tree(FILE *file, Graph gr) {
     int i = 0;
     if (gr->not_connectivity) {
-        fprintf(file, "no spanning tree");
+        fprintf(file, NO_TREE);
     } else if ((gr->n != 1) && (gr->m)) {
         for (i = 1; i < gr->n; i++) {
             fprintf(file, "%d %d\n", gr->min_tree[i] + 1, i + 1);

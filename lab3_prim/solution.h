@@ -27,6 +27,21 @@
 #define INFTY INT_MAX + 1
 
 /**
+ * @def Boolean TRUE value
+ */
+#define TRUE 1
+
+/**
+ * @def Boolean FALSE value
+ */
+#define FALSE 0
+
+/**
+ * @def Spanning tree does not exist
+ */
+#define NO_TREE "no spanning tree"
+
+/**
 * @enum Code errors for wrong arguments
  * BAD_NV - bad number of vertices
  * BAD_V - bad vertex

@@ -87,11 +87,11 @@ void prim(Graph gr) {
 
             if (!visited[v] && w < gr->weight[v]) {
                 edgeList_add_edge(&gr->mst, (Edge) {v, (unsigned int) u});
-                gr->weight[j] = w, gr->is_connectivity++;
+                gr->weight[v] = w, gr->is_connectivity++;
             }
         }
     }
-    gr->is_connectivity = (gr->is_connectivity >= gr->n) ? TRUE : FALSE;
+    gr->is_connectivity = (gr->is_connectivity == gr->n) ? TRUE : FALSE;
 }
 
 /**

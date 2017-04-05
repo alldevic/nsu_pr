@@ -19,8 +19,8 @@
 /**
  * @def The max weight edge in graph
  */
-#define INT_MAX 2147483647
-
+#define INT_MAX 2147483647u
+#define INFTY INT_MAX + 1
 /**
 * @enum Code errors for wrong arguments
  * BAD_NV - bad number of vertices
@@ -87,7 +87,5 @@ int init_arrays(Graph gr);
 char *get_err_str(ArgError code);
 
 void fprint_min_tree(FILE *file, Graph gr);
-
-void dfs(Graph gr, int k, int *visited);
 
 #endif /*LAB3_SOLUTION_H*/

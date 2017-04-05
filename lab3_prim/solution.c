@@ -42,16 +42,17 @@ int main(void) {
  * @param gr - graph for searching minimum spanning tree
  */
 void prim(Graph gr) {
-    int weight[gr->n], i = 0, j = 0, min, u = 0;
+    int i = 0, j = 0, u = 0;
+    unsigned int weight[gr->n], min;
     char visited[gr->n];
 
     for (i = 0; i < gr->n; i++) {
-        weight[i] = INT_MAX;
+        weight[i] = INT_MAX + 1;
         visited[i] = 0;
     }
     weight[0] = 0;
     for (i = 0; i < gr->n - 1; i++) {
-        min = INT_MAX;
+        min = INT_MAX + 1;
         u = 0;
 
         for (j = 0; j < gr->n; j++) {
@@ -68,6 +69,10 @@ void prim(Graph gr) {
                 weight[j] = gr->edges[u][j];
             }
         }
+
+    }
+    for (i = 0; i < gr->n; i++) {
+        gr->not_connectivity += (weight[i] == INFTY);
     }
 }
 
@@ -89,7 +94,7 @@ int read_data(Graph gr) {
     ERR(fscanf(file, "%d", &(gr->m)) != 1);
     ARG_ERR((gr->m < 0) || (gr->m > (gr->n * (gr->n + 1) / 2)), BAD_NE);
 
-    gr->not_connectivity = 1;
+    gr->not_connectivity = 0;
 
     /*Read edges data*/
     ERR(init_arrays(gr));
@@ -106,26 +111,25 @@ int read_data(Graph gr) {
  * @return error code
  */
 int fread_edges(FILE *file, Graph gr) {
-    int i = 0, src = 0, dest = 0, weight = 0;
+    int i = 0, src = 0, dest = 0, weight = 0, k = 0;
     ARG_ERR(!gr->m, 0);
     for (i = 0; ((i < gr->m) && (!feof(file))); i++) {
         ARG_ERR(fscanf(file, "%d %d %d", &src, &dest, &weight) != 3, BAD_NL);
         ARG_ERR(((src < 1) || (src > gr->n)), BAD_V);
         ARG_ERR(((dest < 1) || (dest > gr->n)), BAD_V);
         ARG_ERR((weight < 0) || (weight > INT_MAX), BAD_LEN);
-        gr->edges[src - 1][dest - 1] = (unsigned int) weight;
-        gr->edges[dest - 1][src - 1] = (unsigned int) weight;
+        if (src != dest) {
+            gr->edges[src - 1][dest - 1] = (unsigned int) weight;
+            gr->edges[dest - 1][src - 1] = (unsigned int) weight;
+            k++;
+        }
 
     }
+
+
+    if (k < gr->n - 1)
+        gr->not_connectivity = 1;
     ARG_ERR(i != (gr->m), BAD_NL);
-
-    /* Check graph for connectivity */
-    gr->not_connectivity = 0;
-    int *visited = calloc((size_t) gr->n, sizeof(int));
-    dfs(gr, 0, visited);
-    for (i = 0; i < gr->n; i++) {
-        gr->not_connectivity += !visited[i];
-    }
 
     return 0;
 }
@@ -142,7 +146,8 @@ int init_arrays(Graph gr) {
     ERR((gr->min_tree = (int *) malloc(gr->n * sizeof(int))) == NULL);
 
     for (i = 0; i < gr->n; i++) {
-        ERR((gr->edges[i] = (unsigned int *) calloc((size_t) gr->n, sizeof(int))) == NULL);
+        ERR((gr->edges[i] = (unsigned int *) calloc((size_t) gr->n, sizeof(int))) ==
+            NULL);
         gr->min_tree[i] = i - 1;
     }
 
@@ -190,19 +195,3 @@ void fprint_min_tree(FILE *file, Graph gr) {
     }
 }
 
-/**
- * @function Service function for finding connectivity in graph. This is a depth-first search
- * implementation
- * @param gr - graph for finding connectivity
- * @param k - current vertex
- * @param visited - array with visited vertex
- */
-void dfs(Graph gr, int k, int *visited) {
-    visited[k] = 1;
-
-    int i = 0;
-    for (i = 0; i < gr->n; i++) {
-        if (!visited[i] && gr->edges[i][k] != 0)
-            dfs(gr, i, visited);
-    }
-}

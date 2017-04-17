@@ -8,12 +8,19 @@
 #define DECODE 'd'
 
 typedef struct tree {
+    int data;
 
 } *Tree;
 
-int init_freq(FILE *file, int *freq);
+typedef struct list {
+    char symbol;
+    int count;
+    struct list *next;
+} *FreqList;
 
-int huffman_tree_init(Tree tree, int *freq);
+int init_freq(FILE *file, FreqList *freq);
+
+int huffman_tree_init(Tree tree, FreqList freq);
 
 int fprint_tree(FILE *file, Tree tree);
 

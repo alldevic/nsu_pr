@@ -47,15 +47,23 @@ int init_freq(FILE *file, FreqList *freq) {
         fscanf(file, "%c", &ch);
         tmp[ch]++;
     }
+    int j = 0, max = 0, max2 = 0, fl = 1;
+    for (i = 0; (i < ALPH_SIZE) && fl; i++) {
+        max = 0, fl = 0;
+        for (j = 0; j < ALPH_SIZE; j++) {
+            if (max < tmp[j]) {
+                max = tmp[j], tmp[j] = 0;
+                max2 = j;
+                fl = 1;
+            }
+        }
 
-    for (i = 0; i < ALPH_SIZE; i++) {
-        if (tmp[i]) {
-            freqList_add(freq, (char) i, tmp[i]);
+        if (max) {
+            freqList_add(freq, (char) max2, max);
         }
     }
     free(tmp);
 
-    fflush(file);
     return 0;
 }
 

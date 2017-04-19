@@ -4,7 +4,7 @@
 /**
  * @def File with source data
  */
-#define INPUT "i.txt"
+#define INPUT "in.txt"
 
 /**
  * @def File for write answer

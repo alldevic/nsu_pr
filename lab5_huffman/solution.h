@@ -6,21 +6,26 @@
 #define ALPH_SIZE 256
 #define CODE 'c'
 #define DECODE 'd'
+#define LEFT 0
+#define RIGHT 1
+#define TRUE 1
+#define FALSE 0
 
-typedef struct tree {
-    int data;
-
+typedef struct node {
+    char symbol;
+    int count;
+    struct node *left, *right;
 } *Tree;
 
 typedef struct list {
-    char symbol;
-    int count;
+    Tree data;
     struct list *next;
-} *FreqList;
+} *PriorityQueue;
 
-int init_freq(FILE *file, FreqList *freq);
 
-int huffman_tree_init(Tree tree, FreqList freq);
+int init_freq(FILE *file, PriorityQueue *freq);
+
+int huffman_tree_init(Tree tree, PriorityQueue freq);
 
 int fprint_tree(FILE *file, Tree tree);
 
@@ -28,6 +33,6 @@ int fcode(FILE *in, Tree tree, FILE *out);
 
 int fscan_tree(FILE *file, Tree tree);
 
-int fdecode(FILE *in, Tree tree, FILE* out);
+int fdecode(FILE *in, Tree tree, FILE *out);
 
-#endif //LAB5_SOLUTION_H
+#endif /*LAB5_SOLUTION_H*/

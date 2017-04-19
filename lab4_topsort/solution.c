@@ -10,7 +10,7 @@
 /**
  * @def Macros for catching global errors
  */
-#define ERR(x) {if (x) {perror(__func__); return errno;}};
+#define ERR(x) {if (x) {perror(NULL); return errno;}};
 
 /**
  * @function Entry point. At begin get data from <b>INPUT</b>, then init visited array and
@@ -19,12 +19,12 @@
  */
 int main(void) {
     Graph gr = malloc(sizeof(Graph));
-    ERR(gr == NULL);
-
-    int er = read_data(gr), i = 0;
-    ERR(er > 0);
-
+    int er = 0, i = 0, *visited;
     FILE *file = fopen(OUTPUT, "w");
+
+    ERR(gr == NULL);
+    er = read_data(gr);
+    ERR(er > 0);
     ERR(file == NULL);
 
     if (er < 0) {
@@ -33,7 +33,7 @@ int main(void) {
         return 0;
     }
 
-    int *visited = calloc((size_t) gr->n, sizeof(int));
+    visited = calloc((size_t) gr->n, sizeof(int));
     ERR(visited == NULL);
     for (i = 0; i < gr->n; i++) {
         if (visited[i] == WHITE) {
@@ -55,9 +55,9 @@ int main(void) {
  * @return error code
  */
 int top_sort(Graph gr, int k, int *visited) {
-    visited[k] = GRAY;
     IntList tmp = NULL;
-    for (tmp = gr->data[k]; tmp && gr->is_sorting; tmp = tmp->next) {
+    visited[k] = GRAY;
+        for (tmp = gr->data[k]; tmp && gr->is_sorting; tmp = tmp->next) {
         gr->is_sorting = (visited[tmp->data] == GRAY) ? FALSE : gr->is_sorting;
 
         if (visited[tmp->data] == WHITE) {
@@ -77,6 +77,7 @@ int top_sort(Graph gr, int k, int *visited) {
  * @return error code
  */
 int read_data(Graph gr) {
+    int er;
     FILE *file = fopen(INPUT, "r");
     ERR(file == NULL);
 
@@ -94,7 +95,7 @@ int read_data(Graph gr) {
     gr->sorted = NULL;
 
     /* Read edges data */
-    int er = fread_edges(file, gr);
+    er = fread_edges(file, gr);
     ERR(er > 0);
     fclose(file);
 

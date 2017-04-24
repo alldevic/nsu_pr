@@ -5,6 +5,7 @@
 #define OUTPUT "out.txt"
 #define ENCODE 'c'
 #define DECODE 'd'
+#define ALPH_SIZE 256
 
 int fencode(FILE *in, FILE *out);
 

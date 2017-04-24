@@ -3,6 +3,7 @@
 #include "pqueue.h"
 #include "huffman.h"
 #include "solution.h"
+#include "binary_io.h"
 
 struct QueueNode *buildHuffmanTree(char data[], unsigned int freq[], int size) {
     struct QueueNode *left, *right, *top;
@@ -25,23 +26,17 @@ struct QueueNode *buildHuffmanTree(char data[], unsigned int freq[], int size) {
     return deQueue(secondQueue);
 }
 
-void printCodes(struct QueueNode *root, int arr[], int top) {
-    int i = 0;
 
-    if (root->left) {
-        arr[top] = 0;
-        printCodes(root->left, arr, top + 1);
+void printCodes( FILE *file, struct QueueNode *root) {
+    if (!(root->left || root->right))
+    {
+        writeBit(file, 1);
+        writeCode(file, root->data, 8);
     }
-
-    if (root->right) {
-        arr[top] = 1;
-        printCodes(root->right, arr, top + 1);
-    }
-
-    if (!(root->left) && !(root->right)) {
-        printf("%c: ", root->data);
-        for (i = 0; i < top; ++i)
-            printf("%d", arr[i]);
-        printf("\n");
+    else
+    {
+        writeBit(file, 0);
+        printCodes(file, root->left);
+        printCodes(file, root->right);
     }
 }

@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "solution.h"
 #include "binary_io.h"
 #include "huffman.h"
+#include "pqueue.h"
 
 int main(void) {
     FILE *in_file = fopen(INPUT, "rb");
@@ -27,17 +29,17 @@ int main(void) {
 
 
 int fencode(FILE *in, FILE *out) {
-    int size = 0, k = 0, i, j;
+    int size = 0, k = 0, i, j, g = 0;
     unsigned char ch;
     unsigned int tmp[256] = {0};
-
+    char *curCode;
     while (!feof(in)) {
         ch = (unsigned char) readByte(in);
         if (!tmp[(int) ch]) {
             size++;
         }
         tmp[(int) ch]++;
-
+        g++;
     }
     char data[size], max2 = 0;
     unsigned int freq[size], max, fl = 1;
@@ -60,12 +62,19 @@ int fencode(FILE *in, FILE *out) {
     }
     struct QueueNode *root = buildHuffmanTree(data, freq, size);
 
-    int arr[ALPH_SIZE], top = 0;
-    printCodes(root, arr, top);
+    writeInt(out, size);
+    printCodes(out, root);
+    writeCode(out, 0, 8 - getCount());
+    writeCode(out, '\n', 8);
+    for (i = 0; i < g; i++) {
+        curCode = getCode(root, (unsigned char) fgetc(in));
+        writeCode(out, convertCode(curCode), (int) strlen(curCode));
+    }
+    writeCode(out, 0, 8 - getCount());
     return 0;
 }
 
-int fdecode(FILE* in, FILE *out){
+int fdecode(FILE *in, FILE *out) {
     return 0;
 }
 

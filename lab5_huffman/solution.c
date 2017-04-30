@@ -27,6 +27,22 @@ int main(void) {
     return 0;
 }
 
+char *getCode(struct QueueNode *root, int ch, char arr[], int top) {
+    if (root->left) {
+        arr[top] = 0;
+        getCode(root->left, ch, arr, top + 1);
+    }
+
+    if (root->right) {
+        arr[top] = 1;
+        getCode(root->right, ch, arr, top + 1);
+    }
+
+    if (!(root->left) && !(root->right) && (root->data == ch)) {
+        return arr;
+    }
+    return arr;
+}
 
 int fencode(FILE *in, FILE *out) {
     int size = 0, k = 0, i, j, g = 0;
@@ -66,17 +82,79 @@ int fencode(FILE *in, FILE *out) {
     printCodes(out, root);
     writeCode(out, 0, 8 - getCount());
     writeCode(out, '\n', 8);
+    fseek(in, 3, SEEK_SET);
+    int l = 0;
+    char arr[ALPH_SIZE], top = 0;
     for (i = 0; i < g; i++) {
-        curCode = getCode(root, (unsigned char) fgetc(in));
+        for (l = 0; l < ALPH_SIZE; l++) {
+            arr[l] = 0;
+        }
+        top = 0;
+        curCode = getCode(root, readByte(in), arr, top);
         writeCode(out, convertCode(curCode), (int) strlen(curCode));
     }
     writeCode(out, 0, 8 - getCount());
     return 0;
 }
 
-int fdecode(FILE *in, FILE *out) {
-    return 0;
+struct QueueNode* readHuffmanTree(FILE* file)
+{
+    struct QueueNode *node = (struct QueueNode*) malloc(sizeof(struct QueueNode));
+
+    if (readBit(file))
+    {
+        node->data = (char) readByte(file);
+        node->left = NULL;
+        node->right = NULL;
+    }
+    else
+    {
+        node->data = -1;
+        node->left = readHuffmanTree(file);
+        node->right = readHuffmanTree(file);
+    }
+    return node;
 }
 
+void generateCodes(struct QueueNode *root)
+{
+    if (root->left != NULL)
+    {
+        strcpy(root->left->code, root->code);
+        strcat(root->left->code, "0");
+        generateCodes(root->left);
+    }
+    if (root->right != NULL)
+    {
+        strcpy(root->right->code, root->code);
+        strcat(root->right->code, "1");
+        generateCodes(root->right);
+    }
+}
 
+int decodeByte(FILE* in, struct QueueNode *tree)
+{
+    if (tree->data != -1)
+    {
+        return tree->data;
+    }
+    else if (readBit(in))
+    {
+        return decodeByte(in, tree->right);
+    }
+    else
+    {
+        return decodeByte(in, tree->left);
+    }
+}
 
+int fdecode(FILE *in, FILE *out) {
+    int i, length = readInt(in);
+    struct QueueNode *pTree = readHuffmanTree(in);
+    generateCodes(pTree);
+    setCount(0);
+    for (i = 0; i < length; i++) {
+        fprintf(out, "%c", decodeByte(in, pTree));
+    }
+    return 0;
+}

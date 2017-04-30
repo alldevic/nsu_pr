@@ -3,6 +3,7 @@
 struct QueueNode {
     char data;
     unsigned freq;
+    char code[10];
     struct QueueNode *left, *right;
 };
 

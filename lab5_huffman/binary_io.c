@@ -5,22 +5,18 @@
 unsigned char buffer = 0;
 int count = 0;
 
-void setCount(int v)
-{
+void setCount(int v) {
     count = v;
 }
 
-int getCount()
-{
+int getCount() {
     return count;
 }
 
-int readBit(FILE* in)
-{
+int readBit(FILE *in) {
     int res, readed;
-    if (count == 0)
-    {
-        readed = fread(&buffer, 1, 1, in);
+    if (count == 0) {
+        readed = (int) fread(&buffer, 1, 1, in);
         count = readed * 8;
     }
     res = buffer & 0x80;
@@ -29,53 +25,42 @@ int readBit(FILE* in)
     return res;
 }
 
-int readByte(FILE* in)
-{
+int readByte(FILE *in) {
     int i, res = 0;
-    for (i = 0; i < 8; i++)
-    {
+    for (i = 0; i < 8; i++) {
         res = res << 1;
-        if (readBit(in))
-        {
+        if (readBit(in)) {
             res |= 1;
         }
     }
     return res;
 }
 
-void writeBit(FILE* out, int value)
-{
+void writeBit(FILE *out, int value) {
     buffer = buffer << 1;
-    if (value)
-    {
+    if (value) {
         buffer |= 1;
     }
     count++;
-    if (count == 8)
-    {
+    if (count == 8) {
         fwrite(&buffer, 1, 1, out);
         count = 0;
     }
 }
 
-void writeCode(FILE* out, long code, int length)
-{
-    size_t i;
+void writeCode(FILE *out, long code, int length) {
+    int i;
     long mask;
-    for (i = length; i > 0; i--)
-    {
+    for (i = length; i > 0; i--) {
         mask = 1 << (i - 1);
         writeBit(out, code & mask);
     }
 }
 
-char findMax(int *array, int size, int *frequency)
-{
+char findMax(int *array, int size, int *frequency) {
     int i, max = array[0], maxIndex = 0;
-    for (i = 0; i < size; i++)
-    {
-        if (array[i] > max)
-        {
+    for (i = 0; i < size; i++) {
+        if (array[i] > max) {
             max = array[i];
             maxIndex = i;
         }
@@ -85,32 +70,26 @@ char findMax(int *array, int size, int *frequency)
     return (char) maxIndex;
 }
 
-char getBit(unsigned char byte, int offset)
-{
-    return (((byte >> offset) & 0x1) == 0x1) ? '1' : '0';
+char getBit(unsigned char byte, int offset) {
+    return (char) ((((byte >> offset) & 0x1) == 0x1) ? '1' : '0');
 }
 
-int readInt(FILE *file)
-{
+int readInt(FILE *file) {
     int value;
     fread(&value, sizeof(int), 1, file);
     return value;
 }
 
-void writeInt(FILE *file, int value)
-{
+void writeInt(FILE *file, int value) {
     fwrite(&value, sizeof(int), 1, file);
 }
 
-long convertCode(char *code)
-{
+long convertCode(char *code) {
     size_t i;
     long res = 0;
-    for (i = 0; i < strlen(code); i++)
-    {
+    for (i = 0; i < strlen(code); i++) {
         res = res << 1;
-        if (code[i] == '1')
-        {
+        if (code[i] == '1') {
             res |= 1;
         }
     }

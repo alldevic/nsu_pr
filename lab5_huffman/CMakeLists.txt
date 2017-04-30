@@ -12,10 +12,10 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wpedantic -Wall -Wextra")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pipe")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mtune=native -march=native")
 
-set(SOURCE_FILES solution.c solution.h)
+set(SOURCE_FILES main.c main.h)
 set(SOURCE_FILES ${SOURCE_FILES} binary_io.c binary_io.h)
 set(SOURCE_FILES ${SOURCE_FILES} huffman.c huffman.h)
-set(SOURCE_FILES ${SOURCE_FILES} pqueue.c pqueue.h)
+set(SOURCE_FILES ${SOURCE_FILES} list.c list.h)
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 

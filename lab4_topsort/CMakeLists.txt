@@ -3,7 +3,7 @@ set(PROJECT_NAME "lab4")
 
 project(${PROJECT_NAME})
 
-set (CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/CMake")
+set (CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/../CMake")
 include(cotire OPTIONAL)
 
 set(CMAKE_C_STANDARD 90)
@@ -18,4 +18,6 @@ if (COMMAND cotire)
     set(COTIRE_MAXIMUM_NUMBER_OF_UNITY_INCLUDES "-j4")
     cotire(${PROJECT_NAME})
 endif()
+
+
 

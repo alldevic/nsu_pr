@@ -30,76 +30,46 @@ int main(void) {
 
     fclose(fin);
     fclose(fout);
-
     return 0;
 }
 
 int encoding(FILE *fin, FILE *fout, FILE *tabl) {
-    size_t size = fread(text, sizeof(char), MY_BUFFER, fin), flag = 1, i, j, k;
-    unsigned char byteOut = 0, position = 0;
+    size_t size = 0, i, j, k;
+    int pos = 0, byteOut = 0;
 
-    if (size == 0) {
-        fclose(fin);
-        fclose(fout);
+    if (!(size = fread(text, sizeof(char), MY_BUFFER, fin))) {
         return 0;
     }
 
-    while (flag) {
+    while (size) {
         for (i = 0; i < size; i++) {
             quantityChar[text[i]]++;
         }
-        if (size == MY_BUFFER) {
-            size = fread(text, sizeof(char), MY_BUFFER, fin);
-        } else {
-            flag = 0;
-        }
+        size = fread(text, sizeof(char), MY_BUFFER, fin);
     }
-
     fclose(fin);
 
     ERR((tabl = fopen("tabl.txt", "wb")) == NULL);
     write_table(tabl);
+
     ERR((fin = fopen(IN, "rb")) == NULL);
-
-    flag = 1;
     fread(text, sizeof(char), 3, fin);
+
     size = fread(text, sizeof(char), MY_BUFFER, fin);
-
-    while (flag) {
+    while (size) {
         for (k = 0; k < size; k++) {
-            unsigned char rem = text[k];
-
-            for (j = 0; j < huffmanTable[rem].size; j++) {
-                byteOut <<= 1;
-
-                if (huffmanTable[rem].text[j]) {
-                    byteOut = (unsigned char) (byteOut | 0x01);
-                }
-
-                position++;
-
-                if (position == 8) {
-                    fprintf(fout, "%c", byteOut);
-                    position = 0;
-                    byteOut = 0;
-                }
+            for (j = 0; j < huffmanTable[text[k]].size; j++) {
+                byteOut <<= 1, pos++;
+                byteOut = huffmanTable[text[k]].text[j] ? (byteOut | 0x01) : byteOut;
+                byteOut = pos == 8 ? pos = fprintf(fout, "%c", byteOut) - 1 : byteOut;
             }
         }
 
-        if (size == MY_BUFFER) {
-            size = fread(text, sizeof(char), MY_BUFFER, fin);
-        } else {
-            flag = 0;
-        }
+        size = fread(text, sizeof(char), MY_BUFFER, fin);
     }
 
-    if (position != 0) {
-        byteOut <<= 8 - position;
-        fprintf(fout, "%c", byteOut);
-    }
-
-    position = (!position) ? (unsigned char) 8 : position;
-    fprintf(fout, "%c", position);
+    fprintf(fout, pos ? "%c" : "", pos ? byteOut << (8 - pos) : '1');
+    fprintf(fout, "%c", !pos ? 8 : pos);
     return 0;
 }
 

@@ -6,7 +6,7 @@ project(${PROJECT_NAME})
 set (CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/../CMake")
 include(cotire OPTIONAL)
 
-set(CMAKE_C_STANDARD 90)
+set(CMAKE_C_STANDARD 99)
 #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wpedantic -Wall -Wextra -Werror")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wpedantic -Wall -Wextra")
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pipe")

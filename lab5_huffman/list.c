@@ -1,23 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "errors.h"
 #include "list.h"
 
-void l_push_front(List **tree, Node *l) {
-    if ((*tree) == NULL) {
+int l_push_front(List **tree, Node *l) {
+    if (!(*tree)) {
         List *list = calloc(1, sizeof(List));
-        if (list == NULL) {
-            printf("Error memory.");
-            exit(1);
-        }
+        ERR(list == NULL);
 
         list->node = l;
         *tree = list;
     } else {
         List *front = calloc(1, sizeof(List));
-        if (front == NULL) {
-            printf("Error memory.");
-            exit(1);
-        }
+        ERR(front == NULL);
 
         (*tree)->pre = front;
         front->next = *tree;
@@ -25,11 +20,12 @@ void l_push_front(List **tree, Node *l) {
 
         *tree = front;
     }
+    return 0;
 }
 
 Node *l_pop_front(List **tree) {
     Node *l;
-    if (*tree == NULL) {
+    if (!*tree) {
         return NULL;
     }
 
@@ -49,32 +45,31 @@ Node *l_pop_front(List **tree) {
 
 int l_size(List *tree) {
     int count = 0;
-
-    if (!tree) {
-        return count;
-    }
-
-    for (count = 1; tree->next; tree = tree->next, count++);
+    for (count = 1; tree && tree->next; tree = tree->next, count++);
     return count;
 }
 
 Node *combine(Node *left, Node *right) {
-    Node *node = calloc(1, sizeof(Node));
+    Node *node;
+    if (!(node = calloc(1, sizeof(Node)))) {
+        return NULL;
+    }
 
     node->size = left->size + right->size;
-    node->left = left;
-    node->right = right;
+    node->left = left, node->right = right;
 
     return node;
 }
 
 void l_qsort(List **tree) {
     List *begin = NULL;
+    Node *tmp1, *tmp2;
     for (begin = *tree; begin->next; begin = begin->next) {
-        if (begin->node->size >= begin->next->node->size) {
-            Node *tmp = begin->node;
-            begin->node = begin->next->node;
-            begin->next->node = tmp;
+        tmp1 = begin->node, tmp2 = begin->next->node;
+
+        if (tmp1->size >= tmp2->size) {
+            begin->node = tmp2;
+            begin->next->node = tmp1;
         }
     }
 

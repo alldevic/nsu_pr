@@ -13,11 +13,11 @@ typedef struct Text {
 } Text;
 
 
-void encoding(FILE *fin, FILE *fout, FILE *tabl);
+int encoding(FILE *fin, FILE *fout, FILE *tabl);
 
-void decoding(FILE *fin, FILE *fout, FILE *tabl);
+int decoding(FILE *fin, FILE *fout, FILE *tabl);
 
-void write_table(FILE *tabl);
+int write_table(FILE *tabl);
 
 Node *read_table(FILE *tabl);
 

@@ -16,7 +16,7 @@ typedef struct List {
     struct List *pre;
 } List;
 
-void l_push_front(List **tree, Node *l);
+int l_push_front(List **tree, Node *l);
 
 Node *l_pop_front(List **tree);
 

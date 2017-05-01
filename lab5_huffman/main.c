@@ -2,42 +2,30 @@
 #include <stdlib.h>
 #include "list.h"
 #include "main.h"
+#include "errors.h"
 
 Text huffmanTable[COUNT_CHAR];
-
 size_t quantityChar[COUNT_CHAR] = {0};
-
 unsigned char text[MY_BUFFER] = {0};
-
 
 int main(void) {
     FILE *fin = NULL, *fout = NULL, *tabl = NULL;
     unsigned char huffmanFlag[3];
     int i = 0;
 
-
-    fin = fopen(IN, "rb");
-    fout = fopen(OUT, "wb");
-    if ((fin == NULL) || (fout == NULL)) {
-        return 1;
-    }
-
+    ERR((fin = fopen(IN, "rb")) == NULL);
+    ERR((fout = fopen(OUT, "wb")) == NULL);
 
     fread(huffmanFlag, sizeof(unsigned char), 3, fin);
 
-    for (i = 0; i < COUNT_CHAR; ++i) {
+    for (i = 0; i < COUNT_CHAR; i++) {
         huffmanTable[i].size = 0;
     }
 
-    switch (huffmanFlag[0]) {
-        case 'c':
-            encoding(fin, fout, tabl);
-            break;
-        case 'd':
-            decoding(fin, fout, tabl);
-            break;
-        default:
-            break;
+    if (huffmanFlag[0] == 'c') {
+        encoding(fin, fout, tabl);
+    } else if (huffmanFlag[0] == 'd') {
+        decoding(fin, fout, tabl);
     }
 
     fclose(fin);
@@ -46,19 +34,19 @@ int main(void) {
     return 0;
 }
 
-void encoding(FILE *fin, FILE *fout, FILE *tabl) {
+int encoding(FILE *fin, FILE *fout, FILE *tabl) {
     size_t size = fread(text, sizeof(char), MY_BUFFER, fin), flag = 1, i, j, k;
     unsigned char byteOut = 0, position = 0;
 
     if (size == 0) {
         fclose(fin);
         fclose(fout);
-        exit(0);
+        return 0;
     }
 
     while (flag) {
-        for (i = 0; i < size; ++i) {
-            ++quantityChar[text[i]];
+        for (i = 0; i < size; i++) {
+            quantityChar[text[i]]++;
         }
         if (size == MY_BUFFER) {
             size = fread(text, sizeof(char), MY_BUFFER, fin);
@@ -69,33 +57,26 @@ void encoding(FILE *fin, FILE *fout, FILE *tabl) {
 
     fclose(fin);
 
-    tabl = fopen("tabl.txt", "wb");
-    if (tabl == NULL) {
-        fclose(fin);
-        fclose(fout);
-        exit(1);
-    }
-
+    ERR((tabl = fopen("tabl.txt", "wb")) == NULL);
     write_table(tabl);
-
-    fin = fopen(IN, "rb");
+    ERR((fin = fopen(IN, "rb")) == NULL);
 
     flag = 1;
     fread(text, sizeof(char), 3, fin);
     size = fread(text, sizeof(char), MY_BUFFER, fin);
 
     while (flag) {
-        for (k = 0; k < size; ++k) {
+        for (k = 0; k < size; k++) {
             unsigned char rem = text[k];
 
-            for (j = 0; j < huffmanTable[rem].size; ++j) {
+            for (j = 0; j < huffmanTable[rem].size; j++) {
                 byteOut <<= 1;
 
                 if (huffmanTable[rem].text[j]) {
                     byteOut = (unsigned char) (byteOut | 0x01);
                 }
 
-                ++position;
+                position++;
 
                 if (position == 8) {
                     fprintf(fout, "%c", byteOut);
@@ -119,32 +100,25 @@ void encoding(FILE *fin, FILE *fout, FILE *tabl) {
 
     position = (!position) ? (unsigned char) 8 : position;
     fprintf(fout, "%c", position);
+    return 0;
 }
 
-void decoding(FILE *fin, FILE *fout, FILE *tabl) {
+int decoding(FILE *fin, FILE *fout, FILE *tabl) {
     int size = (int) fread(text, sizeof(char), MY_BUFFER, fin);
     int index = 0, i, runner = 0, offset;
     Node *root, *node;
     unsigned char byteIn = text[index++], position = 0;
 
     if (size == 0) {
-        fclose(fin);
-        fclose(fout);
-        exit(0);
+        fclose(fin), fclose(fout);
+        return 0;
     }
 
-    tabl = fopen("tabl.txt", "rb");
-    if (tabl == NULL) {
-        fclose(fin);
-        fclose(fout);
-        exit(1);
-    }
-
+    ERR((tabl = fopen("tabl.txt", "rb")) == NULL);
     node = root = read_table(tabl);
 
-
     while (size == MY_BUFFER) {
-        for (i = 0; i < 8; ++i) {
+        for (i = 0; i < 8; i++) {
             if ((byteIn & 0x80) != 0) {
                 if (node->right) {
                     node = node->right;
@@ -165,7 +139,7 @@ void decoding(FILE *fin, FILE *fout, FILE *tabl) {
             }
 
             byteIn <<= 1;
-            ++position;
+            position++;
 
             if (position == 8) {
                 position = 0;
@@ -185,7 +159,7 @@ void decoding(FILE *fin, FILE *fout, FILE *tabl) {
 
     while (index < size - 2) {
         runner = 1;
-        for (i = 0; i < 8; ++i) {
+        for (i = 0; i < 8; i++) {
             if ((byteIn & 0x80) != 0) {
                 if (node->right) {
                     node = node->right;
@@ -208,7 +182,7 @@ void decoding(FILE *fin, FILE *fout, FILE *tabl) {
             }
 
             byteIn <<= 1;
-            ++position;
+            position++;
 
             if (position == 8) {
                 position = 0;
@@ -217,7 +191,7 @@ void decoding(FILE *fin, FILE *fout, FILE *tabl) {
         }
     }
 
-    for (i = position; (i < 8) && runner; ++i) {
+    for (i = position; (i < 8) && runner; i++) {
         if ((byteIn & 0x80) != 0) {
             if (node->right) {
                 node = node->right;
@@ -238,7 +212,7 @@ void decoding(FILE *fin, FILE *fout, FILE *tabl) {
         }
 
         byteIn <<= 1;
-        ++position;
+        position++;
     }
 
     byteIn = text[size - 2];
@@ -248,7 +222,7 @@ void decoding(FILE *fin, FILE *fout, FILE *tabl) {
         offset = 8;
     }
 
-    for (i = 0; i < offset; ++i) {
+    for (i = 0; i < offset; i++) {
         if ((byteIn & 0x80) != 0) {
             if (node->right) {
                 node = node->right;
@@ -270,9 +244,10 @@ void decoding(FILE *fin, FILE *fout, FILE *tabl) {
 
         byteIn <<= 1;
     }
+    return 0;
 }
 
-void write_table(FILE *tabl) {
+int write_table(FILE *tabl) {
     size_t i, j;
     char position = 0;
     unsigned char byteOut = 0, countChar = 0;
@@ -280,20 +255,17 @@ void write_table(FILE *tabl) {
     Node *root;
     List *tree = NULL;
 
-    for (i = 0; i < COUNT_CHAR; ++i) {
+    for (i = 0; i < COUNT_CHAR; i++) {
         if (quantityChar[i] != 0) {
             Node *l = calloc(1, sizeof(Node));
-            if (l == NULL) {
-                printf("Error memory.");
-                exit(1);
-            }
+            ERR(l == NULL);
 
             l->ch = (unsigned char) i;
             l->size = quantityChar[i];
 
             l_push_front(&tree, l);
 
-            ++countChar;
+            countChar++;
         }
     }
 
@@ -319,16 +291,16 @@ void write_table(FILE *tabl) {
 
     fprintf(tabl, "%c", countChar);
 
-    for (i = 0; i < COUNT_CHAR; ++i) {
+    for (i = 0; i < COUNT_CHAR; i++) {
         if (quantityChar[i]) {
             unsigned char letter = (unsigned char) i;
 
-            for (j = 0; j < 8; ++j) {
+            for (j = 0; j < 8; j++) {
                 byteOut <<= 1;
 
                 byteOut |= (letter & 0x80) != 0;
                 letter <<= 1;
-                ++position;
+                position++;
 
                 if (position == 8) {
                     fprintf(tabl, "%c", byteOut);
@@ -339,12 +311,12 @@ void write_table(FILE *tabl) {
 
             letter = (unsigned char) huffmanTable[i].size;
 
-            for (j = 0; j < 8; ++j) {
+            for (j = 0; j < 8; j++) {
                 byteOut <<= 1;
 
                 byteOut |= (letter & 0x80) != 0;
                 letter <<= 1;
-                ++position;
+                position++;
 
                 if (position == 8) {
                     fprintf(tabl, "%c", byteOut);
@@ -353,11 +325,11 @@ void write_table(FILE *tabl) {
                 }
             }
 
-            for (j = 0; j < huffmanTable[i].size; ++j) {
+            for (j = 0; j < huffmanTable[i].size; j++) {
                 byteOut <<= 1;
                 byteOut |= huffmanTable[i].text[j];
 
-                ++position;
+                position++;
 
                 if (position == 8) {
                     fprintf(tabl, "%c", byteOut);
@@ -373,6 +345,7 @@ void write_table(FILE *tabl) {
         byteOut <<= 8 - position;
         fprintf(tabl, "%c", byteOut);
     }
+    return 0;
 }
 
 Node *read_table(FILE *tabl) {
@@ -385,48 +358,45 @@ Node *read_table(FILE *tabl) {
 
     byteIn = (unsigned char) tableDecod[tableIndex++];
 
-    for (i = 0; i < countDecod; ++i) {
+    for (i = 0; i < countDecod; i++) {
         unsigned char currentSymbol = 0;
 
-        for (j = 0; j < 8; ++j) {
+        for (j = 0; j < 8; j++) {
             currentSymbol <<= 1;
             currentSymbol |= (byteIn & 0x80) != 0;
             byteIn <<= 1;
-            ++position;
+            position++;
 
             if (position == 8) {
                 byteIn = (unsigned char) tableDecod[tableIndex++];
-
                 position = 0;
             }
         }
 
         currentCount = 0;
 
-        for (j = 0; j < 8; ++j) {
+        for (j = 0; j < 8; j++) {
             currentCount <<= 1;
             currentCount |= (byteIn & 0x80) != 0;
             byteIn <<= 1;
-            ++position;
+            position++;
 
             if (position == 8) {
                 byteIn = (unsigned char) tableDecod[tableIndex++];
-
                 position = 0;
             }
         }
 
         huffmanTable[currentSymbol].size = (size_t) currentCount;
 
-        for (j = 0; j < currentCount; ++j) {
+        for (j = 0; j < currentCount; j++) {
             huffmanTable[currentSymbol].text[j] = (byteIn & 0x80) != 0;
 
             byteIn <<= 1;
-            ++position;
+            position++;
 
             if (position == 8) {
                 byteIn = (unsigned char) tableDecod[tableIndex++];
-
                 position = 0;
             }
         }
@@ -436,11 +406,11 @@ Node *read_table(FILE *tabl) {
     root = calloc(1, sizeof(Node));
     nodes = calloc(512, sizeof(Node));
 
-    for (i = 0; i < COUNT_CHAR; ++i) {
+    for (i = 0; i < COUNT_CHAR; i++) {
         if (huffmanTable[i].size) {
             Node *node = root;
 
-            for (j = 0; j < huffmanTable[i].size; ++j) {
+            for (j = 0; j < huffmanTable[i].size; j++) {
                 node = n_direction(node, huffmanTable[i].text[j], nodes);
             }
 
@@ -452,56 +422,38 @@ Node *read_table(FILE *tabl) {
 }
 
 void build_table(Node *root, Text *huffmanTable, Text *buffer) {
-    unsigned char i;
-    if (root->left != NULL) {
-        buffer->text[buffer->size] = 0;
-        buffer->size++;
-
+    size_t i;
+    if (root->left) {
+        buffer->text[buffer->size] = 0, buffer->size++;
         build_table(root->left, huffmanTable, buffer);
     }
 
-    if (root->right != NULL) {
-        buffer->text[buffer->size] = 1;
-        buffer->size++;
-
+    if (root->right) {
+        buffer->text[buffer->size] = 1, buffer->size++;
         build_table(root->right, huffmanTable, buffer);
     }
 
-    if (root->left == NULL && root->right == NULL) {
-        for (i = 0; i < buffer->size; ++i) {
+    if (!(root->left || root->right)) {
+        for (i = 0; i < buffer->size; i++) {
             huffmanTable[root->ch].text[i] = buffer->text[i];
             huffmanTable[root->ch].size = buffer->size;
         }
     }
 
-    if (buffer->size != 0) {
-        buffer->size--;
-    }
+    buffer->size = buffer->size ? buffer->size - 1 : buffer->size;
 }
 
 Node *n_direction(Node *root, int direction, Node *nodes) {
     static int index = 0;
     if (direction) {
         if (!root->right) {
-            Node *right = &nodes[index++];
-            if (!right) {
-                printf("Error memory");
-                exit(1);
-            }
-
-            root->right = right;
+            root->right = &nodes[index++];
         }
 
         return root->right;
     } else {
         if (!root->left) {
-            Node *left = &nodes[index++];
-            if (!left) {
-                printf("Error memory");
-                exit(1);
-            }
-
-            root->left = left;
+            root->left = &nodes[index++];
         }
 
         return root->left;

@@ -219,22 +219,16 @@ int decoding(FILE *fin, FILE *fout, FILE *tabl) {
 
 int write_table(FILE *tabl) {
     size_t i, j;
-    char position = 0;
-    unsigned char byteOut = 0, countChar = 0;
+    int pos = 0, byteOut = 0, countChar = 0;
     Text buffer;
-    Node *root;
+    Node *root, *l;
     List *tree = NULL;
 
     for (i = 0; i < COUNT_CHAR; i++) {
-        if (quantityChar[i] != 0) {
-            Node *l = calloc(1, sizeof(Node));
-            ERR(l == NULL);
-
-            l->ch = (unsigned char) i;
-            l->size = quantityChar[i];
-
+        if (quantityChar[i]) {
+            ERR((l = calloc(1, sizeof(Node))) == NULL);
+            l->ch = (unsigned char) i, l->size = quantityChar[i];
             l_push_front(&tree, l);
-
             countChar++;
         }
     }
@@ -269,52 +263,28 @@ int write_table(FILE *tabl) {
                 byteOut <<= 1;
 
                 byteOut |= (letter & 0x80) != 0;
-                letter <<= 1;
-                position++;
-
-                if (position == 8) {
-                    fprintf(tabl, "%c", byteOut);
-                    byteOut = 0;
-                    position = 0;
-                }
+                letter <<= 1, pos++;
+                byteOut = pos == 8 ? pos = fprintf(tabl, "%c", byteOut) - 1 : byteOut;
             }
 
             letter = (unsigned char) huffmanTable[i].size;
 
             for (j = 0; j < 8; j++) {
                 byteOut <<= 1;
-
                 byteOut |= (letter & 0x80) != 0;
-                letter <<= 1;
-                position++;
-
-                if (position == 8) {
-                    fprintf(tabl, "%c", byteOut);
-                    byteOut = 0;
-                    position = 0;
-                }
+                letter <<= 1, pos++;
+                byteOut = pos == 8 ? pos = fprintf(tabl, "%c", byteOut) - 1 : byteOut;
             }
 
             for (j = 0; j < huffmanTable[i].size; j++) {
-                byteOut <<= 1;
+                byteOut <<= 1, pos++;
                 byteOut |= huffmanTable[i].text[j];
-
-                position++;
-
-                if (position == 8) {
-                    fprintf(tabl, "%c", byteOut);
-                    byteOut = 0;
-                    position = 0;
-                }
+                byteOut = pos == 8 ? pos = fprintf(tabl, "%c", byteOut) - 1 : byteOut;
             }
 
         }
     }
-
-    if (position != 0) {
-        byteOut <<= 8 - position;
-        fprintf(tabl, "%c", byteOut);
-    }
+    fprintf(tabl, pos ? "%c" : "", pos ? byteOut << (8 - pos) : '1');
     return 0;
 }
 

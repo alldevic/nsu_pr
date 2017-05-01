@@ -2,7 +2,7 @@
 #define LAB5_LIST_H
 
 typedef struct Node {
-    unsigned long long int size;
+    size_t size;
     unsigned char ch;
 
     struct Node *left;

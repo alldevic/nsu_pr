@@ -28,17 +28,16 @@ void l_push_front(List **tree, Node *l) {
 }
 
 Node *l_pop_front(List **tree) {
+    Node *l;
     if (*tree == NULL) {
         return NULL;
     }
 
-    Node *l = (*tree)->node;
+    l = (*tree)->node;
 
-    if ((*tree)->next != NULL) {
+    if ((*tree)->next) {
         *tree = (*tree)->next;
-
         free((*tree)->pre);
-
         (*tree)->pre = NULL;
     } else {
         free(*tree);
@@ -49,16 +48,13 @@ Node *l_pop_front(List **tree) {
 }
 
 int l_size(List *tree) {
+    int count = 0;
+
     if (!tree) {
-        return 0;
+        return count;
     }
 
-    int count = 1;
-
-    for (; tree->next; tree = tree->next) {
-        ++count;
-    }
-
+    for (count = 1; tree->next; tree = tree->next, count++);
     return count;
 }
 

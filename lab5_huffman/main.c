@@ -185,16 +185,12 @@ int write_table(FILE *tabl) {
     }
 
     while (l_size(tree) > 1) {
-        Node *left = l_pop_front(&tree);
-        Node *right = l_pop_front(&tree);
-
+        Node *left = l_pop_front(&tree), *right = l_pop_front(&tree);
         l_push_front(&tree, combine(left, right));
         l_qsort(&tree);
     }
 
-
-    buffer.size = 0;
-    root = tree->node;
+    buffer.size = 0, root = tree->node;
 
     if (root->left && root->right) {
         build_table(root, huffmanTable, &buffer);
@@ -285,8 +281,7 @@ Node *read_table(FILE *tabl) {
     }
 
 
-    root = calloc(1, sizeof(Node));
-    nodes = calloc(512, sizeof(Node));
+    root = calloc(1, sizeof(Node)), nodes = calloc(512, sizeof(Node));
 
     for (i = 0; i < COUNT_CHAR; i++) {
         if (huffmanTable[i].size) {
@@ -328,16 +323,8 @@ void build_table(Node *root, Text *huffmanTable, Text *buffer) {
 Node *n_direction(Node *root, int direction, Node *nodes) {
     static int index = 0;
     if (direction) {
-        if (!root->right) {
-            root->right = &nodes[index++];
-        }
-
-        return root->right;
+        return root->right = !root->right ? &nodes[index++] : root->right;
     } else {
-        if (!root->left) {
-            root->left = &nodes[index++];
-        }
-
-        return root->left;
+        return root->left = !root->left ? &nodes[index++] : root->left;
     }
 }

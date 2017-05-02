@@ -4,20 +4,16 @@
 #include "list.h"
 
 int l_push_front(List **tree, Node *l) {
-    if (!(*tree)) {
+    if (!*tree) {
         List *list = calloc(1, sizeof(List));
         ERR(list == NULL);
 
-        list->node = l;
-        *tree = list;
+        list->node = l, *tree = list;
     } else {
         List *front = calloc(1, sizeof(List));
         ERR(front == NULL);
 
-        (*tree)->pre = front;
-        front->next = *tree;
-        front->node = l;
-
+        (*tree)->pre = front, front->next = *tree, front->node = l;
         *tree = front;
     }
     return 0;
@@ -32,12 +28,9 @@ Node *l_pop_front(List **tree) {
     l = (*tree)->node;
 
     if ((*tree)->next) {
-        *tree = (*tree)->next;
-        free((*tree)->pre);
-        (*tree)->pre = NULL;
+        *tree = (*tree)->next, free((*tree)->pre), (*tree)->pre = NULL;
     } else {
-        free(*tree);
-        *tree = NULL;
+        free(*tree), *tree = NULL;
     }
 
     return l;
@@ -57,7 +50,6 @@ Node *combine(Node *left, Node *right) {
 
     node->size = left->size + right->size;
     node->left = left, node->right = right;
-
     return node;
 }
 

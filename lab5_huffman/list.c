@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "errors.h"
 #include "list.h"
+#include "errors.h"
 
 int l_push_front(List **tree, Node *l) {
     if (!*tree) {

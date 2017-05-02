@@ -79,8 +79,7 @@ int decoding(FILE *fin, FILE *fout, FILE *tabl) {
     Node *root, *node;
     unsigned char byteIn = text[index++], position = 0;
 
-    if (size == 0) {
-        fclose(fin), fclose(fout);
+    if (!size) {
         return 0;
     }
 
@@ -89,40 +88,25 @@ int decoding(FILE *fin, FILE *fout, FILE *tabl) {
 
     while (size == MY_BUFFER) {
         for (i = 0; i < 8; i++) {
-            if ((byteIn & 0x80) != 0) {
-                if (node->right) {
-                    node = node->right;
-                } else {
-                    break;
-                }
+            if ((byteIn & 0x80) && node->right) {
+                node = node->right;
+            } else if (!(byteIn & 0x80) && node->left) {
+                node = node->left;
             } else {
-                if (node->left) {
-                    node = node->left;
-                } else {
-                    break;
-                }
+                break;
             }
 
-            if (!node->left && !node->right) {
-                fputc(node->ch, fout);
-                node = root;
+            if (!(node->left || node->right)) {
+                fprintf(fout, "%c", node->ch), node = root;
             }
 
-            byteIn <<= 1;
-            position++;
+            byteIn = position++ == 7 ? text[index++] : byteIn << 1;
+            position = position == 8 ? (char) 0 : position;
+            index = index == size ? 0 : index;
 
-            if (position == 8) {
-                position = 0;
-                byteIn = text[index++];
-
-                if (index == size) {
-                    size = (int) fread(text, sizeof(char), MY_BUFFER, fin);
-                    index = 0;
-
-                    if (size != MY_BUFFER) {
-                        break;
-                    }
-                }
+            if (!(position || index) &&
+                (size = (int) fread(text, sizeof(char), MY_BUFFER, fin)) != MY_BUFFER) {
+                break;
             }
         }
     }
@@ -130,86 +114,53 @@ int decoding(FILE *fin, FILE *fout, FILE *tabl) {
     while (index < size - 2) {
         runner = 1;
         for (i = 0; i < 8; i++) {
-            if ((byteIn & 0x80) != 0) {
-                if (node->right) {
-                    node = node->right;
-                } else {
-                    index = size;
-                    break;
-                }
+            if ((byteIn & 0x80) && node->right) {
+                node = node->right;
+            } else if (!(byteIn & 0x80) && node->left) {
+                node = node->left;
             } else {
-                if (node->left) {
-                    node = node->left;
-                } else {
-                    index = size;
-                    break;
-                }
+                index = size;
+                break;
             }
 
-            if (!node->left && !node->right) {
-                fputc(node->ch, fout);
-                node = root;
+            if (!(node->left || node->right)) {
+                fprintf(fout, "%c", node->ch), node = root;
             }
 
-            byteIn <<= 1;
-            position++;
-
-            if (position == 8) {
-                position = 0;
-                byteIn = text[index++];
-            }
+            byteIn = position++ == 7 ? text[index++] : byteIn << 1;
+            position = position == 8 ? (char) 0 : position;
         }
     }
 
     for (i = position; (i < 8) && runner; i++) {
-        if ((byteIn & 0x80) != 0) {
-            if (node->right) {
-                node = node->right;
-            } else {
-                break;
-            }
+        if ((byteIn & 0x80) && node->right) {
+            node = node->right;
+        } else if (!(byteIn & 0x80) && node->left) {
+            node = node->left;
         } else {
-            if (node->left) {
-                node = node->left;
-            } else {
-                break;
-            }
+            break;
         }
 
-        if (!node->left && !node->right) {
-            fputc(node->ch, fout);
-            node = root;
+        if (!(node->left || node->right)) {
+            fprintf(fout, "%c", node->ch), node = root;
         }
 
-        byteIn <<= 1;
-        position++;
+        byteIn <<= 1, position++;
     }
 
-    byteIn = text[size - 2];
-    offset = text[size - 1];
-
-    if (offset == 0) {
-        offset = 8;
-    }
+    byteIn = text[size - 2], offset = !text[size - 1] ? 8 : text[size - 1];
 
     for (i = 0; i < offset; i++) {
-        if ((byteIn & 0x80) != 0) {
-            if (node->right) {
-                node = node->right;
-            } else {
-                break;
-            }
+        if ((byteIn & 0x80) && node->right) {
+            node = node->right;
+        } else if (!(byteIn & 0x80) && node->left) {
+            node = node->left;
         } else {
-            if (node->left) {
-                node = node->left;
-            } else {
-                break;
-            }
+            break;
         }
 
-        if (!node->left && !node->right) {
-            fputc(node->ch, fout);
-            node = root;
+        if (!(node->left || node->right)) {
+            fprintf(fout, "%c", node->ch), node = root;
         }
 
         byteIn <<= 1;

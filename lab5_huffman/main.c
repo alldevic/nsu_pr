@@ -23,40 +23,28 @@ int main(void) {
 }
 
 int encoding(FILE *fin, FILE *fout, FILE *tabl) {
-    Text huffmanTable[COUNT_CHAR];
+    Text table[COUNT_CHAR];
     unsigned char text[MY_BUFFER] = {0};
     size_t size = 0, i, j, k, quantityChar[COUNT_CHAR] = {0};
     int pos = 0, byteOut = 0;
 
     if ((size = fread(text, sizeof(char), MY_BUFFER, fin))) {
-        while (size) {
+        for (; size; size = fread(text, sizeof(char), MY_BUFFER, fin)) {
             for (i = 0; i < size; i++, quantityChar[text[i - 1]]++);
-            size = fread(text, sizeof(char), MY_BUFFER, fin);
         }
-    } else {
-        return 0;
-    }
-    fclose(fin);
-
+    } else return 0;
+    fseek(fin, 3, SEEK_SET);
     ERR((tabl = fopen(TABLE, "wb")) == NULL);
-    for (i = 0; i < COUNT_CHAR; i++, huffmanTable[i - 1].size = 0);
-    write_table(tabl, quantityChar, huffmanTable);
-
-    ERR((fin = fopen(INPUT, "rb")) == NULL);
-    fread(text, sizeof(char), 3, fin);
-
+    write_table(tabl, quantityChar, table);
     while ((size = fread(text, sizeof(char), MY_BUFFER, fin))) {
         for (k = 0; k < size; k++) {
-            for (j = 0; j < huffmanTable[text[k]].size; j++) {
-                byteOut <<= 1, pos++;
-                byteOut = huffmanTable[text[k]].text[j] ? (byteOut | 0x01) : byteOut;
-                byteOut = pos == 8 ? pos = fprintf(fout, "%c", byteOut) - 1 : byteOut;
+            for (j = 0; j < table[text[k]].size; j++) {
+                byteOut = table[text[k]].text[j] ? byteOut << 1 | 0x01 : byteOut << 1;
+                byteOut = pos++ == 7 ? pos = fprintf(fout, "%c", byteOut) - 1 : byteOut;
             }
         }
     }
-
-    fprintf(fout, pos ? "%c" : "", pos ? byteOut << (8 - pos) : '1');
-    fprintf(fout, "%c", !pos ? 8 : pos);
+    pos ? fprintf(fout, "%c%c", byteOut << (8 - pos), pos) : fprintf(fout, "%c", 8);
     return 0;
 }
 
@@ -166,6 +154,7 @@ int write_table(FILE *tabl, size_t quantityChar[], Text huffmanTable[]) {
     List *tree = NULL;
 
     for (i = 0; i < COUNT_CHAR; i++) {
+        huffmanTable[i - 1].size = 0;
         if (quantityChar[i]) {
             ERR((l = calloc(1, sizeof(Node))) == NULL);
             l->ch = (unsigned char) i, l->size = quantityChar[i];

@@ -289,55 +289,46 @@ int write_table(FILE *tabl) {
 }
 
 Node *read_table(FILE *tabl) {
-    char tableDecod[1000];
-    unsigned char byteIn = 0, position = 0;
-    size_t tableIndex = 0, countDecod = 0, i, j, currentCount;
+    char tableDecod[1000], byteIn = 0;
+    unsigned char position = 0, currentSymbol = 0, currentCount;
+    size_t tableIndex = 0, countDecod = 0, i, j;
     Node *root, *nodes;
-    fread(tableDecod, sizeof(unsigned char), 1000, tabl);
-    countDecod = (size_t) (!tableDecod[tableIndex++] ? 256 : tableDecod[tableIndex - 1]);
 
-    byteIn = (unsigned char) tableDecod[tableIndex++];
+    fread(tableDecod, sizeof(char), 1000, tabl);
+    countDecod = (size_t) (!tableDecod[tableIndex++] ? 256 : tableDecod[tableIndex - 1]);
+    byteIn = tableDecod[tableIndex++];
 
     for (i = 0; i < countDecod; i++) {
-        unsigned char currentSymbol = 0;
 
+        currentSymbol = 0;
         for (j = 0; j < 8; j++) {
-            currentSymbol <<= 1;
-            currentSymbol |= (byteIn & 0x80) != 0;
-            byteIn <<= 1;
-            position++;
+            currentSymbol <<= 1, currentSymbol |= (byteIn & 0x80) != 0;
+            byteIn <<= 1, position++;
 
             if (position == 8) {
-                byteIn = (unsigned char) tableDecod[tableIndex++];
-                position = 0;
+                byteIn = tableDecod[tableIndex++], position = 0;
             }
         }
 
         currentCount = 0;
-
         for (j = 0; j < 8; j++) {
-            currentCount <<= 1;
-            currentCount |= (byteIn & 0x80) != 0;
-            byteIn <<= 1;
-            position++;
+            currentCount <<= 1, currentCount |= (byteIn & 0x80) != 0;
+            byteIn <<= 1, position++;
 
             if (position == 8) {
-                byteIn = (unsigned char) tableDecod[tableIndex++];
-                position = 0;
+                byteIn = tableDecod[tableIndex++], position = 0;
             }
         }
 
-        huffmanTable[currentSymbol].size = (size_t) currentCount;
+        huffmanTable[currentSymbol].size = currentCount;
 
         for (j = 0; j < currentCount; j++) {
+            huffmanTable[currentSymbol].text[j] <<= 1;
             huffmanTable[currentSymbol].text[j] = (byteIn & 0x80) != 0;
 
-            byteIn <<= 1;
-            position++;
-
+            byteIn <<= 1, position++;
             if (position == 8) {
-                byteIn = (unsigned char) tableDecod[tableIndex++];
-                position = 0;
+                byteIn = tableDecod[tableIndex++], position = 0;
             }
         }
     }

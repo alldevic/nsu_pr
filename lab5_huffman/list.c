@@ -68,8 +68,7 @@ void l_qsort(List **tree) {
         tmp1 = begin->node, tmp2 = begin->next->node;
 
         if (tmp1->size >= tmp2->size) {
-            begin->node = tmp2;
-            begin->next->node = tmp1;
+            begin->node = tmp2, begin->next->node = tmp1;
         }
     }
 

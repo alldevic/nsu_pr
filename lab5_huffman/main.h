@@ -1,21 +1,20 @@
 #ifndef LAB5_MAIN_H
 #define LAB5_MAIN_H
-#define COUNT_CHAR 256u
+#define COUNT_CHAR 256
 #define MY_BUFFER 512
 
-#define IN "in.txt"
-#define OUT "out.txt"
+#define INPUT "in.txt"
+#define OUTPUT "out.txt"
+#define TABLE "table"
 
 typedef struct Text {
     char text[512];
     size_t size;
 } Text;
 
-int encoding(FILE *fin, FILE *fout, FILE *tabl,
-             unsigned char text[], size_t quantityChar[], Text huffmanTable[]);
+int encoding(FILE *fin, FILE *fout, FILE *tabl);
 
-int decoding(FILE *fin, FILE *fout, FILE *tabl,
-             unsigned char text[], Text huffmanTable[]);
+int decoding(FILE *fin, FILE *fout, FILE *tabl);
 
 int write_table(FILE *tabl, size_t quantityChar[], Text huffmanTable[]);
 

@@ -24,19 +24,19 @@ int main(void) {
 
 int encoding(FILE *fin, FILE *fout, FILE *tabl) {
     Text table[COUNT_CHAR];
-    unsigned char text[MY_BUFFER] = {0};
+    unsigned char text[BUFFER] = {0};
     size_t size = 0, i, j, k, quantityChar[COUNT_CHAR] = {0};
     int pos = 0, byteOut = 0;
 
-    if ((size = fread(text, sizeof(char), MY_BUFFER, fin))) {
-        for (; size; size = fread(text, sizeof(char), MY_BUFFER, fin)) {
+    if ((size = fread(text, sizeof(char), BUFFER, fin))) {
+        for (; size; size = fread(text, sizeof(char), BUFFER, fin)) {
             for (i = 0; i < size; i++, quantityChar[text[i - 1]]++);
         }
     } else return 0;
     fseek(fin, 3, SEEK_SET);
     ERR((tabl = fopen(TABLE, "wb")) == NULL);
     write_table(tabl, quantityChar, table);
-    while ((size = fread(text, sizeof(char), MY_BUFFER, fin))) {
+    while ((size = fread(text, sizeof(char), BUFFER, fin))) {
         for (k = 0; k < size; k++) {
             for (j = 0; j < table[text[k]].size; j++) {
                 byteOut = table[text[k]].text[j] ? byteOut << 1 | 0x01 : byteOut << 1;
@@ -50,98 +50,45 @@ int encoding(FILE *fin, FILE *fout, FILE *tabl) {
 
 int decoding(FILE *fin, FILE *fout, FILE *tabl) {
     Text huffmanTable[COUNT_CHAR];
-    unsigned char text[MY_BUFFER] = {0};
-    int size = (int) fread(text, sizeof(char), MY_BUFFER, fin);
-    int index = 0, i, runner = 0, offset;
+    unsigned char text[BUFFER] = {0}, byteIn, pos = 0;
+    int size = 0, index = 0, i, fl = 0, offset;
     Node *root, *node;
-    unsigned char byteIn = text[index++], pos = 0;
 
-    if (!size) {
+    if (!(size = (int) fread(text, sizeof(char), BUFFER, fin))) {
         return 0;
     }
 
     ERR((tabl = fopen(TABLE, "rb")) == NULL);
     for (i = 0; i < COUNT_CHAR; i++, huffmanTable[i - 1].size = 0);
-    node = root = read_table(tabl, huffmanTable);
+    node = root = read_table(tabl, huffmanTable), byteIn = text[index++];
 
-    while (size == MY_BUFFER) {
+    while (size == BUFFER) {
         for (i = 0; i < 8; i++) {
-            if ((byteIn & 0x80) && node->right) {
-                node = node->right;
-            } else if (!(byteIn & 0x80) && node->left) {
-                node = node->left;
-            } else {
-                break;
-            }
-
-            if (!(node->left || node->right)) {
-                fprintf(fout, "%c", node->ch), node = root;
-            }
-
+            node = writeNode(fout, root, node, byteIn);
             byteIn = pos++ == 7 ? text[index++] : byteIn << 1;
             pos = pos == 8 ? (char) 0 : pos;
             index = index == size ? 0 : index;
-
             if (!(pos || index) &&
-                (size = (int) fread(text, sizeof(char), MY_BUFFER, fin)) != MY_BUFFER) {
+                (size = (int) fread(text, sizeof(char), BUFFER, fin)) != BUFFER) {
                 break;
             }
         }
     }
 
     while (index < size - 2) {
-        runner = 1;
-        for (i = 0; i < 8; i++) {
-            if ((byteIn & 0x80) && node->right) {
-                node = node->right;
-            } else if (!(byteIn & 0x80) && node->left) {
-                node = node->left;
-            } else {
-                index = size;
-                break;
-            }
-
-            if (!(node->left || node->right)) {
-                fprintf(fout, "%c", node->ch), node = root;
-            }
-
-            byteIn = pos++ == 7 ? text[index++] : byteIn << 1;
-            pos = pos == 8 ? (char) 0 : pos;
+        for (i = 0; i < 8; i++, byteIn <<= 1) {
+            node = writeNode(fout, root, node, byteIn);
         }
+        pos = 0, byteIn = text[index++], fl = 1;
     }
 
-    for (i = pos; (i < 8) && runner; i++) {
-        if ((byteIn & 0x80) && node->right) {
-            node = node->right;
-        } else if (!(byteIn & 0x80) && node->left) {
-            node = node->left;
-        } else {
-            break;
-        }
-
-        if (!(node->left || node->right)) {
-            fprintf(fout, "%c", node->ch), node = root;
-        }
-
-        byteIn <<= 1, pos++;
+    for (i = pos; (i < 8) && fl; i++, byteIn <<= 1) {
+        node = writeNode(fout, root, node, byteIn);
     }
 
     byteIn = text[size - 2], offset = !text[size - 1] ? 8 : text[size - 1];
-
-    for (i = 0; i < offset; i++) {
-        if ((byteIn & 0x80) && node->right) {
-            node = node->right;
-        } else if (!(byteIn & 0x80) && node->left) {
-            node = node->left;
-        } else {
-            break;
-        }
-
-        if (!(node->left || node->right)) {
-            fprintf(fout, "%c", node->ch), node = root;
-        }
-
-        byteIn <<= 1;
+    for (i = 0; i < offset; i++, byteIn <<= 1) {
+        node = writeNode(fout, root, node, byteIn);
     }
     return 0;
 }
@@ -291,4 +238,13 @@ Node *n_direction(Node *root, int direction, Node *nodes) {
     } else {
         return root->left = !root->left ? &nodes[index++] : root->left;
     }
+}
+
+Node *writeNode(FILE *fout, Node *root, Node *node, unsigned char byteIn) {
+    node = ((byteIn & 0x80) && node->right) ? node->right :
+           !(byteIn & 0x80) && node->left ? node->left : node;
+    if (!(node->left || node->right)) {
+        fprintf(fout, "%c", node->ch), node = root;
+    }
+    return node;
 }

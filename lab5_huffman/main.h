@@ -1,7 +1,7 @@
 #ifndef LAB5_MAIN_H
 #define LAB5_MAIN_H
 #define COUNT_CHAR 256
-#define MY_BUFFER 512
+#define BUFFER 512
 
 #define INPUT "in.txt"
 #define OUTPUT "out.txt"
@@ -23,5 +23,7 @@ Node *read_table(FILE *tabl, Text huffmanTable[]);
 void build_table(Node *root, Text *huffmanTable, Text *buffer);
 
 Node *n_direction(Node *root, int direction, Node *nodes);
+
+Node *writeNode(FILE *fout, Node *root, Node *node, unsigned char byteIn);
 
 #endif /*LAB5_MAIN_H*/

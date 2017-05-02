@@ -13,13 +13,15 @@ typedef struct Text {
 } Text;
 
 
-int encoding(FILE *fin, FILE *fout, FILE *tabl);
+int encoding(FILE *fin, FILE *fout, FILE *tabl,
+             unsigned char text[], size_t quantityChar[], Text huffmanTable[]);
 
-int decoding(FILE *fin, FILE *fout, FILE *tabl);
+int decoding(FILE *fin, FILE *fout, FILE *tabl,
+             unsigned char text[], Text huffmanTable[]);
 
-int write_table(FILE *tabl);
+int write_table(FILE *tabl, size_t quantityChar[], Text huffmanTable[]);
 
-Node *read_table(FILE *tabl);
+Node *read_table(FILE *tabl, Text huffmanTable[]);
 
 void build_table(Node *root, Text *huffmanTable, Text *buffer);
 

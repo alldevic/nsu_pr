@@ -4,14 +4,13 @@
 #include "main.h"
 #include "errors.h"
 
-Text huffmanTable[COUNT_CHAR];
-size_t quantityChar[COUNT_CHAR] = {0};
-unsigned char text[MY_BUFFER] = {0};
-
 int main(void) {
     FILE *fin = NULL, *fout = NULL, *tabl = NULL;
     unsigned char huffmanFlag[3];
     int i = 0;
+    Text huffmanTable[COUNT_CHAR];
+    size_t quantityChar[COUNT_CHAR] = {0};
+    unsigned char text[MY_BUFFER] = {0};
 
     ERR((fin = fopen(IN, "rb")) == NULL);
     ERR((fout = fopen(OUT, "wb")) == NULL);
@@ -23,9 +22,9 @@ int main(void) {
     }
 
     if (huffmanFlag[0] == 'c') {
-        encoding(fin, fout, tabl);
+        encoding(fin, fout, tabl, text, quantityChar, huffmanTable);
     } else if (huffmanFlag[0] == 'd') {
-        decoding(fin, fout, tabl);
+        decoding(fin, fout, tabl, text, huffmanTable);
     }
 
     fclose(fin);
@@ -33,7 +32,8 @@ int main(void) {
     return 0;
 }
 
-int encoding(FILE *fin, FILE *fout, FILE *tabl) {
+int encoding(FILE *fin, FILE *fout, FILE *tabl,
+             unsigned char text[], size_t quantityChar[], Text huffmanTable[]) {
     size_t size = 0, i, j, k;
     int pos = 0, byteOut = 0;
 
@@ -50,7 +50,7 @@ int encoding(FILE *fin, FILE *fout, FILE *tabl) {
     fclose(fin);
 
     ERR((tabl = fopen("tabl.txt", "wb")) == NULL);
-    write_table(tabl);
+    write_table(tabl, quantityChar, huffmanTable);
 
     ERR((fin = fopen(IN, "rb")) == NULL);
     fread(text, sizeof(char), 3, fin);
@@ -73,7 +73,8 @@ int encoding(FILE *fin, FILE *fout, FILE *tabl) {
     return 0;
 }
 
-int decoding(FILE *fin, FILE *fout, FILE *tabl) {
+int decoding(FILE *fin, FILE *fout, FILE *tabl,
+             unsigned char text[], Text huffmanTable[]) {
     int size = (int) fread(text, sizeof(char), MY_BUFFER, fin);
     int index = 0, i, runner = 0, offset;
     Node *root, *node;
@@ -84,7 +85,7 @@ int decoding(FILE *fin, FILE *fout, FILE *tabl) {
     }
 
     ERR((tabl = fopen("tabl.txt", "rb")) == NULL);
-    node = root = read_table(tabl);
+    node = root = read_table(tabl, huffmanTable);
 
     while (size == MY_BUFFER) {
         for (i = 0; i < 8; i++) {
@@ -168,7 +169,7 @@ int decoding(FILE *fin, FILE *fout, FILE *tabl) {
     return 0;
 }
 
-int write_table(FILE *tabl) {
+int write_table(FILE *tabl, size_t quantityChar[], Text huffmanTable[]) {
     size_t i, j;
     int pos = 0, byteOut = 0, countChar = 0;
     Text buffer;
@@ -235,7 +236,7 @@ int write_table(FILE *tabl) {
     return 0;
 }
 
-Node *read_table(FILE *tabl) {
+Node *read_table(FILE *tabl, Text huffmanTable[]) {
     char tableDecod[1000], byteIn = 0;
     unsigned char position = 0, currentSymbol = 0, currentCount;
     size_t tableIndex = 0, countDecod = 0, i, j;

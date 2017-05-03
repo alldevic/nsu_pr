@@ -1,6 +1,8 @@
 #ifndef LAB5_LIST_H
 #define LAB5_LIST_H
-
+/**
+ * Implementation of tree structure
+ */
 typedef struct Node {
     size_t size;
     unsigned char ch;
@@ -9,6 +11,9 @@ typedef struct Node {
     struct Node *right;
 } Node;
 
+/**
+ * Implementation of list structure with tree nodes as data
+ */
 typedef struct List {
     Node *node;
 
@@ -16,14 +21,14 @@ typedef struct List {
     struct List *pre;
 } List;
 
-int l_push_front(List **tree, Node *l);
+int l_push(List **list, Node *l);
 
-Node *l_pop_front(List **tree);
+Node *l_pop(List **list);
 
-int l_size(List *tree);
+int l_size(List *list);
 
 Node *combine(Node *left, Node *right);
 
-void l_qsort(List **tree);
+void l_qsort(List **list);
 
 #endif /*LAB5_LIST_H*/

@@ -3,45 +3,67 @@
 #include "list.h"
 #include "errors.h"
 
-int l_push_front(List **tree, Node *l) {
-    if (!*tree) {
-        List *list = calloc(1, sizeof(List));
-        ERR(list == NULL);
+/**
+ * Implementation of push operation for list
+ * @param list - List for pushing
+ * @param l - data
+ * @return error code
+ */
+int l_push(List **list, Node *l) {
+    if (!*list) {
+        List *lst = calloc(1, sizeof(List));
+        ERR(lst == NULL);
 
-        list->node = l, *tree = list;
+        lst->node = l, *list = lst;
     } else {
         List *front = calloc(1, sizeof(List));
         ERR(front == NULL);
 
-        (*tree)->pre = front, front->next = *tree, front->node = l;
-        *tree = front;
+        (*list)->pre = front, front->next = *list, front->node = l;
+        *list = front;
     }
     return 0;
 }
 
-Node *l_pop_front(List **tree) {
+/**
+ * Implementation of pop operation for list
+ * @param list - List for pop
+ * @return Deleted element
+ */
+Node *l_pop(List **list) {
     Node *l;
-    if (!*tree) {
+    if (!*list) {
         return NULL;
     }
 
-    l = (*tree)->node;
+    l = (*list)->node;
 
-    if ((*tree)->next) {
-        *tree = (*tree)->next, free((*tree)->pre), (*tree)->pre = NULL;
+    if ((*list)->next) {
+        *list = (*list)->next, free((*list)->pre), (*list)->pre = NULL;
     } else {
-        free(*tree), *tree = NULL;
+        free(*list), *list = NULL;
     }
 
     return l;
 }
 
-int l_size(List *tree) {
+/**
+ * Calculate length of list
+ * @param list for calculating
+ * @return length
+ */
+int l_size(List *list) {
     int count = 0;
-    for (count = 1; tree && tree->next; tree = tree->next, count++);
+    for (count = 1; list && list->next; list = list->next, count++);
     return count;
 }
 
+/**
+ * Function for union of two trees in one tree
+ * @param left - new left node
+ * @param right - new right node
+ * @return new tree with new left and new right nodes
+ */
 Node *combine(Node *left, Node *right) {
     Node *node;
     if (!(node = calloc(1, sizeof(Node)))) {
@@ -53,10 +75,14 @@ Node *combine(Node *left, Node *right) {
     return node;
 }
 
-void l_qsort(List **tree) {
+/**
+ * Quick sort implementation for list
+ * @param list - list for sorting
+ */
+void l_qsort(List **list) {
     List *begin = NULL;
     Node *tmp1, *tmp2;
-    for (begin = *tree; begin->next; begin = begin->next) {
+    for (begin = *list; begin->next; begin = begin->next) {
         tmp1 = begin->node, tmp2 = begin->next->node;
 
         if (tmp1->size >= tmp2->size) {

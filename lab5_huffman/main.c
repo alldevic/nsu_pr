@@ -94,13 +94,13 @@ int write_table(FILE *tab, size_t quantityChar[], Text table[]) {
         if (quantityChar[i]) {
             ERR((l = calloc(1, sizeof(Node))) == NULL);
             l->ch = (char) i, l->size = quantityChar[i], countChar++;
-            l_push_front(&tree, l);
+            l_push(&tree, l);
         }
     }
 
     while (l_size(tree) > 1) {
-        Node *left = l_pop_front(&tree), *right = l_pop_front(&tree);
-        l_push_front(&tree, combine(left, right));
+        Node *left = l_pop(&tree), *right = l_pop(&tree);
+        l_push(&tree, combine(left, right));
         l_qsort(&tree);
     }
 

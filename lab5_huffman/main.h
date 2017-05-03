@@ -1,7 +1,7 @@
 #ifndef LAB5_MAIN_H
 #define LAB5_MAIN_H
 #define COUNT_CHAR 256
-#define BUFFER 512
+#define BUFF 512
 
 #define INPUT "in.txt"
 #define OUTPUT "out.txt"
@@ -12,19 +12,19 @@ typedef struct Text {
     size_t size;
 } Text;
 
-int encoding(FILE *fin, FILE *fout, FILE *tabl);
+int encoding(FILE *in, FILE *out, FILE *tab);
 
-int decoding(FILE *fin, FILE *fout, FILE *tabl);
+int decoding(FILE *in, FILE *out, FILE *tab);
 
-int write_table(FILE *tabl, size_t quantityChar[], Text table[]);
+int write_table(FILE *tab, size_t quantityChar[], Text table[]);
 
-Node *read_table(FILE *tabl, Text table[]);
+Node *read_table(FILE *tab, Text table[]);
 
 void build_table(Node *root, Text *table, Text *buffer);
 
 Node *n_direction(Node *root, int direction, Node *nodes);
 
-Node *writeNode(FILE *fout, Node *root, Node *node, unsigned char byteIn);
+Node *writeNode(FILE *out, Node *root, Node *node, unsigned char byteIn);
 
 void writeLetter(FILE *file, unsigned char letter, int *pos, int *byte);
 

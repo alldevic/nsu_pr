@@ -22,78 +22,67 @@ int main(void) {
     return 0;
 }
 
-int encoding(FILE *fin, FILE *fout, FILE *tabl) {
+int encoding(FILE *in, FILE *out, FILE *tab) {
     Text table[COUNT_CHAR];
-    unsigned char text[BUFFER] = {0};
+    unsigned char text[BUFF] = {0};
     size_t size = 0, i, j, k, quantityChar[COUNT_CHAR] = {0};
     int pos = 0, byteOut = 0;
 
-    if ((size = fread(text, sizeof(char), BUFFER, fin))) {
-        for (; size; size = fread(text, sizeof(char), BUFFER, fin)) {
+    if ((size = fread(text, sizeof(char), BUFF, in))) {
+        for (; size; size = fread(text, sizeof(char), BUFF, in)) {
             for (i = 0; i < size; i++, quantityChar[text[i - 1]]++);
         }
     } else return 0;
-    fseek(fin, 3, SEEK_SET);
-    ERR((tabl = fopen(TABLE, "wb")) == NULL);
-    write_table(tabl, quantityChar, table);
-    while ((size = fread(text, sizeof(char), BUFFER, fin))) {
+    fseek(in, 3, SEEK_SET);
+    ERR((tab = fopen(TABLE, "wb")) == NULL);
+    write_table(tab, quantityChar, table);
+    while ((size = fread(text, sizeof(char), BUFF, in))) {
         for (k = 0; k < size; k++) {
             for (j = 0; j < table[text[k]].size; j++) {
                 byteOut = table[text[k]].text[j] ? byteOut << 1 | 0x01 : byteOut << 1;
-                byteOut = pos++ == 7 ? pos = fprintf(fout, "%c", byteOut) - 1 : byteOut;
+                byteOut = pos++ == 7 ? pos = fprintf(out, "%c", byteOut) - 1 : byteOut;
             }
         }
     }
-    pos ? fprintf(fout, "%c%c", byteOut << (8 - pos), pos) : fprintf(fout, "%c", 8);
+    pos ? fprintf(out, "%c%c", byteOut << (8 - pos), pos) : fprintf(out, "%c", 8);
     return 0;
 }
 
-int decoding(FILE *fin, FILE *fout, FILE *tabl) {
+int decoding(FILE *in, FILE *out, FILE *tab) {
     Text huffmanTable[COUNT_CHAR];
-    unsigned char text[BUFFER] = {0}, byteIn, pos = 0;
+    unsigned char txt[BUFF] = {0}, byte, pos = 0;
     int size = 0, index = 0, i, fl = 0, offset;
-    Node *root, *node;
+    Node *root, *nd;
 
-    if (!(size = (int) fread(text, sizeof(char), BUFFER, fin))) {
+    if (!(size = (int) fread(txt, sizeof(char), BUFF, in))) {
         return 0;
     }
 
-    ERR((tabl = fopen(TABLE, "rb")) == NULL);
+    ERR((tab = fopen(TABLE, "rb")) == NULL);
     for (i = 0; i < COUNT_CHAR; i++, huffmanTable[i - 1].size = 0);
-    node = root = read_table(tabl, huffmanTable), byteIn = text[index++];
-
-    while (size == BUFFER) {
+    nd = root = read_table(tab, huffmanTable), byte = txt[index++];
+    while (size == BUFF) {
         for (i = 0; i < 8; i++) {
-            node = writeNode(fout, root, node, byteIn);
-            byteIn = pos++ == 7 ? text[index++] : byteIn << 1;
-            pos = pos == 8 ? (char) 0 : pos;
-            index = index == size ? 0 : index;
+            nd = writeNode(out, root, nd, byte);
+            byte = pos++ == 7 ? txt[index++] : byte << 1;
+            pos = pos == 8 ? (char) 0 : pos, index = index == size ? 0 : index;
             if (!(pos || index) &&
-                (size = (int) fread(text, sizeof(char), BUFFER, fin)) != BUFFER) {
+                (size = (int) fread(txt, sizeof(char), BUFF, in)) != BUFF) {
                 break;
             }
         }
     }
 
-    while (index < size - 2) {
-        for (i = 0; i < 8; i++, byteIn <<= 1) {
-            node = writeNode(fout, root, node, byteIn);
-        }
-        pos = 0, byteIn = text[index++], fl = 1;
+    for (; index < size - 2; pos = 0, byte = txt[index++], fl = 1) {
+        for (i = 0; i < 8; i++, nd = writeNode(out, root, nd, byte), byte <<= 1);
     }
-
-    for (i = pos; (i < 8) && fl; i++, byteIn <<= 1) {
-        node = writeNode(fout, root, node, byteIn);
-    }
-
-    byteIn = text[size - 2], offset = !text[size - 1] ? 8 : text[size - 1];
-    for (i = 0; i < offset; i++, byteIn <<= 1) {
-        node = writeNode(fout, root, node, byteIn);
-    }
+    for (i = pos; (i < 8) && fl; i++, nd = writeNode(out, root, nd, byte), byte <<= 1);
+    byte = txt[size - 2], offset = !txt[size - 1] ? 8 : txt[size - 1];
+    for (i = 0; i < offset; i++, nd = writeNode(out, root, nd, byte), byte <<= 1);
     return 0;
 }
 
-int write_table(FILE *tabl, size_t quantityChar[], Text table[]) {
+int write_table(FILE *tab, size_t quantityChar[], Text table[]) {
     size_t i, j;
     int pos = 0, byteOut = 0, countChar = 0;
     Text buffer;
@@ -123,28 +112,28 @@ int write_table(FILE *tabl, size_t quantityChar[], Text table[]) {
         table[root->ch].text[0] = 0;
     }
 
-    fprintf(tabl, "%c", countChar);
+    fprintf(tab, "%c", countChar);
     for (i = 0; i < COUNT_CHAR; i++) {
         if (quantityChar[i]) {
-            writeLetter(tabl, (unsigned char) i, &pos, &byteOut);
-            writeLetter(tabl, (unsigned char) table[i].size, &pos, &byteOut);
+            writeLetter(tab, (unsigned char) i, &pos, &byteOut);
+            writeLetter(tab, (unsigned char) table[i].size, &pos, &byteOut);
             for (j = 0; j < table[i].size; j++) {
                 byteOut <<= 1, pos++;
                 byteOut |= table[i].text[j];
-                byteOut = pos == 8 ? pos = fprintf(tabl, "%c", byteOut) - 1 : byteOut;
+                byteOut = pos == 8 ? pos = fprintf(tab, "%c", byteOut) - 1 : byteOut;
             }
         }
     }
-    fprintf(tabl, pos ? "%c" : "", pos ? byteOut << (8 - pos) : '1');
+    fprintf(tab, pos ? "%c" : "", pos ? byteOut << (8 - pos) : '1');
     return 0;
 }
 
-Node *read_table(FILE *tabl, Text table[]) {
+Node *read_table(FILE *tab, Text table[]) {
     char tableDecod[1000], byteIn = 0;
     unsigned char pos = 0, curSymb = 0, curCount;
     size_t tableIndex = 0, countDecod = 0, i, j;
 
-    fread(tableDecod, sizeof(char), 1000, tabl);
+    fread(tableDecod, sizeof(char), 1000, tab);
     countDecod = !tableDecod[tableIndex++] ? 256 : (unsigned) tableDecod[tableIndex - 1];
     byteIn = tableDecod[tableIndex++];
 
@@ -191,11 +180,11 @@ Node *n_direction(Node *root, int direction, Node *nodes) {
     }
 }
 
-Node *writeNode(FILE *fout, Node *root, Node *node, unsigned char byteIn) {
+Node *writeNode(FILE *out, Node *root, Node *node, unsigned char byteIn) {
     node = ((byteIn & 0x80) && node->right) ? node->right :
            !(byteIn & 0x80) && node->left ? node->left : node;
     if (!(node->left || node->right)) {
-        fprintf(fout, "%c", node->ch), node = root;
+        fprintf(out, "%c", node->ch), node = root;
     }
     return node;
 }

@@ -4,8 +4,6 @@
 #include "main.h"
 #include "errors.h"
 
-void writeLetter(FILE *file, unsigned char letter, int *pos, int *byte);
-
 int main(void) {
     FILE *fin, *fout, *tabl = NULL;
     unsigned char huffmanFlag[3];
@@ -143,53 +141,25 @@ int write_table(FILE *tabl, size_t quantityChar[], Text table[]) {
 
 Node *read_table(FILE *tabl, Text table[]) {
     char tableDecod[1000], byteIn = 0;
-    unsigned char pos = 0, currentSymbol = 0, currentCount;
+    unsigned char pos = 0, curSymb = 0, curCount;
     size_t tableIndex = 0, countDecod = 0, i, j;
-    Node *root, *nodes;
 
     fread(tableDecod, sizeof(char), 1000, tabl);
-    countDecod = (size_t) (!tableDecod[tableIndex++] ? 256 : tableDecod[tableIndex - 1]);
+    countDecod = !tableDecod[tableIndex++] ? 256 : (unsigned) tableDecod[tableIndex - 1];
     byteIn = tableDecod[tableIndex++];
 
     for (i = 0; i < countDecod; i++) {
-        currentSymbol = 0;
-        for (j = 0; j < 8; j++) {
-            currentSymbol <<= 1, currentSymbol |= (byteIn & 0x80) != 0;
-            byteIn = pos++ == 7 ? tableDecod[tableIndex++] : byteIn << 1;
-            pos = pos == 8 ? (char) 0 : pos;
-        }
+        curSymb = readByte(&byteIn, &pos, tableDecod, &tableIndex);
+        table[curSymb].size = curCount = readByte(&byteIn, &pos, tableDecod, &tableIndex);
 
-        currentCount = 0;
-        for (j = 0; j < 8; j++) {
-            currentCount <<= 1, currentCount |= (byteIn & 0x80) != 0;
-            byteIn = pos++ == 7 ? tableDecod[tableIndex++] : byteIn << 1;
-            pos = pos == 8 ? (char) 0 : pos;
-        }
-
-        table[currentSymbol].size = currentCount;
-
-        for (j = 0; j < currentCount; j++) {
-            table[currentSymbol].text[j] <<= 1;
-            table[currentSymbol].text[j] = (byteIn & 0x80) != 0;
+        for (j = 0; j < curCount; table[curSymb].text[j] <<= 1, j++) {
+            table[curSymb].text[j] = (byteIn & 0x80) != 0;
             byteIn = pos++ == 7 ? tableDecod[tableIndex++] : byteIn << 1;
             pos = pos == 8 ? (char) 0 : pos;
         }
     }
 
-    root = calloc(1, sizeof(Node)), nodes = calloc(512, sizeof(Node));
-
-    for (i = 0; i < COUNT_CHAR; i++) {
-        if (table[i].size) {
-            Node *node = root;
-
-            for (j = 0; j < table[i].size; j++) {
-                node = n_direction(node, table[i].text[j], nodes);
-            }
-            node->ch = (char) i;
-        }
-    }
-
-    return root;
+    return createTree(table);
 }
 
 void build_table(Node *root, Text *table, Text *buffer) {
@@ -237,4 +207,29 @@ void writeLetter(FILE *file, unsigned char letter, int *pos, int *byte) {
         (*byte) |= (letter & 0x80) != 0;
         (*byte) = (*pos) == 8 ? (*pos) = fprintf(file, "%c", (*byte)) - 1 : (*byte);
     }
+}
+
+unsigned char readByte(char *byte, unsigned char *pos, char *table, size_t *index) {
+    unsigned char res = 0, i;
+    for (i = 0; i < 8; i++) {
+        res <<= 1, res |= ((*byte) & 0x80) != 0;
+        (*byte) = (*pos)++ == 7 ? table[(*index)++] : (*byte) << 1;
+        (*pos) = (unsigned char) ((*pos) == 8 ? (char) 0 : (*pos));
+    }
+    return res;
+}
+
+Node *createTree(Text table[]) {
+    Node *root = calloc(1, sizeof(Node)), *nodes = calloc(512, sizeof(Node)), *node;
+    unsigned i, j;
+    for (i = 0; i < COUNT_CHAR; i++) {
+        if (table[i].size) {
+            node = root;
+            for (j = 0; j < table[i].size; j++) {
+                node = n_direction(node, table[i].text[j], nodes);
+            }
+            node->ch = (char) i;
+        }
+    }
+    return root;
 }

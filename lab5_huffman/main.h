@@ -26,4 +26,10 @@ Node *n_direction(Node *root, int direction, Node *nodes);
 
 Node *writeNode(FILE *fout, Node *root, Node *node, unsigned char byteIn);
 
+void writeLetter(FILE *file, unsigned char letter, int *pos, int *byte);
+
+unsigned char readByte(char *byte, unsigned char *pos, char *table, size_t *index);
+
+Node *createTree(Text table[]);
+
 #endif /*LAB5_MAIN_H*/

@@ -1,5 +1,6 @@
 #ifndef LAB5_MAIN_H
 #define LAB5_MAIN_H
+
 #define COUNT_CHAR 256
 #define BUFF 512
 

@@ -1,9 +1,18 @@
+/**
+ * @mainpage Laboratory work #12. Huffman's archiver
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "list.h"
 #include "main.h"
 #include "errors.h"
 
+/**
+ * Entry point of program. Open INPUT file and read first 3 bytes, because "c/r/n" or
+ * "d/r/n". THen code or decode information and write it to OUTPUT
+ * @return error code
+ */
 int main(void) {
     FILE *fin, *fout, *tabl = NULL;
     unsigned char huffmanFlag[3];
@@ -22,11 +31,19 @@ int main(void) {
     return 0;
 }
 
+/**
+ * At fist circle do frequency analysis, then generate and write to TABLE the table of
+ * Huffman's codes. Then again view INPUT and write encoded data to OUTPUT
+ * @param in - input file
+ * @param out - output file
+ * @param tab - file for saving table of Huffman's codes
+ * @return error code
+ */
 int encoding(FILE *in, FILE *out, FILE *tab) {
     Text table[COUNT_CHAR];
     unsigned char text[BUFF] = {0};
     size_t size = 0, i, j, k, quantityChar[COUNT_CHAR] = {0};
-    int pos = 0, byteOut = 0;
+    int pos = 0, byte = 0;
 
     if ((size = fread(text, sizeof(char), BUFF, in))) {
         for (; size; size = fread(text, sizeof(char), BUFF, in)) {
@@ -39,15 +56,22 @@ int encoding(FILE *in, FILE *out, FILE *tab) {
     while ((size = fread(text, sizeof(char), BUFF, in))) {
         for (k = 0; k < size; k++) {
             for (j = 0; j < table[text[k]].size; j++) {
-                byteOut = table[text[k]].text[j] ? byteOut << 1 | 0x01 : byteOut << 1;
-                byteOut = pos++ == 7 ? pos = fprintf(out, "%c", byteOut) - 1 : byteOut;
+                byte = table[text[k]].text[j] ? byte << 1 | 0x01 : byte << 1;
+                byte = pos++ == 7 ? pos = fprintf(out, "%c", byte) - 1 : byte;
             }
         }
     }
-    pos ? fprintf(out, "%c%c", byteOut << (8 - pos), pos) : fprintf(out, "%c", 8);
+    pos ? fprintf(out, "%c%c", byte << (8 - pos), pos) : fprintf(out, "%c", 8);
     return 0;
 }
 
+/**
+ * Decode information from INPUT with TABLE. Write decoded data to OUTPUT
+ * @param in - input file
+ * @param out - output file
+ * @param tab - file with table of codes
+ * @return error code
+ */
 int decoding(FILE *in, FILE *out, FILE *tab) {
     Text huffmanTable[COUNT_CHAR];
     unsigned char txt[BUFF] = {0}, byte, pos = 0;
@@ -82,6 +106,13 @@ int decoding(FILE *in, FILE *out, FILE *tab) {
     return 0;
 }
 
+/**
+ * Write Huffman's table to TABLE
+ * @param tab - file for writing
+ * @param quantityChar - frequency of every symbol in text
+ * @param table - binary codes of symbols
+ * @return error code
+ */
 int write_table(FILE *tab, size_t quantityChar[], Text table[]) {
     size_t i, j;
     int pos = 0, byteOut = 0, countChar = 0;
@@ -128,6 +159,12 @@ int write_table(FILE *tab, size_t quantityChar[], Text table[]) {
     return 0;
 }
 
+/**
+ * Function for read table from TABLE
+ * @param tab - input file
+ * @param table - structure with string implementation of codes
+ * @return Huffman's tree
+ */
 Node *read_table(FILE *tab, Text table[]) {
     char tableDecod[1000], byteIn = 0;
     unsigned char pos = 0, curSymb = 0, curCount;
@@ -148,9 +185,15 @@ Node *read_table(FILE *tab, Text table[]) {
         }
     }
 
-    return createTree(table);
+    return createHuffmanTree(table);
 }
 
+/**
+ * Build binary tree from data in table
+ * @param root - root of new Huffman's tree
+ * @param table - data for building tree
+ * @param buffer - initialised buffer for temporary data
+ */
 void build_table(Node *root, Text *table, Text *buffer) {
     size_t i;
     if (root->left) {
@@ -171,6 +214,13 @@ void build_table(Node *root, Text *table, Text *buffer) {
     buffer->size = buffer->size ? buffer->size - 1 : buffer->size;
 }
 
+/**
+ * Direction for tree
+ * @param root of tree
+ * @param direction - 1 is right
+ * @param nodes - array with others nodes
+ * @return directioned tree
+ */
 Node *n_direction(Node *root, int direction, Node *nodes) {
     static int index = 0;
     if (direction) {
@@ -180,6 +230,14 @@ Node *n_direction(Node *root, int direction, Node *nodes) {
     }
 }
 
+/**
+ * Write tree nod to file
+ * @param out - file for writing
+ * @param root - root of tree
+ * @param node - current node
+ * @param byteIn - temporary byte buffer
+ * @return writed node
+ */
 Node *writeNode(FILE *out, Node *root, Node *node, unsigned char byteIn) {
     node = ((byteIn & 0x80) && node->right) ? node->right :
            !(byteIn & 0x80) && node->left ? node->left : node;
@@ -189,6 +247,13 @@ Node *writeNode(FILE *out, Node *root, Node *node, unsigned char byteIn) {
     return node;
 }
 
+/**
+ * Write letter after decoding
+ * @param file - file for writing
+ * @param letter - leter for writing
+ * @param pos - position in byte buffer
+ * @param byte buffer
+ */
 void writeLetter(FILE *file, unsigned char letter, int *pos, int *byte) {
     int j;
     for (j = 0; j < 8; j++, letter <<= 1) {
@@ -198,6 +263,14 @@ void writeLetter(FILE *file, unsigned char letter, int *pos, int *byte) {
     }
 }
 
+/**
+ * read byte from file
+ * @param byte buffer
+ * @param pos - current position in byte buffer
+ * @param table - table of Huffman's codes
+ * @param index - current position in Huffman's table
+ * @return value of read byte
+ */
 unsigned char readByte(char *byte, unsigned char *pos, char *table, size_t *index) {
     unsigned char res = 0, i;
     for (i = 0; i < 8; i++) {
@@ -208,7 +281,12 @@ unsigned char readByte(char *byte, unsigned char *pos, char *table, size_t *inde
     return res;
 }
 
-Node *createTree(Text table[]) {
+/**
+ * Create Huffman's tree from Huffman's table
+ * @param table - table with codes
+ * @return root of tree
+ */
+Node *createHuffmanTree(Text *table) {
     Node *root = calloc(1, sizeof(Node)), *nodes = calloc(512, sizeof(Node)), *node;
     unsigned i, j;
     for (i = 0; i < COUNT_CHAR; i++) {

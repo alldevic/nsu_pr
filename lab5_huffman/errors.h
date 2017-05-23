@@ -1,6 +1,8 @@
 #ifndef LAB5_ERRORS_H
 #define LAB5_ERRORS_H
 
+#include <errno.h>
+
 /**
  * @def Macros for catching global errors
  */
